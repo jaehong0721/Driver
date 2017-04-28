@@ -11,6 +11,19 @@ android {
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
+
+    productFlavors {
+        stage {
+            applicationId "com.rena21.driver.stage"
+        }
+        dev {
+            applicationId "com.rena21.driver.dev"
+        }
+        prod {
+            applicationId "com.rena21.driver"
+        }
+    }
+
     buildTypes {
         release {
             minifyEnabled false
