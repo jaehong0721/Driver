@@ -1,0 +1,20 @@
+<resources>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+
+    <dimen name="text_smallest">12sp</dimen>
+    <dimen name="text_default">14sp</dimen>
+    <dimen name="text_large">16sp</dimen>
+    <dimen name="text_large_accent">20sp</dimen>
+    <dimen name="text_dialog_title">20sp</dimen>
+    <dimen name="text_select_date">19sp</dimen>
+    <dimen name="text_large_title">24sp</dimen>
+    <dimen name="text_xxx_large">32sp</dimen>
+
+    <!-- 리스트뷰, RecyclerView의 아이템에서 사용 -->
+    <dimen name="itemHeight">48dp</dimen>
+    <dimen name="itemLeftPadding">16dp</dimen>
+    <dimen name="itemRightPadding">16dp</dimen>
+
+</resources>
