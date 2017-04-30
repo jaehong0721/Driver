@@ -41,28 +41,6 @@ public class ReceivedOrdersAdapter extends RecyclerView.Adapter<ReceivedOrdersAd
     public ReceivedOrdersAdapter() {
         this.receivedOrderItemMap = new HashMap<>();
         this.fileNameList = new ArrayList<>();
-        addDummyData();
-    }
-
-    private void addDummyData() {
-        OrderItem dummyOrderItem1 = new OrderItem();
-        OrderItem dummyOrderItem2 = new OrderItem();
-        ArrayList<OrderItem> dummyOrderItems = new ArrayList<>();
-        Order dummyOrder = new Order();
-
-        dummyOrderItem1.name = "양파";
-        dummyOrderItem1.count = "3개";
-
-        dummyOrderItem2.name = "삼겹살";
-        dummyOrderItem2.count = "1근";
-
-        dummyOrderItems.add(dummyOrderItem1);
-        dummyOrderItems.add(dummyOrderItem2);
-
-        dummyOrder.restaurantName = "거상식당";
-        dummyOrder.orderItems = dummyOrderItems;
-
-        addedItem("파일명", dummyOrder);
     }
 
     @Override public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
