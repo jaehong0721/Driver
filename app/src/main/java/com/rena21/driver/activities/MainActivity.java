@@ -13,6 +13,7 @@ import com.rena21.driver.App;
 import com.rena21.driver.R;
 import com.rena21.driver.etc.AppPreferenceManager;
 import com.rena21.driver.pojo.Order;
+import com.rena21.driver.view.DividerItemDecoration;
 import com.rena21.driver.view.actionbar.ActionBarViewModel;
 import com.rena21.driver.view.adapter.ReceivedOrdersAdapter;
 
@@ -37,6 +38,7 @@ public class MainActivity extends BaseActivity {
         rvReceivedOrders = (RecyclerView) findViewById(R.id.rvReceivedOrders);
         receivedOrdersAdapter = new ReceivedOrdersAdapter();
         rvReceivedOrders.setLayoutManager(new LinearLayoutManager(this));
+        rvReceivedOrders.addItemDecoration(new DividerItemDecoration(this, R.drawable.shape_divider_for_received_orders));
         rvReceivedOrders.setAdapter(receivedOrdersAdapter);
 
         appPreferenceManager = App.getApplication(getApplicationContext()).getPreferenceManager();
