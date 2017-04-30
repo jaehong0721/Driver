@@ -45,6 +45,8 @@ public class MainActivity extends BaseActivity {
                 .getReference("vendors")
                 .child(appPreferenceManager.getPhoneNumber());
 
+        vendorRef.keepSynced(true);
+
         receivedOrderEventListener = new ChildEventListener() {
             @Override public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 String fileName = dataSnapshot.getKey();

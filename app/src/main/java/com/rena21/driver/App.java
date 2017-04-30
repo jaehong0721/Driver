@@ -3,6 +3,7 @@ package com.rena21.driver;
 import android.app.Application;
 import android.content.Context;
 
+import com.google.firebase.database.FirebaseDatabase;
 import com.rena21.driver.etc.AppPreferenceManager;
 import com.rena21.driver.network.ConnectivityIntercepter;
 
@@ -27,6 +28,8 @@ public class App extends Application {
     }
 
     private void init() {
+        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+
         CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
                 .setDefaultFontPath("fonts/dohyun.ttf")
                 .setFontAttrId(R.attr.fontPath)
