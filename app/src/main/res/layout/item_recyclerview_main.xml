@@ -6,9 +6,18 @@
                 android:paddingTop="@dimen/itemPaddingTop">
 
     <TextView
-        android:id="@+id/tvRestaurantName"
+        android:id="@+id/tvTimeStamp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="text"
+        android:textSize="@dimen/text_large_accent"/>
+
+    <TextView
+        android:id="@+id/tvRestaurantName"
+        android:layout_marginTop="14dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvTimeStamp"
         android:text="text"
         android:textSize="@dimen/text_large"/>
 

@@ -20,16 +20,19 @@ import java.util.List;
 public class ReceivedOrdersAdapter extends RecyclerView.Adapter<ReceivedOrdersAdapter.MyViewHolder>{
 
     class MyViewHolder extends ViewHolder{
+        TextView tvTimeStamp;
         TextView tvRestaurantName;
         TextView tvItems;
 
         public MyViewHolder(View itemView) {
             super(itemView);
+            tvTimeStamp = (TextView) itemView.findViewById(R.id.tvTimeStamp);
             tvRestaurantName = (TextView) itemView.findViewById(R.id.tvRestaurantName);
             tvItems = (TextView) itemView.findViewById(R.id.tvItems);
         }
 
-        public void bind(String restaurantName, String orderItems) {
+        public void bind(String timeStamp, String restaurantName, String orderItems) {
+            tvTimeStamp.setText(timeStamp);
             tvRestaurantName.setText(restaurantName);
             tvItems.setText(orderItems);
         }
@@ -52,7 +55,7 @@ public class ReceivedOrdersAdapter extends RecyclerView.Adapter<ReceivedOrdersAd
         String fileName = fileNameList.get(position);
         ReceivedOrder receivedOrder = receivedOrderItemMap.get(fileName);
 
-        holder.bind(receivedOrder.restaurantName, receivedOrder.orderItems);
+        holder.bind(receivedOrder.timeStamp, receivedOrder.restaurantName, receivedOrder.orderItems);
     }
 
     @Override public int getItemCount() {
@@ -60,10 +63,11 @@ public class ReceivedOrdersAdapter extends RecyclerView.Adapter<ReceivedOrdersAd
     }
 
     public void addedItem(String fileName, Order order) {
+        String timeStamp = getDisplayTimeFromfileName(fileName);
         String restaurantName = order.restaurantName;
         String orderItems = makeOrderItemsString(order.orderItems);
 
-        ReceivedOrder receivedOrder = new ReceivedOrder(restaurantName, orderItems);
+        ReceivedOrder receivedOrder = new ReceivedOrder(timeStamp, restaurantName, orderItems);
 
         receivedOrderItemMap.put(fileName, receivedOrder);
         fileNameList.add(0, fileName);
@@ -91,6 +95,27 @@ public class ReceivedOrdersAdapter extends RecyclerView.Adapter<ReceivedOrdersAd
         fileNameList.remove(fileName);
 
         notifyItemRemoved(position);
+    }
+
+    public String getDisplayTimeFromfileName(String fileName) {
+        StringBuffer sb = new StringBuffer();
+        String timeStamp = fileName.substring(16, 26);
+        for (int i = 0; i < timeStamp.length(); i++) {
+            if (i == 2) {
+                sb.append(".");
+            }
+            if (i == 4) {
+                sb.append("  ");
+            }
+            if (i == 6) {
+                sb.append(":");
+            }
+            if (i == 8) {
+                sb.append(":");
+            }
+            sb.append(timeStamp.charAt(i));
+        }
+        return sb.toString();
     }
 
     private String makeOrderItemsString(List<OrderItem> orderItems) {
