@@ -4,7 +4,7 @@ import android.os.Bundle;
 
 import com.rena21.driver.R;
 
-import view.ActionBarViewModel;
+import com.rena21.driver.view.actionbar.ActionBarViewModel;
 
 public class MainActivity extends BaseActivity {
 
