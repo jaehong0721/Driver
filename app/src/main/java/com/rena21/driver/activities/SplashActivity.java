@@ -1,7 +1,9 @@
-package com.rena21.driver;
+package com.rena21.driver.activities;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+
+import com.rena21.driver.R;
 
 public class SplashActivity extends AppCompatActivity {
 

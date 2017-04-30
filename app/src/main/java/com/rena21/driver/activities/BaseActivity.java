@@ -1,4 +1,4 @@
-package com.rena21.driver;
+package com.rena21.driver.activities;
 
 import android.content.Context;
 import android.support.v7.app.AppCompatActivity;

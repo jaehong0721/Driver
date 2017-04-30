@@ -1,6 +1,8 @@
-package com.rena21.driver;
+package com.rena21.driver.activities;
 
 import android.os.Bundle;
+
+import com.rena21.driver.R;
 
 import view.ActionBarViewModel;
 
