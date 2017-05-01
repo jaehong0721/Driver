@@ -2,7 +2,7 @@ package com.rena21.driver.model;
 
 public class ReceivedOrder {
 
-    public String timeStamp;
+    public final String timeStamp;
     public String restaurantName;
     public String orderItems;
 
