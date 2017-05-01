@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="primaryYellow">#FFC145</color>
+    <color name="primaryGreen">#096769</color>
+    <color name="primaryDarkgreen">#0E5254</color>
+    <color name="primaryOrange">#CE6531</color>
+    <color name="primaryMahogany">#390405</color>
+
+    <color name="textBlack">#313131</color>
+    <color name="textBlackSub">#838383</color>
+
+    <color name="itemDividerForListView">#CCCCCC</color>
 </resources>

@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Driver dev</string>
+    <string name="server_address">http://52.78.67.115:9000</string>
+</resources>
