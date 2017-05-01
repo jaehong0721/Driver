@@ -96,7 +96,7 @@ public class ReceivedOrdersAdapter extends RecyclerView.Adapter<ReceivedOrdersAd
 
         notifyItemRemoved(position);
     }
-
+    
     public String getDisplayTimeFromfileName(String fileName) {
         StringBuffer sb = new StringBuffer();
         String timeStamp = fileName.substring(16, 26);
