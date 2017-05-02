@@ -3,6 +3,8 @@ package com.rena21.driver.activities;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.view.View;
 
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -12,6 +14,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.rena21.driver.App;
 import com.rena21.driver.R;
 import com.rena21.driver.etc.AppPreferenceManager;
+import com.rena21.driver.listener.ReceivedOrderTouchListener;
 import com.rena21.driver.pojo.Order;
 import com.rena21.driver.view.DividerItemDecoration;
 import com.rena21.driver.view.actionbar.ActionBarViewModel;
@@ -37,9 +40,16 @@ public class MainActivity extends BaseActivity {
 
         rvReceivedOrders = (RecyclerView) findViewById(R.id.rvReceivedOrders);
         receivedOrdersAdapter = new ReceivedOrdersAdapter();
+
         rvReceivedOrders.setLayoutManager(new LinearLayoutManager(this));
         rvReceivedOrders.addItemDecoration(new DividerItemDecoration(this, R.drawable.shape_divider_for_received_orders));
         rvReceivedOrders.setAdapter(receivedOrdersAdapter);
+        rvReceivedOrders.addOnItemTouchListener(new ReceivedOrderTouchListener(this, new ReceivedOrderTouchListener.ItemClickListener() {
+            @Override public void onItemClick(View childView) {
+                int position = rvReceivedOrders.getChildAdapterPosition(childView);
+                Log.d("MainActivity", "item click : " + position + "번째");
+            }
+        }));
 
         appPreferenceManager = App.getApplication(getApplicationContext()).getPreferenceManager();
 
