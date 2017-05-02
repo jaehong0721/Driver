@@ -39,10 +39,12 @@ public class ReceivedOrdersAdapter extends RecyclerView.Adapter<ReceivedOrdersAd
     }
 
     private HashMap<String, ReceivedOrder> receivedOrderItemMap;
+    private HashMap<String, Order> orderMap;
     private ArrayList<String> fileNameList;
 
     public ReceivedOrdersAdapter() {
         this.receivedOrderItemMap = new HashMap<>();
+        this.orderMap = new HashMap<>();
         this.fileNameList = new ArrayList<>();
     }
 
@@ -69,6 +71,8 @@ public class ReceivedOrdersAdapter extends RecyclerView.Adapter<ReceivedOrdersAd
         receivedOrderItemMap.put(fileName, receivedOrder);
         fileNameList.add(0, fileName);
 
+        orderMap.put(fileName, order);
+
         notifyItemInserted(0);
     }
 
@@ -80,6 +84,9 @@ public class ReceivedOrdersAdapter extends RecyclerView.Adapter<ReceivedOrdersAd
         receivedOrderItemMap.remove(fileName);
         receivedOrderItemMap.put(fileName, changedOrder);
 
+        orderMap.remove(fileName);
+        orderMap.put(fileName, order);
+
         notifyItemChanged(position);
     }
 
@@ -89,7 +96,13 @@ public class ReceivedOrdersAdapter extends RecyclerView.Adapter<ReceivedOrdersAd
         receivedOrderItemMap.remove(fileName);
         fileNameList.remove(fileName);
 
+        orderMap.remove(fileName);
+
         notifyItemRemoved(position);
+    }
+
+    public Order getOrder(int position) {
+        return orderMap.get(fileNameList.get(position));
     }
 
     private ReceivedOrder newReceivedOrder(String fileName, Order order) {
