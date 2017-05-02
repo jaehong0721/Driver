@@ -99,7 +99,7 @@ public class ReceivedOrdersAdapter extends RecyclerView.Adapter<ReceivedOrdersAd
         return new ReceivedOrder(timeStamp, restaurantName, orderItems);
     }
     
-    public String getDisplayTimeFromfileName(String fileName) {
+    private String getDisplayTimeFromfileName(String fileName) {
         StringBuffer sb = new StringBuffer();
         String timeStamp = fileName.substring(16, 26);
         for (int i = 0; i < timeStamp.length(); i++) {
