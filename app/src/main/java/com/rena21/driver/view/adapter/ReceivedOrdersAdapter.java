@@ -101,7 +101,7 @@ public class ReceivedOrdersAdapter extends RecyclerView.Adapter<ReceivedOrdersAd
         notifyItemRemoved(position);
     }
 
-    public Order getOrder(int position) {
+    public Order getItem(int position) {
         return orderMap.get(fileNameList.get(position));
     }
 

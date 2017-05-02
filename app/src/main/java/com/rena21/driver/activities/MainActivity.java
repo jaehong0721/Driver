@@ -48,6 +48,9 @@ public class MainActivity extends BaseActivity {
             @Override public void onItemClick(View childView) {
                 int position = rvReceivedOrders.getChildAdapterPosition(childView);
                 Log.d("MainActivity", "item click : " + position + "번째");
+
+                Order order = receivedOrdersAdapter.getItem(position);
+                Log.d("MainActivity", "restaurant name : " + order.restaurantName + " " + "order items :" + order.orderItems);
             }
         }));
 
