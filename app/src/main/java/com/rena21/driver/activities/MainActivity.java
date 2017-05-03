@@ -22,7 +22,7 @@ import com.rena21.driver.view.actionbar.ActionBarViewModel;
 import com.rena21.driver.view.adapter.ReceivedOrdersAdapter;
 import com.rena21.driver.view.fragment.OrderDetailDialogFragment;
 
-public class MainActivity extends BaseActivity {
+public class MainActivity extends BaseActivity implements OrderDetailDialogFragment.OrderAcceptedListener{
 
     private RecyclerView rvReceivedOrders;
     private ReceivedOrdersAdapter receivedOrdersAdapter;
@@ -109,5 +109,9 @@ public class MainActivity extends BaseActivity {
     @Override protected void onStop() {
         super.onStop();
         vendorRef.removeEventListener(receivedOrderEventListener);
+    }
+
+    @Override public void onOrderAccepted() {
+        Log.d("MainActivity", "주문 접수됨");
     }
 }

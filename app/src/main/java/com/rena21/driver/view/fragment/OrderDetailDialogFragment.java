@@ -2,6 +2,7 @@ package com.rena21.driver.view.fragment;
 
 
 import android.app.Dialog;
+import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -14,6 +15,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.rena21.driver.R;
@@ -23,14 +25,39 @@ import com.rena21.driver.view.adapter.OrderDetailAdapter;
 
 public class OrderDetailDialogFragment extends DialogFragment {
 
+    public interface OrderAcceptedListener {
+        void onOrderAccepted();
+    }
+
+    private OrderAcceptedListener orderAcceptedListener;
+
+    //출처 : https://developer.android.com/guide/components/fragments.html?hl=ko#CommunicatingWithActivity
+    @Override public void onAttach(Context context) {
+        super.onAttach(context);
+        try {
+            orderAcceptedListener = (OrderAcceptedListener) getActivity();
+        } catch (ClassCastException e) {
+            throw new ClassCastException(getActivity().toString() + " must implement OrderAcceptedListener");
+        }
+    }
+
     @Nullable @Override public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
+        View view = inflater.inflate(R.layout.dialog_fragment_order_detail, container);
+
+        TextView tvRestaurantName = (TextView) view.findViewById(R.id.tvRestaurantName);
+        RecyclerView rvOrderDetail = (RecyclerView) view.findViewById(R.id.rvOrderDetail);
+        Button btnAccept = (Button) view.findViewById(R.id.btnAccept);
+
+        btnAccept.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                orderAcceptedListener.onOrderAccepted();
+                dismiss();
+            }
+        });
 
         ParcelableOrder parcelableOrder = getArguments().getParcelable("order");
         Log.d("OrderDetail", "식당 이름 : " + parcelableOrder.restaurantName + "품목 : " + parcelableOrder.orderItems);
-
-        View view = inflater.inflate(R.layout.dialog_fragment_order_detail, container);
-        TextView tvRestaurantName = (TextView) view.findViewById(R.id.tvRestaurantName);
-        RecyclerView rvOrderDetail = (RecyclerView) view.findViewById(R.id.rvOrderDetail);
 
         tvRestaurantName.setText(parcelableOrder.restaurantName);
 
