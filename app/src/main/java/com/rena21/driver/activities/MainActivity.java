@@ -16,7 +16,7 @@ import com.rena21.driver.R;
 import com.rena21.driver.etc.AppPreferenceManager;
 import com.rena21.driver.listener.OrderAcceptedListener;
 import com.rena21.driver.listener.ReceivedOrderTouchListener;
-import com.rena21.driver.pojo.Order;
+import com.rena21.driver.models.Order;
 import com.rena21.driver.view.DividerItemDecoration;
 import com.rena21.driver.view.actionbar.ActionBarViewModel;
 import com.rena21.driver.view.adapter.ReceivedOrdersAdapter;

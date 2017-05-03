@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.rena21.driver.R;
-import com.rena21.driver.pojo.OrderItem;
+import com.rena21.driver.models.OrderItem;
 
 import java.util.List;
 

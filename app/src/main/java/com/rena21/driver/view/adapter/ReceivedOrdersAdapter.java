@@ -8,8 +8,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.rena21.driver.R;
-import com.rena21.driver.pojo.Order;
-import com.rena21.driver.pojo.OrderItem;
+import com.rena21.driver.models.Order;
+import com.rena21.driver.models.OrderItem;
 
 import java.util.ArrayList;
 import java.util.HashMap;

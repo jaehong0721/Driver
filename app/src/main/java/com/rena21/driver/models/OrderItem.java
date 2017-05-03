@@ -1,4 +1,4 @@
-package com.rena21.driver.pojo;
+package com.rena21.driver.models;
 
 import android.os.Parcel;
 import android.os.Parcelable;

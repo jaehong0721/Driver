@@ -20,7 +20,7 @@ import android.widget.TextView;
 
 import com.rena21.driver.R;
 import com.rena21.driver.listener.OrderAcceptedListener;
-import com.rena21.driver.pojo.Order;
+import com.rena21.driver.models.Order;
 import com.rena21.driver.view.DividerItemDecoration;
 import com.rena21.driver.view.adapter.OrderDetailAdapter;
 
