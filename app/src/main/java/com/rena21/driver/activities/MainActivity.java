@@ -15,7 +15,6 @@ import com.rena21.driver.App;
 import com.rena21.driver.R;
 import com.rena21.driver.etc.AppPreferenceManager;
 import com.rena21.driver.listener.ReceivedOrderTouchListener;
-import com.rena21.driver.model.ParcelableOrder;
 import com.rena21.driver.pojo.Order;
 import com.rena21.driver.view.DividerItemDecoration;
 import com.rena21.driver.view.actionbar.ActionBarViewModel;
@@ -58,10 +57,8 @@ public class MainActivity extends BaseActivity implements OrderDetailDialogFragm
                 Order order = receivedOrdersAdapter.getItem(position);
                 Log.d("MainActivity", "restaurant name : " + order.restaurantName + " " + "order items :" + order.orderItems);
 
-                ParcelableOrder parcelableOrder = new ParcelableOrder(order.restaurantName, order.orderItems);
-
                 Bundle bundle = new Bundle();
-                bundle.putParcelable("order", parcelableOrder);
+                bundle.putParcelable("order", order);
                 orderDetailDialogFragment.setArguments(bundle);
 
                 orderDetailDialogFragment.show(getSupportFragmentManager(), "order_detail");

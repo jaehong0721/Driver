@@ -19,7 +19,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.rena21.driver.R;
-import com.rena21.driver.model.ParcelableOrder;
+import com.rena21.driver.pojo.Order;
 import com.rena21.driver.view.DividerItemDecoration;
 import com.rena21.driver.view.adapter.OrderDetailAdapter;
 
@@ -56,12 +56,12 @@ public class OrderDetailDialogFragment extends DialogFragment {
             }
         });
 
-        ParcelableOrder parcelableOrder = getArguments().getParcelable("order");
-        Log.d("OrderDetail", "식당 이름 : " + parcelableOrder.restaurantName + "품목 : " + parcelableOrder.orderItems);
+        Order order = getArguments().getParcelable("order");
+        Log.d("OrderDetail", "식당 이름 : " + order.restaurantName + "품목 : " + order.orderItems);
 
-        tvRestaurantName.setText(parcelableOrder.restaurantName);
+        tvRestaurantName.setText(order.restaurantName);
 
-        OrderDetailAdapter orderDetailAdapter = new OrderDetailAdapter(parcelableOrder.orderItems);
+        OrderDetailAdapter orderDetailAdapter = new OrderDetailAdapter(order.orderItems);
 
         rvOrderDetail.setLayoutManager(new LinearLayoutManager(getActivity()));
         rvOrderDetail.addItemDecoration(new DividerItemDecoration(getActivity(), R.drawable.shape_divider_for_received_orders));
