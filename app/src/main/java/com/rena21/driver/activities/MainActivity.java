@@ -96,15 +96,12 @@ public class MainActivity extends BaseActivity implements OrderDetailDialogFragm
             @Override public void onChildMoved(DataSnapshot dataSnapshot, String s) {}
             @Override public void onCancelled(DatabaseError databaseError) {}
         };
-    }
 
-    @Override protected void onStart() {
-        super.onStart();
         vendorRef.child("receivedOrders").addChildEventListener(receivedOrderEventListener);
     }
-
-    @Override protected void onStop() {
-        super.onStop();
+    
+    @Override protected void onDestroy() {
+        super.onDestroy();
         vendorRef.removeEventListener(receivedOrderEventListener);
     }
 
