@@ -15,15 +15,19 @@ import com.rena21.driver.App;
 import com.rena21.driver.R;
 import com.rena21.driver.etc.AppPreferenceManager;
 import com.rena21.driver.listener.ReceivedOrderTouchListener;
+import com.rena21.driver.model.ParcelableOrder;
 import com.rena21.driver.pojo.Order;
 import com.rena21.driver.view.DividerItemDecoration;
 import com.rena21.driver.view.actionbar.ActionBarViewModel;
 import com.rena21.driver.view.adapter.ReceivedOrdersAdapter;
+import com.rena21.driver.view.fragment.OrderDetailDialogFragment;
 
 public class MainActivity extends BaseActivity {
 
     private RecyclerView rvReceivedOrders;
     private ReceivedOrdersAdapter receivedOrdersAdapter;
+
+    private OrderDetailDialogFragment orderDetailDialogFragment;
 
     private DatabaseReference vendorRef;
     private ChildEventListener receivedOrderEventListener;
@@ -38,6 +42,8 @@ public class MainActivity extends BaseActivity {
         ActionBarViewModel.createWithActionBar(getSupportActionBar())
                 .setTitle("");
 
+        orderDetailDialogFragment = new OrderDetailDialogFragment();
+
         rvReceivedOrders = (RecyclerView) findViewById(R.id.rvReceivedOrders);
         receivedOrdersAdapter = new ReceivedOrdersAdapter();
 
@@ -51,6 +57,14 @@ public class MainActivity extends BaseActivity {
 
                 Order order = receivedOrdersAdapter.getItem(position);
                 Log.d("MainActivity", "restaurant name : " + order.restaurantName + " " + "order items :" + order.orderItems);
+
+                ParcelableOrder parcelableOrder = new ParcelableOrder(order.restaurantName, order.orderItems);
+
+                Bundle bundle = new Bundle();
+                bundle.putParcelable("order", parcelableOrder);
+                orderDetailDialogFragment.setArguments(bundle);
+
+                orderDetailDialogFragment.show(getSupportFragmentManager(), "order_detail");
             }
         }));
 
