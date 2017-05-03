@@ -66,20 +66,22 @@ public class MainActivity extends BaseActivity {
             @Override public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 String fileName = dataSnapshot.getKey();
                 Order order = dataSnapshot.getValue(Order.class);
+
                 receivedOrdersAdapter.addedItem(fileName, order);
             }
 
             @Override public void onChildChanged(DataSnapshot dataSnapshot, String s) {
                 String fileName = dataSnapshot.getKey();
                 Order order = dataSnapshot.getValue(Order.class);
+
                 receivedOrdersAdapter.changedItem(fileName, order);
             }
 
             @Override public void onChildRemoved(DataSnapshot dataSnapshot) {
                 String fileName = dataSnapshot.getKey();
+
                 receivedOrdersAdapter.removedItem(fileName);
             }
-
             @Override public void onChildMoved(DataSnapshot dataSnapshot, String s) {}
             @Override public void onCancelled(DatabaseError databaseError) {}
         };

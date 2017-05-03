@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.rena21.driver.R;
-import com.rena21.driver.model.ReceivedOrder;
 import com.rena21.driver.pojo.Order;
 import com.rena21.driver.pojo.OrderItem;
 
@@ -38,12 +37,10 @@ public class ReceivedOrdersAdapter extends RecyclerView.Adapter<ReceivedOrdersAd
         }
     }
 
-    private HashMap<String, ReceivedOrder> receivedOrderItemMap;
     private HashMap<String, Order> orderMap;
     private ArrayList<String> fileNameList;
 
     public ReceivedOrdersAdapter() {
-        this.receivedOrderItemMap = new HashMap<>();
         this.orderMap = new HashMap<>();
         this.fileNameList = new ArrayList<>();
     }
@@ -55,9 +52,13 @@ public class ReceivedOrdersAdapter extends RecyclerView.Adapter<ReceivedOrdersAd
 
     @Override public void onBindViewHolder(MyViewHolder holder, int position) {
         String fileName = fileNameList.get(position);
-        ReceivedOrder receivedOrder = receivedOrderItemMap.get(fileName);
+        Order order = orderMap.get(fileName);
 
-        holder.bind(receivedOrder.timeStamp, receivedOrder.restaurantName, receivedOrder.orderItems);
+        String timeStamp = getDisplayTimeFromfileName(fileName);
+        String restaurantName = order.restaurantName;
+        String orderItems = makeOrderItemsString(order.orderItems);
+
+        holder.bind(timeStamp, restaurantName, orderItems);
     }
 
     @Override public int getItemCount() {
@@ -65,24 +66,14 @@ public class ReceivedOrdersAdapter extends RecyclerView.Adapter<ReceivedOrdersAd
     }
 
     public void addedItem(String fileName, Order order) {
-
-        ReceivedOrder receivedOrder = newReceivedOrder(fileName, order);
-
-        receivedOrderItemMap.put(fileName, receivedOrder);
-        fileNameList.add(0, fileName);
-
         orderMap.put(fileName, order);
+        fileNameList.add(0, fileName);
 
         notifyItemInserted(0);
     }
 
     public void changedItem(String fileName, Order order) {
         int position = fileNameList.indexOf(fileName);
-
-        ReceivedOrder changedOrder = newReceivedOrder(fileName, order);
-
-        receivedOrderItemMap.remove(fileName);
-        receivedOrderItemMap.put(fileName, changedOrder);
 
         orderMap.remove(fileName);
         orderMap.put(fileName, order);
@@ -93,25 +84,12 @@ public class ReceivedOrdersAdapter extends RecyclerView.Adapter<ReceivedOrdersAd
     public void removedItem(String fileName) {
         int position = fileNameList.indexOf(fileName);
 
-        receivedOrderItemMap.remove(fileName);
-        fileNameList.remove(fileName);
-
         orderMap.remove(fileName);
+        fileNameList.remove(fileName);
 
         notifyItemRemoved(position);
     }
 
-    public Order getItem(int position) {
-        return orderMap.get(fileNameList.get(position));
-    }
-
-    private ReceivedOrder newReceivedOrder(String fileName, Order order) {
-        String timeStamp = getDisplayTimeFromfileName(fileName);
-        String restaurantName = order.restaurantName;
-        String orderItems = makeOrderItemsString(order.orderItems);
-        return new ReceivedOrder(timeStamp, restaurantName, orderItems);
-    }
-    
     private String getDisplayTimeFromfileName(String fileName) {
         StringBuffer sb = new StringBuffer();
         String timeStamp = fileName.substring(16, 26);
@@ -145,5 +123,9 @@ public class ReceivedOrdersAdapter extends RecyclerView.Adapter<ReceivedOrdersAd
         sb.deleteCharAt(sb.length() - 1);
 
         return sb.toString();
+    }
+
+    public Order getItem(int position) {
+        return orderMap.get(fileNameList.get(position));
     }
 }
