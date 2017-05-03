@@ -19,15 +19,12 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.rena21.driver.R;
+import com.rena21.driver.listener.OrderAcceptedListener;
 import com.rena21.driver.pojo.Order;
 import com.rena21.driver.view.DividerItemDecoration;
 import com.rena21.driver.view.adapter.OrderDetailAdapter;
 
 public class OrderDetailDialogFragment extends DialogFragment {
-
-    public interface OrderAcceptedListener {
-        void onOrderAccepted();
-    }
 
     private OrderAcceptedListener orderAcceptedListener;
 

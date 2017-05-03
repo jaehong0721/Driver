@@ -14,6 +14,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.rena21.driver.App;
 import com.rena21.driver.R;
 import com.rena21.driver.etc.AppPreferenceManager;
+import com.rena21.driver.listener.OrderAcceptedListener;
 import com.rena21.driver.listener.ReceivedOrderTouchListener;
 import com.rena21.driver.pojo.Order;
 import com.rena21.driver.view.DividerItemDecoration;
@@ -21,7 +22,7 @@ import com.rena21.driver.view.actionbar.ActionBarViewModel;
 import com.rena21.driver.view.adapter.ReceivedOrdersAdapter;
 import com.rena21.driver.view.fragment.OrderDetailDialogFragment;
 
-public class MainActivity extends BaseActivity implements OrderDetailDialogFragment.OrderAcceptedListener{
+public class MainActivity extends BaseActivity implements OrderAcceptedListener {
 
     private RecyclerView rvReceivedOrders;
     private ReceivedOrdersAdapter receivedOrdersAdapter;
@@ -99,7 +100,7 @@ public class MainActivity extends BaseActivity implements OrderDetailDialogFragm
 
         vendorRef.child("receivedOrders").addChildEventListener(receivedOrderEventListener);
     }
-    
+
     @Override protected void onDestroy() {
         super.onDestroy();
         vendorRef.removeEventListener(receivedOrderEventListener);
