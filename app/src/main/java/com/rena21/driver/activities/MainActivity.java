@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.View;
 
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -15,7 +14,6 @@ import com.rena21.driver.App;
 import com.rena21.driver.R;
 import com.rena21.driver.etc.AppPreferenceManager;
 import com.rena21.driver.listener.OrderAcceptedListener;
-import com.rena21.driver.listener.ReceivedOrderTouchListener;
 import com.rena21.driver.models.Order;
 import com.rena21.driver.view.DividerItemDecoration;
 import com.rena21.driver.view.actionbar.ActionBarViewModel;
@@ -50,21 +48,14 @@ public class MainActivity extends BaseActivity implements OrderAcceptedListener 
         rvReceivedOrders.setLayoutManager(new LinearLayoutManager(this));
         rvReceivedOrders.addItemDecoration(new DividerItemDecoration(this, R.drawable.shape_divider_for_received_orders));
         rvReceivedOrders.setAdapter(receivedOrdersAdapter);
-        rvReceivedOrders.addOnItemTouchListener(new ReceivedOrderTouchListener(this, new ReceivedOrderTouchListener.ItemClickListener() {
-            @Override public void onItemClick(View childView) {
-                int position = rvReceivedOrders.getChildAdapterPosition(childView);
-                Log.d("MainActivity", "item click : " + position + "번째");
-
-                Order order = receivedOrdersAdapter.getItem(position);
-                Log.d("MainActivity", "restaurant name : " + order.restaurantName + " " + "order items :" + order.orderItems);
-
+        receivedOrdersAdapter.addOnItemClickListener(new ReceivedOrdersAdapter.OnItemClickListener() {
+            @Override public void onItemClick(Order order) {
                 Bundle bundle = new Bundle();
                 bundle.putParcelable("order", order);
                 orderDetailDialogFragment.setArguments(bundle);
-
                 orderDetailDialogFragment.show(getSupportFragmentManager(), "order_detail");
             }
-        }));
+        });
 
         appPreferenceManager = App.getApplication(getApplicationContext()).getPreferenceManager();
 

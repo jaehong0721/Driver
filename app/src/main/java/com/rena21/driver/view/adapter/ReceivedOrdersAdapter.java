@@ -1,5 +1,6 @@
 package com.rena21.driver.view.adapter;
 
+import android.content.DialogInterface;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.ViewHolder;
 import android.view.LayoutInflater;
@@ -16,12 +17,18 @@ import java.util.HashMap;
 import java.util.List;
 
 
-public class ReceivedOrdersAdapter extends RecyclerView.Adapter<ReceivedOrdersAdapter.MyViewHolder>{
+public class ReceivedOrdersAdapter extends RecyclerView.Adapter<ReceivedOrdersAdapter.MyViewHolder> {
 
-    class MyViewHolder extends ViewHolder{
-        TextView tvTimeStamp;
-        TextView tvRestaurantName;
-        TextView tvItems;
+
+    public interface OnItemClickListener {
+        void onItemClick(Order order);
+    }
+
+    static class MyViewHolder extends ViewHolder {
+
+        private TextView tvTimeStamp;
+        private TextView tvRestaurantName;
+        private TextView tvItems;
 
         public MyViewHolder(View itemView) {
             super(itemView);
@@ -30,15 +37,17 @@ public class ReceivedOrdersAdapter extends RecyclerView.Adapter<ReceivedOrdersAd
             tvItems = (TextView) itemView.findViewById(R.id.tvItems);
         }
 
-        public void bind(String timeStamp, String restaurantName, String orderItems) {
+        public void bind(String timeStamp, String restaurantName, String orderItems, View.OnClickListener onClickListener) {
             tvTimeStamp.setText(timeStamp);
             tvRestaurantName.setText(restaurantName);
             tvItems.setText(orderItems);
+            itemView.setOnClickListener(onClickListener);
         }
     }
 
     private HashMap<String, Order> orderMap;
     private ArrayList<String> fileNameList;
+    private OnItemClickListener onItemClickListener;
 
     public ReceivedOrdersAdapter() {
         this.orderMap = new HashMap<>();
@@ -52,13 +61,17 @@ public class ReceivedOrdersAdapter extends RecyclerView.Adapter<ReceivedOrdersAd
 
     @Override public void onBindViewHolder(MyViewHolder holder, int position) {
         String fileName = fileNameList.get(position);
-        Order order = orderMap.get(fileName);
+        final Order order = orderMap.get(fileName);
 
         String timeStamp = getDisplayTimeFromfileName(fileName);
         String restaurantName = order.restaurantName;
         String orderItems = makeOrderItemsString(order.orderItems);
 
-        holder.bind(timeStamp, restaurantName, orderItems);
+        holder.bind(timeStamp, restaurantName, orderItems, new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                onItemClickListener.onItemClick(order);
+            }
+        });
     }
 
     @Override public int getItemCount() {
@@ -88,6 +101,10 @@ public class ReceivedOrdersAdapter extends RecyclerView.Adapter<ReceivedOrdersAd
         fileNameList.remove(fileName);
 
         notifyItemRemoved(position);
+    }
+
+    public void addOnItemClickListener(OnItemClickListener onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
     }
 
     private String getDisplayTimeFromfileName(String fileName) {
@@ -123,9 +140,5 @@ public class ReceivedOrdersAdapter extends RecyclerView.Adapter<ReceivedOrdersAd
         sb.deleteCharAt(sb.length() - 1);
 
         return sb.toString();
-    }
-
-    public Order getItem(int position) {
-        return orderMap.get(fileNameList.get(position));
     }
 }
