@@ -21,7 +21,7 @@ public class ReceivedOrdersAdapter extends RecyclerView.Adapter<ReceivedOrdersAd
 
 
     public interface OnItemClickListener {
-        void onItemClick(Order order);
+        void onItemClick(String fileName, Order order);
     }
 
     static class MyViewHolder extends ViewHolder {
@@ -60,7 +60,7 @@ public class ReceivedOrdersAdapter extends RecyclerView.Adapter<ReceivedOrdersAd
     }
 
     @Override public void onBindViewHolder(MyViewHolder holder, int position) {
-        String fileName = fileNameList.get(position);
+        final String fileName = fileNameList.get(position);
         final Order order = orderMap.get(fileName);
 
         String timeStamp = getDisplayTimeFromfileName(fileName);
@@ -69,7 +69,7 @@ public class ReceivedOrdersAdapter extends RecyclerView.Adapter<ReceivedOrdersAd
 
         holder.bind(timeStamp, restaurantName, orderItems, new View.OnClickListener() {
             @Override public void onClick(View v) {
-                onItemClickListener.onItemClick(order);
+                onItemClickListener.onItemClick(fileName, order);
             }
         });
     }

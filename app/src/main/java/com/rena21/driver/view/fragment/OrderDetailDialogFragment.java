@@ -46,14 +46,16 @@ public class OrderDetailDialogFragment extends DialogFragment {
         RecyclerView rvOrderDetail = (RecyclerView) view.findViewById(R.id.rvOrderDetail);
         Button btnAccept = (Button) view.findViewById(R.id.btnAccept);
 
+        Order order = getArguments().getParcelable("order");
+        final String fileName = getArguments().getString("fileName");
+
         btnAccept.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
-                orderAcceptedListener.onOrderAccepted();
+                orderAcceptedListener.onOrderAccepted(fileName);
                 dismiss();
             }
         });
 
-        Order order = getArguments().getParcelable("order");
         Log.d("OrderDetail", "식당 이름 : " + order.restaurantName + "품목 : " + order.orderItems);
 
         tvRestaurantName.setText(order.restaurantName);

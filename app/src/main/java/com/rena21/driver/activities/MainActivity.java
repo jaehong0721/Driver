@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -49,9 +50,11 @@ public class MainActivity extends BaseActivity implements OrderAcceptedListener 
         rvReceivedOrders.addItemDecoration(new DividerItemDecoration(this, R.drawable.shape_divider_for_received_orders));
         rvReceivedOrders.setAdapter(receivedOrdersAdapter);
         receivedOrdersAdapter.addOnItemClickListener(new ReceivedOrdersAdapter.OnItemClickListener() {
-            @Override public void onItemClick(Order order) {
+            @Override public void onItemClick(String fileName, Order order) {
                 Bundle bundle = new Bundle();
+                // TODO: Order 객체를 직접 전달하지 않고, FirebaseDB에서 값을 전달 받는 방식으로 변경
                 bundle.putParcelable("order", order);
+                bundle.putString("fileName", fileName);
                 orderDetailDialogFragment.setArguments(bundle);
                 orderDetailDialogFragment.show(getSupportFragmentManager(), "order_detail");
             }
@@ -85,7 +88,9 @@ public class MainActivity extends BaseActivity implements OrderAcceptedListener 
 
                 receivedOrdersAdapter.removedItem(fileName);
             }
+
             @Override public void onChildMoved(DataSnapshot dataSnapshot, String s) {}
+
             @Override public void onCancelled(DatabaseError databaseError) {}
         };
 
@@ -97,7 +102,7 @@ public class MainActivity extends BaseActivity implements OrderAcceptedListener 
         vendorRef.removeEventListener(receivedOrderEventListener);
     }
 
-    @Override public void onOrderAccepted() {
-        Log.d("MainActivity", "주문 접수됨");
+    @Override public void onOrderAccepted(String fileName) {
+        Toast.makeText(this, fileName, Toast.LENGTH_SHORT).show();
     }
 }
