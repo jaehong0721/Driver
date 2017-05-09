@@ -49,12 +49,16 @@ public class OrderDetailDialogFragment extends DialogFragment {
         Order order = getArguments().getParcelable("order");
         final String fileName = getArguments().getString("fileName");
 
-        btnAccept.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
-                orderAcceptedListener.onOrderAccepted(fileName);
-                dismiss();
-            }
-        });
+        if (order.accepted) {
+            btnAccept.setVisibility(View.GONE);
+        } else {
+            btnAccept.setOnClickListener(new View.OnClickListener() {
+                @Override public void onClick(View v) {
+                    orderAcceptedListener.onOrderAccepted(fileName);
+                    dismiss();
+                }
+            });
+        }
 
         Log.d("OrderDetail", "식당 이름 : " + order.restaurantName + "품목 : " + order.orderItems);
 
@@ -78,7 +82,7 @@ public class OrderDetailDialogFragment extends DialogFragment {
     @Override public void onStart() {
         super.onStart();
         Dialog dialog = getDialog();
-        if (dialog!=null){
+        if (dialog != null) {
             int width = ViewGroup.LayoutParams.MATCH_PARENT;
             int height = ViewGroup.LayoutParams.MATCH_PARENT;
             dialog.getWindow().setLayout(width, height);

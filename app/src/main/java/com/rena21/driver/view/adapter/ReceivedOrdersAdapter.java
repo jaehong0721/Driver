@@ -19,7 +19,6 @@ import java.util.List;
 
 public class ReceivedOrdersAdapter extends RecyclerView.Adapter<ReceivedOrdersAdapter.MyViewHolder> {
 
-
     public interface OnItemClickListener {
         void onItemClick(String fileName, Order order);
     }
@@ -141,4 +140,9 @@ public class ReceivedOrdersAdapter extends RecyclerView.Adapter<ReceivedOrdersAd
 
         return sb.toString();
     }
+
+    public Order getOrder(String orderKey) {
+        return orderMap.get(orderKey);
+    }
+
 }
