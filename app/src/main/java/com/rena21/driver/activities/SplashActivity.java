@@ -141,7 +141,6 @@ public class SplashActivity extends BaseActivity {
 
     }
 
-
     private void requestUserToken() {
         appPreferenceManager.initPhoneNumber();
         apiService
