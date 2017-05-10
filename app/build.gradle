@@ -29,7 +29,6 @@ android {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt')
             proguardFile 'proguard-rules.pro'
-            proguardFile 'proguard-aws.pro'
             proguardFile 'proguard-firebase.pro'
             proguardFile 'proguard-okhttp3.pro'
             proguardFile 'proguard-retrofit2.pro'
