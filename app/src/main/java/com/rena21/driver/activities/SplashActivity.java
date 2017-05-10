@@ -7,14 +7,17 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.crash.FirebaseCrash;
+import com.google.firebase.database.FirebaseDatabase;
 import com.rena21.driver.App;
 import com.rena21.driver.R;
 import com.rena21.driver.etc.AppPreferenceManager;
@@ -108,11 +111,34 @@ public class SplashActivity extends BaseActivity {
 
     private void checkUserSignedIn() {
         FirebaseUser user = firebaseAuth.getCurrentUser();
-        if(user != null) {
-            goToMain();
+        if (user != null) {
+            storeFcmToken();
         } else {
             requestUserToken();
         }
+    }
+
+
+    private void storeFcmToken() {
+        String phoneNumber = appPreferenceManager.getPhoneNumber();
+        String fcmToken = appPreferenceManager.getFcmToken();
+        FirebaseDatabase.getInstance().getReference().child("vendors")
+                .child(phoneNumber)
+                .child("info")
+                .child("fcmId")
+                .setValue(fcmToken)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override public void onSuccess(Void aVoid) {
+                        Log.d("fcm", "Fcm 토큰 등록 성공");
+                        goToMain();
+                    }
+                })
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override public void onComplete(@NonNull Task<Void> task) {
+                        FirebaseCrash.logcat(Log.ERROR, "fcm", "Fcm 등록 실패");
+                    }
+                });
+
     }
 
     private void requestUserToken() {
@@ -140,7 +166,7 @@ public class SplashActivity extends BaseActivity {
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            goToMain();
+                            storeFcmToken();
                         } else {
                             Dialogs.createPlayServiceUpdateWarningDialog(SplashActivity.this, new Dialog.OnClickListener() {
                                 @Override

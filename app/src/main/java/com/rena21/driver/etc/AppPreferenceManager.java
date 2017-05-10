@@ -55,4 +55,16 @@ public class AppPreferenceManager {
         }
         return phoneNumber;
     }
+
+    public void setFcmToken(String token) {
+        sharedPreference
+                .edit()
+                .putString("fcmToken", token)
+                .apply();
+    }
+
+    public String getFcmToken() {
+        return sharedPreference
+                .getString("fcmToken", null);
+    }
 }
