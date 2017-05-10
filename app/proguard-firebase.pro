@@ -2,7 +2,7 @@
 
 #database
 -keepattributes Signature
--keepclassmembers class com.rena21c.driver.model.** {*;}
+-keepclassmembers class com.rena21c.driver.models.** {*;}
 
 #auth
 -keepattributes *Annotation*
