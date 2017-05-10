@@ -19,6 +19,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.rena21.driver.App;
 import com.rena21.driver.R;
 import com.rena21.driver.etc.AppPreferenceManager;
+import com.rena21.driver.firebase.FirebaseDbManager;
 import com.rena21.driver.listener.OrderAcceptedListener;
 import com.rena21.driver.models.Order;
 import com.rena21.driver.view.DividerItemDecoration;
@@ -39,6 +40,7 @@ public class MainActivity extends BaseActivity implements OrderAcceptedListener 
     private ChildEventListener receivedOrderEventListener;
 
     private AppPreferenceManager appPreferenceManager;
+    private FirebaseDbManager dbManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,10 +50,12 @@ public class MainActivity extends BaseActivity implements OrderAcceptedListener 
         ActionBarViewModel.createWithActionBar(getSupportActionBar())
                 .setTitle("");
 
+        dbManager = new FirebaseDbManager(FirebaseDatabase.getInstance());
+
         orderDetailDialogFragment = new OrderDetailDialogFragment();
 
         rvReceivedOrders = (RecyclerView) findViewById(R.id.rvReceivedOrders);
-        receivedOrdersAdapter = new ReceivedOrdersAdapter();
+        receivedOrdersAdapter = new ReceivedOrdersAdapter(dbManager);
 
         rvReceivedOrders.setLayoutManager(new LinearLayoutManager(this));
         rvReceivedOrders.addItemDecoration(new DividerItemDecoration(this, R.drawable.shape_divider_for_received_orders));
@@ -80,7 +84,6 @@ public class MainActivity extends BaseActivity implements OrderAcceptedListener 
             @Override public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 String fileName = dataSnapshot.getKey();
                 Order order = dataSnapshot.getValue(Order.class);
-
                 receivedOrdersAdapter.addedItem(fileName, order);
             }
 
@@ -155,5 +158,9 @@ public class MainActivity extends BaseActivity implements OrderAcceptedListener 
                     }
                 });
 
+    }
+
+    public FirebaseDbManager getDbManager(){
+        return dbManager;
     }
 }

@@ -18,7 +18,12 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 import com.rena21.driver.R;
+import com.rena21.driver.activities.MainActivity;
+import com.rena21.driver.firebase.FirebaseDbManager;
 import com.rena21.driver.listener.OrderAcceptedListener;
 import com.rena21.driver.models.Order;
 import com.rena21.driver.view.DividerItemDecoration;
@@ -27,12 +32,14 @@ import com.rena21.driver.view.adapter.OrderDetailAdapter;
 public class OrderDetailDialogFragment extends DialogFragment {
 
     private OrderAcceptedListener orderAcceptedListener;
+    private FirebaseDbManager dbManager;
 
     //출처 : https://developer.android.com/guide/components/fragments.html?hl=ko#CommunicatingWithActivity
     @Override public void onAttach(Context context) {
         super.onAttach(context);
         try {
             orderAcceptedListener = (OrderAcceptedListener) getActivity();
+            dbManager = ((MainActivity) getActivity()).getDbManager();
         } catch (ClassCastException e) {
             throw new ClassCastException(getActivity().toString() + " must implement OrderAcceptedListener");
         }
@@ -42,11 +49,11 @@ public class OrderDetailDialogFragment extends DialogFragment {
 
         View view = inflater.inflate(R.layout.dialog_fragment_order_detail, container);
 
-        TextView tvRestaurantName = (TextView) view.findViewById(R.id.tvRestaurantName);
+        final TextView tvRestaurantName = (TextView) view.findViewById(R.id.tvRestaurantName);
         RecyclerView rvOrderDetail = (RecyclerView) view.findViewById(R.id.rvOrderDetail);
         Button btnAccept = (Button) view.findViewById(R.id.btnAccept);
 
-        Order order = getArguments().getParcelable("order");
+        final Order order = getArguments().getParcelable("order");
         final String fileName = getArguments().getString("fileName");
 
         if (order.accepted) {
@@ -60,9 +67,20 @@ public class OrderDetailDialogFragment extends DialogFragment {
             });
         }
 
-        Log.d("OrderDetail", "식당 이름 : " + order.restaurantName + "품목 : " + order.orderItems);
+        final String restaurantPhoneNumber = fileName.split("_")[0];
 
-        tvRestaurantName.setText(order.restaurantName);
+        dbManager.getRestaurantName(restaurantPhoneNumber, new ValueEventListener() {
+            @Override public void onDataChange(DataSnapshot dataSnapshot) {
+                String restaurantName = dataSnapshot.getValue(String.class);
+                if (restaurantName == null) {   // 식당 연락처가 없는 경우 전화번호를 보여줌
+                    tvRestaurantName.setText(restaurantPhoneNumber);
+                } else {
+                    tvRestaurantName.setText(restaurantName);
+                }
+            }
+
+            @Override public void onCancelled(DatabaseError databaseError) { }
+        });
 
         OrderDetailAdapter orderDetailAdapter = new OrderDetailAdapter(order.orderItems);
 

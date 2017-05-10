@@ -6,14 +6,12 @@ import android.os.Parcelable;
 import java.util.List;
 
 public class Order implements Parcelable {
-    public String restaurantName;
     public List<OrderItem> orderItems;
     public boolean accepted;
 
     public Order() {}
 
     protected Order(Parcel in) {
-        restaurantName = in.readString();
         orderItems = in.createTypedArrayList(OrderItem.CREATOR);
         accepted = in.readByte() != 0;
     }
@@ -35,7 +33,6 @@ public class Order implements Parcelable {
     }
 
     @Override public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(restaurantName);
         dest.writeTypedList(orderItems);
         dest.writeByte((byte) (accepted ? 1 : 0));
     }
