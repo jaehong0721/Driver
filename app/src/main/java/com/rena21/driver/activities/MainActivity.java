@@ -19,6 +19,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.rena21.driver.App;
 import com.rena21.driver.R;
 import com.rena21.driver.etc.AppPreferenceManager;
+import com.rena21.driver.firebase.FirebaseDbManager;
 import com.rena21.driver.listener.OrderAcceptedListener;
 import com.rena21.driver.models.Order;
 import com.rena21.driver.view.DividerItemDecoration;
@@ -39,6 +40,7 @@ public class MainActivity extends BaseActivity implements OrderAcceptedListener 
     private ChildEventListener receivedOrderEventListener;
 
     private AppPreferenceManager appPreferenceManager;
+    private FirebaseDbManager dbManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,10 +50,14 @@ public class MainActivity extends BaseActivity implements OrderAcceptedListener 
         ActionBarViewModel.createWithActionBar(getSupportActionBar())
                 .setTitle("");
 
+        appPreferenceManager = App.getApplication(getApplicationContext()).getPreferenceManager();
+
+        dbManager = new FirebaseDbManager(FirebaseDatabase.getInstance());
+
         orderDetailDialogFragment = new OrderDetailDialogFragment();
 
         rvReceivedOrders = (RecyclerView) findViewById(R.id.rvReceivedOrders);
-        receivedOrdersAdapter = new ReceivedOrdersAdapter();
+        receivedOrdersAdapter = new ReceivedOrdersAdapter(dbManager);
 
         rvReceivedOrders.setLayoutManager(new LinearLayoutManager(this));
         rvReceivedOrders.addItemDecoration(new DividerItemDecoration(this, R.drawable.shape_divider_for_received_orders));
@@ -59,15 +65,11 @@ public class MainActivity extends BaseActivity implements OrderAcceptedListener 
         receivedOrdersAdapter.addOnItemClickListener(new ReceivedOrdersAdapter.OnItemClickListener() {
             @Override public void onItemClick(String fileName, Order order) {
                 Bundle bundle = new Bundle();
-                // TODO: Order 객체를 직접 전달하지 않고, FirebaseDB에서 값을 전달 받는 방식으로 변경
-                bundle.putParcelable("order", order);
                 bundle.putString("fileName", fileName);
                 orderDetailDialogFragment.setArguments(bundle);
                 orderDetailDialogFragment.show(getSupportFragmentManager(), "order_detail");
             }
         });
-
-        appPreferenceManager = App.getApplication(getApplicationContext()).getPreferenceManager();
 
         vendorRef = FirebaseDatabase.getInstance()
                 .getReference("orders")
@@ -80,7 +82,6 @@ public class MainActivity extends BaseActivity implements OrderAcceptedListener 
             @Override public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 String fileName = dataSnapshot.getKey();
                 Order order = dataSnapshot.getValue(Order.class);
-
                 receivedOrdersAdapter.addedItem(fileName, order);
             }
 
@@ -110,26 +111,10 @@ public class MainActivity extends BaseActivity implements OrderAcceptedListener 
         // TODO: Order 객체를 직접 전달하지 않고, FirebaseDB에서 값을 전달 받는 방식으로 변경
         if (getIntent().getExtras() != null) {
             final String fileName = getIntent().getExtras().getString("orderKey");
-
-            FirebaseDatabase.getInstance()
-                    .getReference("orders")
-                    .child("vendors")
-                    .child(appPreferenceManager.getPhoneNumber())
-                    .child(fileName)
-                    .addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override public void onDataChange(DataSnapshot dataSnapshot) {
-                            Order order = dataSnapshot.getValue(Order.class);
-                            Bundle bundle = new Bundle();
-                            bundle.putParcelable("order", order);
-                            bundle.putString("fileName", fileName);
-                            orderDetailDialogFragment.setArguments(bundle);
-                            orderDetailDialogFragment.show(getSupportFragmentManager(), "order_detail");
-                        }
-
-                        @Override public void onCancelled(DatabaseError databaseError) {
-
-                        }
-                    });
+            Bundle bundle = new Bundle();
+            bundle.putString("fileName", fileName);
+            orderDetailDialogFragment.setArguments(bundle);
+            orderDetailDialogFragment.show(getSupportFragmentManager(), "order_detail");
         }
     }
 
@@ -155,5 +140,13 @@ public class MainActivity extends BaseActivity implements OrderAcceptedListener 
                     }
                 });
 
+    }
+
+    public FirebaseDbManager getDbManager() {
+        return dbManager;
+    }
+
+    public String getPhoneNumber() {
+        return appPreferenceManager.getPhoneNumber();
     }
 }

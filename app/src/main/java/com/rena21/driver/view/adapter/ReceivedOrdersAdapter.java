@@ -1,6 +1,5 @@
 package com.rena21.driver.view.adapter;
 
-import android.content.DialogInterface;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.ViewHolder;
 import android.view.LayoutInflater;
@@ -8,7 +7,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 import com.rena21.driver.R;
+import com.rena21.driver.firebase.FirebaseDbManager;
 import com.rena21.driver.models.Order;
 import com.rena21.driver.models.OrderItem;
 
@@ -38,19 +41,25 @@ public class ReceivedOrdersAdapter extends RecyclerView.Adapter<ReceivedOrdersAd
 
         public void bind(String timeStamp, String restaurantName, String orderItems, View.OnClickListener onClickListener) {
             tvTimeStamp.setText(timeStamp);
-            tvRestaurantName.setText(restaurantName);
             tvItems.setText(orderItems);
             itemView.setOnClickListener(onClickListener);
+            tvRestaurantName.setText(restaurantName);
         }
+
+
     }
 
+    private final FirebaseDbManager dbManager;
     private HashMap<String, Order> orderMap;
     private ArrayList<String> fileNameList;
+    private HashMap<String, String> restaruantNameMapCache;
     private OnItemClickListener onItemClickListener;
 
-    public ReceivedOrdersAdapter() {
+    public ReceivedOrdersAdapter(FirebaseDbManager dbManager) {
         this.orderMap = new HashMap<>();
         this.fileNameList = new ArrayList<>();
+        this.restaruantNameMapCache = new HashMap<>();
+        this.dbManager = dbManager;
     }
 
     @Override public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -61,27 +70,44 @@ public class ReceivedOrdersAdapter extends RecyclerView.Adapter<ReceivedOrdersAd
     @Override public void onBindViewHolder(MyViewHolder holder, int position) {
         final String fileName = fileNameList.get(position);
         final Order order = orderMap.get(fileName);
+        final String restaurantPhoneNumber = getPhoneNumber(fileName);
 
         String timeStamp = getDisplayTimeFromfileName(fileName);
-        String restaurantName = order.restaurantName;
         String orderItems = makeOrderItemsString(order.orderItems);
+
+        String restaurantName = restaruantNameMapCache.containsKey(restaurantPhoneNumber) ?
+                restaruantNameMapCache.get(restaurantPhoneNumber) : restaurantPhoneNumber;
+
 
         holder.bind(timeStamp, restaurantName, orderItems, new View.OnClickListener() {
             @Override public void onClick(View v) {
                 onItemClickListener.onItemClick(fileName, order);
             }
         });
+
     }
 
     @Override public int getItemCount() {
         return fileNameList.size();
     }
 
-    public void addedItem(String fileName, Order order) {
+    public void addedItem(final String fileName, Order order) {
         orderMap.put(fileName, order);
         fileNameList.add(0, fileName);
-
+        final String restaurantPhoneNumber = getPhoneNumber(fileName);
         notifyItemInserted(0);
+        // 식당 이름이 저장되지 않은 경우
+        if (!restaruantNameMapCache.containsKey(restaurantPhoneNumber)) {
+            dbManager.getRestaurantName(restaurantPhoneNumber, new ValueEventListener() {
+                @Override public void onDataChange(DataSnapshot dataSnapshot) {
+                    String restaurantName = dataSnapshot.getValue(String.class);
+                    restaruantNameMapCache.put(restaurantPhoneNumber, (restaurantName == null) ? restaurantPhoneNumber : restaurantName);
+                    notifyItemChanged(0);
+                }
+
+                @Override public void onCancelled(DatabaseError databaseError) { }
+            });
+        }
     }
 
     public void changedItem(String fileName, Order order) {
@@ -104,6 +130,10 @@ public class ReceivedOrdersAdapter extends RecyclerView.Adapter<ReceivedOrdersAd
 
     public void addOnItemClickListener(OnItemClickListener onItemClickListener) {
         this.onItemClickListener = onItemClickListener;
+    }
+
+    private String getPhoneNumber(String fileName) {
+        return fileName.split("_")[0];
     }
 
     private String getDisplayTimeFromfileName(String fileName) {
