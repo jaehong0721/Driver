@@ -22,7 +22,6 @@ import java.util.List;
 
 public class ReceivedOrdersAdapter extends RecyclerView.Adapter<ReceivedOrdersAdapter.MyViewHolder> {
 
-
     public interface OnItemClickListener {
         void onItemClick(String fileName, Order order);
     }

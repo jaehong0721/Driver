@@ -1,5 +1,6 @@
 package com.rena21.driver.firebase;
 
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
@@ -17,5 +18,13 @@ public class FirebaseDbManager {
                 .child("info")
                 .child("restaurantName")
                 .addListenerForSingleValueEvent(listener);
+    }
+
+    public DatabaseReference getOrderRef(String vendorPhoneNumber, String fileName) {
+        return instance
+                .getReference("orders")
+                .child("vendors")
+                .child(vendorPhoneNumber)
+                .child(fileName);
     }
 }

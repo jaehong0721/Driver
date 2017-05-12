@@ -17,9 +17,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.firebase.crash.FirebaseCrash;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 import com.rena21.driver.R;
 import com.rena21.driver.activities.MainActivity;
@@ -29,20 +32,30 @@ import com.rena21.driver.models.Order;
 import com.rena21.driver.view.DividerItemDecoration;
 import com.rena21.driver.view.adapter.OrderDetailAdapter;
 
+import static android.R.attr.data;
+import static android.R.attr.order;
+import static android.R.attr.vendor;
+
 public class OrderDetailDialogFragment extends DialogFragment {
 
     private OrderAcceptedListener orderAcceptedListener;
-    private FirebaseDbManager dbManager;
+    private DatabaseReference ref;
+    private ValueEventListener listener;
+
 
     //출처 : https://developer.android.com/guide/components/fragments.html?hl=ko#CommunicatingWithActivity
     @Override public void onAttach(Context context) {
         super.onAttach(context);
         try {
             orderAcceptedListener = (OrderAcceptedListener) getActivity();
-            dbManager = ((MainActivity) getActivity()).getDbManager();
         } catch (ClassCastException e) {
             throw new ClassCastException(getActivity().toString() + " must implement OrderAcceptedListener");
         }
+    }
+
+    @Override public void onDetach() {
+        super.onDetach();
+        ref.removeEventListener(listener);
     }
 
     @Nullable @Override public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -50,43 +63,68 @@ public class OrderDetailDialogFragment extends DialogFragment {
         View view = inflater.inflate(R.layout.dialog_fragment_order_detail, container);
 
         final TextView tvRestaurantName = (TextView) view.findViewById(R.id.tvRestaurantName);
-        RecyclerView rvOrderDetail = (RecyclerView) view.findViewById(R.id.rvOrderDetail);
-        Button btnAccept = (Button) view.findViewById(R.id.btnAccept);
+        final RecyclerView rvOrderDetail = (RecyclerView) view.findViewById(R.id.rvOrderDetail);
+        final Button btnAccept = (Button) view.findViewById(R.id.btnAccept);
 
-        final Order order = getArguments().getParcelable("order");
+        FirebaseDbManager dbManager = ((MainActivity) getActivity()).getDbManager();
+        String vendorPhoneNumber = ((MainActivity) getActivity()).getPhoneNumber();
+
         final String fileName = getArguments().getString("fileName");
+                Log.d("fileName", "fileName: " + fileName);
+                Log.d("fileName", "vendorPhoneNumber: " + vendorPhoneNumber);
 
-        if (order.accepted) {
-            btnAccept.setVisibility(View.GONE);
-        } else {
-            btnAccept.setOnClickListener(new View.OnClickListener() {
-                @Override public void onClick(View v) {
-                    orderAcceptedListener.onOrderAccepted(fileName);
-                    dismiss();
-                }
-            });
-        }
-
-        final String restaurantPhoneNumber = fileName.split("_")[0];
-
-        dbManager.getRestaurantName(restaurantPhoneNumber, new ValueEventListener() {
+        ref = dbManager.getOrderRef(vendorPhoneNumber, fileName);
+        listener = new ValueEventListener() {
             @Override public void onDataChange(DataSnapshot dataSnapshot) {
-                String restaurantName = dataSnapshot.getValue(String.class);
-                if (restaurantName == null) {   // 식당 연락처가 없는 경우 전화번호를 보여줌
-                    tvRestaurantName.setText(restaurantPhoneNumber);
-                } else {
-                    tvRestaurantName.setText(restaurantName);
+
+                Log.d("fileName", "dataSnapshot: " + dataSnapshot);
+
+                Order order = dataSnapshot.getValue(Order.class);
+
+                if(order == null) {
+                    return;
                 }
+
+                if (order.accepted) {
+                    btnAccept.setVisibility(View.GONE);
+                } else {
+                    btnAccept.setOnClickListener(new View.OnClickListener() {
+                        @Override public void onClick(View v) {
+                            orderAcceptedListener.onOrderAccepted(fileName);
+                            dismiss();
+                        }
+                    });
+                }
+
+                final String restaurantPhoneNumber = fileName.split("_")[0];
+                FirebaseDbManager dbManager = ((MainActivity) getActivity()).getDbManager();
+                dbManager.getRestaurantName(restaurantPhoneNumber, new ValueEventListener() {
+                    @Override public void onDataChange(DataSnapshot dataSnapshot) {
+                        String restaurantName = dataSnapshot.getValue(String.class);
+                        if (restaurantName == null) {   // 식당 연락처가 없는 경우 전화번호를 보여줌
+                            tvRestaurantName.setText(restaurantPhoneNumber);
+                        } else {
+                            tvRestaurantName.setText(restaurantName);
+                        }
+                    }
+
+                    @Override public void onCancelled(DatabaseError databaseError) { }
+                });
+
+                OrderDetailAdapter orderDetailAdapter = new OrderDetailAdapter(order.orderItems);
+                rvOrderDetail.setLayoutManager(new LinearLayoutManager(getActivity()));
+                rvOrderDetail.addItemDecoration(new DividerItemDecoration(getActivity(), R.drawable.shape_divider_for_received_orders));
+                rvOrderDetail.setAdapter(orderDetailAdapter);
+
             }
 
-            @Override public void onCancelled(DatabaseError databaseError) { }
-        });
+            @Override public void onCancelled(DatabaseError databaseError) {
+                Log.e("", "error: " + databaseError.toString());
+            }
+        };
 
-        OrderDetailAdapter orderDetailAdapter = new OrderDetailAdapter(order.orderItems);
+        ref.addValueEventListener(listener);
 
-        rvOrderDetail.setLayoutManager(new LinearLayoutManager(getActivity()));
-        rvOrderDetail.addItemDecoration(new DividerItemDecoration(getActivity(), R.drawable.shape_divider_for_received_orders));
-        rvOrderDetail.setAdapter(orderDetailAdapter);
         return view;
     }
 
@@ -106,4 +144,6 @@ public class OrderDetailDialogFragment extends DialogFragment {
             dialog.getWindow().setLayout(width, height);
         }
     }
+
+
 }
