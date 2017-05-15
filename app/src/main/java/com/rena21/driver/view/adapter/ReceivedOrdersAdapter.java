@@ -52,13 +52,13 @@ public class ReceivedOrdersAdapter extends RecyclerView.Adapter<ReceivedOrdersAd
     private final FirebaseDbManager dbManager;
     private HashMap<String, Order> orderMap;
     private ArrayList<String> fileNameList;
-    private HashMap<String, String> restaruantNameMapCache;
+    private HashMap<String, String> restaurantNameMapCache;
     private OnItemClickListener onItemClickListener;
 
     public ReceivedOrdersAdapter(FirebaseDbManager dbManager) {
         this.orderMap = new HashMap<>();
         this.fileNameList = new ArrayList<>();
-        this.restaruantNameMapCache = new HashMap<>();
+        this.restaurantNameMapCache = new HashMap<>();
         this.dbManager = dbManager;
     }
 
@@ -75,8 +75,8 @@ public class ReceivedOrdersAdapter extends RecyclerView.Adapter<ReceivedOrdersAd
         String timeStamp = getDisplayTimeFromfileName(fileName);
         String orderItems = makeOrderItemsString(order.orderItems);
 
-        String restaurantName = restaruantNameMapCache.containsKey(restaurantPhoneNumber) ?
-                restaruantNameMapCache.get(restaurantPhoneNumber) : restaurantPhoneNumber;
+        String restaurantName = restaurantNameMapCache.containsKey(restaurantPhoneNumber) ?
+                restaurantNameMapCache.get(restaurantPhoneNumber) : restaurantPhoneNumber;
 
 
         holder.bind(timeStamp, restaurantName, orderItems, new View.OnClickListener() {
@@ -97,11 +97,11 @@ public class ReceivedOrdersAdapter extends RecyclerView.Adapter<ReceivedOrdersAd
         final String restaurantPhoneNumber = getPhoneNumber(fileName);
         notifyItemInserted(0);
         // 식당 이름이 저장되지 않은 경우
-        if (!restaruantNameMapCache.containsKey(restaurantPhoneNumber)) {
+        if (!restaurantNameMapCache.containsKey(restaurantPhoneNumber)) {
             dbManager.getRestaurantName(restaurantPhoneNumber, new ValueEventListener() {
                 @Override public void onDataChange(DataSnapshot dataSnapshot) {
                     String restaurantName = dataSnapshot.getValue(String.class);
-                    restaruantNameMapCache.put(restaurantPhoneNumber, (restaurantName == null) ? restaurantPhoneNumber : restaurantName);
+                    restaurantNameMapCache.put(restaurantPhoneNumber, (restaurantName == null) ? restaurantPhoneNumber : restaurantName);
                     notifyItemChanged(0);
                 }
 

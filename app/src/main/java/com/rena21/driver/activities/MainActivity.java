@@ -5,17 +5,13 @@ import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.crash.FirebaseCrash;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.rena21.driver.App;
 import com.rena21.driver.R;
 import com.rena21.driver.etc.AppPreferenceManager;
@@ -29,15 +25,12 @@ import com.rena21.driver.view.fragment.OrderDetailDialogFragment;
 
 import java.util.HashMap;
 
-public class MainActivity extends BaseActivity implements OrderAcceptedListener {
+public class MainActivity extends BaseActivity implements OrderAcceptedListener, ChildEventListener{
 
     private RecyclerView rvReceivedOrders;
     private ReceivedOrdersAdapter receivedOrdersAdapter;
 
     private OrderDetailDialogFragment orderDetailDialogFragment;
-
-    private DatabaseReference vendorRef;
-    private ChildEventListener receivedOrderEventListener;
 
     private AppPreferenceManager appPreferenceManager;
     private FirebaseDbManager dbManager;
@@ -52,7 +45,7 @@ public class MainActivity extends BaseActivity implements OrderAcceptedListener 
 
         appPreferenceManager = App.getApplication(getApplicationContext()).getPreferenceManager();
 
-        dbManager = new FirebaseDbManager(FirebaseDatabase.getInstance());
+        dbManager = new FirebaseDbManager(FirebaseDatabase.getInstance(), appPreferenceManager.getPhoneNumber());
 
         orderDetailDialogFragment = new OrderDetailDialogFragment();
 
@@ -71,44 +64,12 @@ public class MainActivity extends BaseActivity implements OrderAcceptedListener 
             }
         });
 
-        vendorRef = FirebaseDatabase.getInstance()
-                .getReference("orders")
-                .child("vendors")
-                .child(appPreferenceManager.getPhoneNumber());
-
-        vendorRef.keepSynced(true);
-
-        receivedOrderEventListener = new ChildEventListener() {
-            @Override public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                String fileName = dataSnapshot.getKey();
-                Order order = dataSnapshot.getValue(Order.class);
-                receivedOrdersAdapter.addedItem(fileName, order);
-            }
-
-            @Override public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                String fileName = dataSnapshot.getKey();
-                Order order = dataSnapshot.getValue(Order.class);
-
-                receivedOrdersAdapter.changedItem(fileName, order);
-            }
-
-            @Override public void onChildRemoved(DataSnapshot dataSnapshot) {
-                String fileName = dataSnapshot.getKey();
-
-                receivedOrdersAdapter.removedItem(fileName);
-            }
-
-            @Override public void onChildMoved(DataSnapshot dataSnapshot, String s) {}
-
-            @Override public void onCancelled(DatabaseError databaseError) {}
-        };
-
-        vendorRef.addChildEventListener(receivedOrderEventListener);
+        dbManager.addChildEventListenerToOrdersRef(this);
     }
 
     @Override protected void onResume() {
         super.onResume();
-        // TODO: Order 객체를 직접 전달하지 않고, FirebaseDB에서 값을 전달 받는 방식으로 변경
+
         if (getIntent().getExtras() != null) {
             final String fileName = getIntent().getExtras().getString("orderKey");
             Bundle bundle = new Bundle();
@@ -120,33 +81,50 @@ public class MainActivity extends BaseActivity implements OrderAcceptedListener 
 
     @Override protected void onDestroy() {
         super.onDestroy();
-        vendorRef.removeEventListener(receivedOrderEventListener);
+        dbManager.removeChildEventListenerFromOrderRef(this);
     }
 
-    @Override public void onOrderAccepted(String fileName) {
-        HashMap<String, Object> map = new HashMap<>();
-        // 확인 버튼을 눌렀는지 저장하기 위한 경로
-        map.put("/orders/vendors/" + appPreferenceManager.getPhoneNumber() + "/" + fileName + "/accepted/", true);
-        // 식당앱을 위한 경로
-        map.put("/orders/restaurants/" + fileName + "/" + appPreferenceManager.getPhoneNumber() + "/accepted/", true);
-        FirebaseDatabase.getInstance()
-                .getReference()
-                .updateChildren(map)
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override public void onComplete(@NonNull Task<Void> task) {
-                        if (!task.isSuccessful()) {
-                            Log.e("error", task.getResult().toString());
-                        }
-                    }
-                });
+    @Override public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+        String fileName = dataSnapshot.getKey();
+        Order order = dataSnapshot.getValue(Order.class);
 
+        receivedOrdersAdapter.addedItem(fileName, order);
+    }
+
+    @Override public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+        String fileName = dataSnapshot.getKey();
+        Order order = dataSnapshot.getValue(Order.class);
+
+        receivedOrdersAdapter.changedItem(fileName, order);
+    }
+
+    @Override public void onChildRemoved(DataSnapshot dataSnapshot) {
+        String fileName = dataSnapshot.getKey();
+
+        receivedOrdersAdapter.removedItem(fileName);
+    }
+
+    @Override public void onChildMoved(DataSnapshot dataSnapshot, String s) {}
+
+    @Override public void onCancelled(DatabaseError databaseError) {}
+
+    @Override public void onOrderAccepted(String fileName) {
+        HashMap<String, Object> pathMap = new HashMap<>();
+        // 확인 버튼을 눌렀는지 저장하기 위한 경로
+        pathMap.put("/orders/vendors/" + appPreferenceManager.getPhoneNumber() + "/" + fileName + "/accepted/", true);
+        // 식당앱을 위한 경로
+        pathMap.put("/orders/restaurants/" + fileName + "/" + appPreferenceManager.getPhoneNumber() + "/accepted/", true);
+
+        dbManager.multiPathUpdateValue(pathMap, new OnCompleteListener<Void>() {
+            @Override public void onComplete(@NonNull Task<Void> task) {
+                if (!task.isSuccessful()) {
+                    Log.e("error", task.getResult().toString());
+                }
+            }
+        });
     }
 
     public FirebaseDbManager getDbManager() {
         return dbManager;
-    }
-
-    public String getPhoneNumber() {
-        return appPreferenceManager.getPhoneNumber();
     }
 }
