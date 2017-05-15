@@ -1,14 +1,10 @@
 package com.rena21.driver.view.fragment;
 
 
-import android.app.Dialog;
 import android.content.Context;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -22,14 +18,14 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 import com.rena21.driver.R;
-import com.rena21.driver.activities.MainActivity;
+import com.rena21.driver.activities.OrderDetailActivity;
 import com.rena21.driver.firebase.FirebaseDbManager;
 import com.rena21.driver.listener.OrderAcceptedListener;
 import com.rena21.driver.models.Order;
 import com.rena21.driver.view.DividerItemDecoration;
 import com.rena21.driver.view.adapter.OrderDetailAdapter;
 
-public class OrderDetailDialogFragment extends DialogFragment implements ValueEventListener{
+public class OrderDetailFragment extends Fragment implements ValueEventListener{
 
     private FirebaseDbManager dbManager;
     private OrderAcceptedListener orderAcceptedListener;
@@ -55,13 +51,13 @@ public class OrderDetailDialogFragment extends DialogFragment implements ValueEv
 
     @Nullable @Override public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.dialog_fragment_order_detail, container);
+        View view = inflater.inflate(R.layout.dialog_fragment_order_detail, container, false);
 
         tvRestaurantName = (TextView) view.findViewById(R.id.tvRestaurantName);
         rvOrderDetail = (RecyclerView) view.findViewById(R.id.rvOrderDetail);
         btnAccept = (Button) view.findViewById(R.id.btnAccept);
 
-        dbManager = ((MainActivity) getActivity()).getDbManager();
+        dbManager = ((OrderDetailActivity) getActivity()).getDbManager();
 
         fileName = getArguments().getString("fileName");
 
@@ -69,24 +65,6 @@ public class OrderDetailDialogFragment extends DialogFragment implements ValueEv
 
         return view;
     }
-
-    @NonNull @Override public Dialog onCreateDialog(Bundle savedInstanceState) {
-        Dialog dialog = new Dialog(getActivity());
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.WHITE));
-        dialog.setCanceledOnTouchOutside(false);
-        return dialog;
-    }
-
-    @Override public void onStart() {
-        super.onStart();
-        Dialog dialog = getDialog();
-        if (dialog != null) {
-            int width = ViewGroup.LayoutParams.MATCH_PARENT;
-            int height = ViewGroup.LayoutParams.MATCH_PARENT;
-            dialog.getWindow().setLayout(width, height);
-        }
-    }
-
 
     @Override public void onDataChange(DataSnapshot dataSnapshot) {
 
@@ -104,7 +82,6 @@ public class OrderDetailDialogFragment extends DialogFragment implements ValueEv
             btnAccept.setOnClickListener(new View.OnClickListener() {
                 @Override public void onClick(View v) {
                     orderAcceptedListener.onOrderAccepted(fileName);
-                    dismiss();
                 }
             });
         }
