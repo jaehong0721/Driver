@@ -22,7 +22,6 @@ public class OrderDetailActivity extends BaseActivity implements OrderAcceptedLi
     private OrderDetailFragment orderDetailFragment;
 
     private FirebaseDbManager dbManager;
-
     private String vendorPhoneNumber;
 
     @Override
@@ -30,21 +29,43 @@ public class OrderDetailActivity extends BaseActivity implements OrderAcceptedLi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_detail);
 
+        initView();
+        initVariable();
+        openDetailFragment();
+    }
+
+    @Override public void onOrderAccepted(String fileName) {
+        updateDb(fileName);
+        closeDetailFragment();
+        finish();
+    }
+
+    public FirebaseDbManager getDbManager() {
+        return dbManager;
+    }
+
+    private void initView() {
         ActionBarViewModel.createWithActionBar(getSupportActionBar())
                 .setTitle("납품 상세");
 
-        vendorPhoneNumber = getIntent().getStringExtra("vendorPhoneNumber");
-
-        dbManager = new FirebaseDbManager(FirebaseDatabase.getInstance(), vendorPhoneNumber);
-
         orderDetailFragment = new OrderDetailFragment();
-        orderDetailFragment.setArguments(getIntent().getExtras());
+    }
+
+    private void initVariable() {
+        vendorPhoneNumber = getIntent().getStringExtra("vendorPhoneNumber");
+        dbManager = new FirebaseDbManager(FirebaseDatabase.getInstance(), vendorPhoneNumber);
+    }
+
+    private void openDetailFragment() {
+        Bundle bundle = new Bundle();
+        bundle.putString("fileName", getIntent().getStringExtra("fileName"));
+        orderDetailFragment.setArguments(bundle);
 
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.add(R.id.order_detail_fragment_container, orderDetailFragment).commit();
     }
 
-    @Override public void onOrderAccepted(String fileName) {
+    private void updateDb(String fileName) {
         HashMap<String, Object> pathMap = new HashMap<>();
         // 확인 버튼을 눌렀는지 저장하기 위한 경로
         pathMap.put("/orders/vendors/" + vendorPhoneNumber + "/" + fileName + "/accepted/", true);
@@ -58,13 +79,10 @@ public class OrderDetailActivity extends BaseActivity implements OrderAcceptedLi
                 }
             }
         });
-
-        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.remove(orderDetailFragment).commit();
-        finish();
     }
 
-    public FirebaseDbManager getDbManager() {
-        return dbManager;
+    private void closeDetailFragment() {
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.remove(orderDetailFragment).commit();
     }
 }
