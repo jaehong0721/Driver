@@ -1,8 +1,12 @@
 package com.rena21.driver.activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.view.LayoutInflater;
+import android.widget.RelativeLayout;
 
 import com.google.firebase.database.FirebaseDatabase;
 import com.rena21.driver.App;
@@ -12,11 +16,17 @@ import com.rena21.driver.firebase.FirebaseDbManager;
 import com.rena21.driver.listener.OrderClickedListener;
 import com.rena21.driver.view.actionbar.ActionBarViewModel;
 import com.rena21.driver.view.fragment.OrderListFragment;
+import com.rena21.driver.viewmodel.MainTabViewModel;
 
-public class MainActivity extends BaseActivity implements OrderClickedListener {
+
+public class MainActivity extends BaseActivity implements OrderClickedListener, MainTabViewModel.MainTabClickListener {
 
     private AppPreferenceManager appPreferenceManager;
     private FirebaseDbManager dbManager;
+
+    private MainTabViewModel mainTabViewModel;
+
+    private OrderListFragment orderListFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,10 +40,12 @@ public class MainActivity extends BaseActivity implements OrderClickedListener {
 
         dbManager = new FirebaseDbManager(FirebaseDatabase.getInstance(), appPreferenceManager.getPhoneNumber());
 
-        OrderListFragment orderListFragment = new OrderListFragment();
+        orderListFragment = new OrderListFragment();
 
-        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.add(R.id.main_fragment_container, orderListFragment).commit();
+        RelativeLayout mainTabContainer = (RelativeLayout) findViewById(R.id.main_tab_container);
+        mainTabViewModel = new MainTabViewModel((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE), mainTabContainer);
+        mainTabViewModel.setMainTabClickListener(this);
+        mainTabViewModel.showInitialTab();
     }
 
     @Override protected void onResume() {
@@ -49,8 +61,25 @@ public class MainActivity extends BaseActivity implements OrderClickedListener {
         goToDetailActivity(orderKey);
     }
 
+    @Override public void onMainTabClick(MainTabViewModel.MainTab tab) {
+        switch (tab) {
+            case TAB_1_ORDERS:
+                replaceFragment(orderListFragment);
+                break;
+            case TAB_2_LEDGER:
+                FragmentTransaction fragmentTransaction2 = getSupportFragmentManager().beginTransaction();
+                fragmentTransaction2.remove(orderListFragment).commit();
+                break;
+        }
+    }
+
     public FirebaseDbManager getDbManager() {
         return dbManager;
+    }
+
+    private void replaceFragment(Fragment targetFragment) {
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.main_fragment_container, targetFragment).commit();
     }
 
     private void goToDetailActivity(String fileName) {
