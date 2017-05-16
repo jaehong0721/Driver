@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -37,6 +38,7 @@ public class OrderDetailFragment extends Fragment implements ValueEventListener{
     private TextView tvRestaurantName;
     private RecyclerView rvOrderDetail;
     private Button btnAccept;
+    private Button btnDeliveryCompletion;
 
     @Override public void onAttach(Context context) {
         super.onAttach(context);
@@ -49,9 +51,8 @@ public class OrderDetailFragment extends Fragment implements ValueEventListener{
 
     @Nullable @Override public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_order_detail, container, false);
-        initView(view);
 
-        initVariable();
+        init(view);
 
         subscribeToSpecificOrderRef();
 
@@ -73,7 +74,7 @@ public class OrderDetailFragment extends Fragment implements ValueEventListener{
             return;
         }
 
-        setAcceptable(order.accepted);
+        activateButton(order.accepted);
         setRestaurantName();
         setOrderItems(order.orderItems);
     }
@@ -90,27 +91,40 @@ public class OrderDetailFragment extends Fragment implements ValueEventListener{
         dbManager.removeValueEventListenerFromSpecificOrderRef(fileName, this);
     }
 
-    private void initView(View view) {
+    private void init(View view) {
         btnAccept = (Button) view.findViewById(R.id.btnAccept);
+        btnDeliveryCompletion = (Button) view.findViewById(R.id.btnDeliveryCompletion);
         tvRestaurantName = (TextView) view.findViewById(R.id.tvRestaurantName);
         rvOrderDetail = (RecyclerView) view.findViewById(R.id.rvOrderDetail);
-    }
 
-    private void initVariable() {
         dbManager = ((OrderDetailActivity) getActivity()).getDbManager();
         fileName = getArguments().getString("fileName");
     }
 
-    private void setAcceptable(boolean accepted) {
+    private void activateButton(boolean accepted) {
         if (accepted) {
-            btnAccept.setVisibility(View.GONE);
+            activateBtnDeliveryCompletion();
         } else {
-            btnAccept.setOnClickListener(new View.OnClickListener() {
-                @Override public void onClick(View v) {
-                    orderAcceptedListener.onOrderAccepted(fileName);
-                }
-            });
+            activateBtnAccept();
         }
+    }
+
+    private void activateBtnDeliveryCompletion() {
+        btnDeliveryCompletion.setVisibility(View.VISIBLE);
+        btnDeliveryCompletion.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                Toast.makeText(getActivity(), "납품 완료!!", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void activateBtnAccept() {
+        btnAccept.setVisibility(View.VISIBLE);
+        btnAccept.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                orderAcceptedListener.onOrderAccepted(fileName);
+            }
+        });
     }
 
     private void setRestaurantName() {
