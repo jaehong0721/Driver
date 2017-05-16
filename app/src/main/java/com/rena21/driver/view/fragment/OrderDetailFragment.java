@@ -48,7 +48,7 @@ public class OrderDetailFragment extends Fragment implements ValueEventListener{
     }
 
     @Nullable @Override public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.dialog_fragment_order_detail, container, false);
+        View view = inflater.inflate(R.layout.fragment_order_detail, container, false);
         initView(view);
 
         initVariable();
