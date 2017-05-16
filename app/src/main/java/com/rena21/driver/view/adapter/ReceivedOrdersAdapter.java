@@ -23,7 +23,7 @@ import java.util.List;
 public class ReceivedOrdersAdapter extends RecyclerView.Adapter<ReceivedOrdersAdapter.MyViewHolder> {
 
     public interface OnItemClickListener {
-        void onItemClick(String fileName, Order order);
+        void onItemClick(String fileName);
     }
 
     static class MyViewHolder extends ViewHolder {
@@ -81,7 +81,7 @@ public class ReceivedOrdersAdapter extends RecyclerView.Adapter<ReceivedOrdersAd
 
         holder.bind(timeStamp, restaurantName, orderItems, new View.OnClickListener() {
             @Override public void onClick(View v) {
-                onItemClickListener.onItemClick(fileName, order);
+                onItemClickListener.onItemClick(fileName);
             }
         });
 
