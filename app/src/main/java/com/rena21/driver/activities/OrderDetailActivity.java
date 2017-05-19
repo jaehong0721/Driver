@@ -7,69 +7,60 @@ import android.util.Log;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.rena21.driver.R;
 import com.rena21.driver.firebase.FirebaseDbManager;
 import com.rena21.driver.listener.OrderAcceptedListener;
 import com.rena21.driver.view.actionbar.ActionBarViewModel;
-import com.rena21.driver.view.fragment.OrderDetailFragment;
+import com.rena21.driver.view.fragment.OrderAcceptFragment;
 
 import java.util.HashMap;
 
 
-public class OrderDetailActivity extends BaseActivity implements OrderAcceptedListener{
-
-    private OrderDetailFragment orderDetailFragment;
+public class OrderDetailActivity extends BaseActivity implements OrderAcceptedListener {
 
     private FirebaseDbManager dbManager;
     private String vendorPhoneNumber;
+    private String fileName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_detail);
 
-        initView();
-        initVariable();
-        openDetailFragment();
-    }
+        ActionBarViewModel.createWithActionBar(getSupportActionBar())
+                .setTitle("주문 상세");
 
-    @Override public void onOrderAccepted(String fileName) {
-        updateDb(fileName);
-        closeDetailFragment();
-        finish();
+        vendorPhoneNumber = getIntent().getStringExtra("vendorPhoneNumber");
+        fileName = getIntent().getStringExtra("fileName");
+
+        dbManager = new FirebaseDbManager(FirebaseDatabase.getInstance(), vendorPhoneNumber);
+        dbManager.getOrderAccepted(fileName, new ValueEventListener() {
+
+            @Override public void onDataChange(DataSnapshot dataSnapshot) {
+                Boolean accepted = dataSnapshot.getValue(Boolean.class);
+                if(accepted == null) {
+                    FragmentTransaction openOrderAcceptFragment = getSupportFragmentManager().beginTransaction();
+                    openOrderAcceptFragment
+                            .add(R.id.order_detail_fragment_container, OrderAcceptFragment.newInstance(fileName))
+                            .commit();
+                } 
+            }
+
+            @Override public void onCancelled(DatabaseError databaseError) {}
+        });
     }
 
     public FirebaseDbManager getDbManager() {
         return dbManager;
     }
 
-    private void initView() {
-        ActionBarViewModel.createWithActionBar(getSupportActionBar())
-                .setTitle("납품 상세");
-
-        orderDetailFragment = new OrderDetailFragment();
-    }
-
-    private void initVariable() {
-        vendorPhoneNumber = getIntent().getStringExtra("vendorPhoneNumber");
-        dbManager = new FirebaseDbManager(FirebaseDatabase.getInstance(), vendorPhoneNumber);
-    }
-
-    private void openDetailFragment() {
-        Bundle bundle = new Bundle();
-        bundle.putString("fileName", getIntent().getStringExtra("fileName"));
-        orderDetailFragment.setArguments(bundle);
-
-        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.add(R.id.order_detail_fragment_container, orderDetailFragment).commit();
-    }
-
-    private void updateDb(String fileName) {
+    @Override public void onOrderAccepted(String fileName) {
         HashMap<String, Object> pathMap = new HashMap<>();
-        // 확인 버튼을 눌렀는지 저장하기 위한 경로
         pathMap.put("/orders/vendors/" + vendorPhoneNumber + "/" + fileName + "/accepted/", true);
-        // 식당앱을 위한 경로
         pathMap.put("/orders/restaurants/" + fileName + "/" + vendorPhoneNumber + "/accepted/", true);
 
         dbManager.multiPathUpdateValue(pathMap, new OnCompleteListener<Void>() {
@@ -79,10 +70,7 @@ public class OrderDetailActivity extends BaseActivity implements OrderAcceptedLi
                 }
             }
         });
-    }
 
-    private void closeDetailFragment() {
-        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.remove(orderDetailFragment).commit();
+        finish();
     }
 }
