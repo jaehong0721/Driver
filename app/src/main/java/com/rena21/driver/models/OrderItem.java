@@ -6,6 +6,7 @@ import android.os.Parcelable;
 public class OrderItem implements Parcelable{
     public String name;
     public String count;
+    public String price;
 
     public OrderItem() {}
 
@@ -39,6 +40,7 @@ public class OrderItem implements Parcelable{
         return "OrderItem{" +
                 "name='" + name + '\'' +
                 ", count='" + count + '\'' +
+                ", price='" + price + '\'' +
                 '}';
     }
 }

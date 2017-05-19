@@ -8,6 +8,7 @@
 
     <color name="textBlack">#313131</color>
     <color name="textBlackSub">#838383</color>
+    <color name="textBackground">#F0F0F0</color>
 
     <color name="itemDividerForListView">#CCCCCC</color>
 </resources>

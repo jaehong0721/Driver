@@ -11,16 +11,20 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
 import com.rena21.driver.R;
+
 import com.rena21.driver.firebase.FirebaseDbManager;
 import com.rena21.driver.listener.OrderAcceptedListener;
+import com.rena21.driver.listener.OrderDeliveryFinishedListener;
 import com.rena21.driver.view.actionbar.ActionBarViewModel;
 import com.rena21.driver.view.fragment.OrderAcceptFragment;
+import com.rena21.driver.view.fragment.OrderDeliveryFinishFragment;
 
 import java.util.HashMap;
 
 
-public class OrderDetailActivity extends BaseActivity implements OrderAcceptedListener {
+public class OrderDetailActivity extends BaseActivity implements OrderAcceptedListener, OrderDeliveryFinishedListener {
 
     private FirebaseDbManager dbManager;
     private String vendorPhoneNumber;
@@ -47,7 +51,12 @@ public class OrderDetailActivity extends BaseActivity implements OrderAcceptedLi
                     openOrderAcceptFragment
                             .add(R.id.order_detail_fragment_container, OrderAcceptFragment.newInstance(fileName))
                             .commit();
-                } 
+                } else {
+                    FragmentTransaction openOrderDeliveryFinishFragment = getSupportFragmentManager().beginTransaction();
+                    openOrderDeliveryFinishFragment
+                            .add(R.id.order_detail_fragment_container, OrderDeliveryFinishFragment.newInstance(fileName))
+                            .commit();
+                }
             }
 
             @Override public void onCancelled(DatabaseError databaseError) {}
@@ -62,6 +71,22 @@ public class OrderDetailActivity extends BaseActivity implements OrderAcceptedLi
         HashMap<String, Object> pathMap = new HashMap<>();
         pathMap.put("/orders/vendors/" + vendorPhoneNumber + "/" + fileName + "/accepted/", true);
         pathMap.put("/orders/restaurants/" + fileName + "/" + vendorPhoneNumber + "/accepted/", true);
+
+        dbManager.multiPathUpdateValue(pathMap, new OnCompleteListener<Void>() {
+            @Override public void onComplete(@NonNull Task<Void> task) {
+                if (!task.isSuccessful()) {
+                    Log.e("error", task.getResult().toString());
+                }
+            }
+        });
+
+        finish();
+    }
+
+    @Override public void onOrderDeliveryFinished(String fileName) {
+        HashMap<String, Object> pathMap = new HashMap<>();
+        pathMap.put("/orders/vendors/" + vendorPhoneNumber + "/" + fileName + "/delivered/", true);
+        pathMap.put("/orders/restaurants/" + fileName + "/" + vendorPhoneNumber + "/delivered/", true);
 
         dbManager.multiPathUpdateValue(pathMap, new OnCompleteListener<Void>() {
             @Override public void onComplete(@NonNull Task<Void> task) {

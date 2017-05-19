@@ -1,7 +1,6 @@
-<?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+             android:layout_width="match_parent"
+             android:layout_height="match_parent">
 
     <RelativeLayout
         android:id="@+id/layoutHeader"
@@ -29,7 +28,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/btnAccept"
+        android:layout_above="@+id/btnDeliveryFinish"
         android:layout_below="@+id/layoutHeaderDivider">
 
         <RelativeLayout
@@ -40,19 +39,10 @@
             android:layout_marginRight="@dimen/activity_vertical_margin">
 
             <TextView
-                android:id="@+id/tvSpecial"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="특이사항"
-                android:textSize="14sp"/>
-
-            <TextView
                 android:id="@+id/tvTitleForName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
-                android:layout_below="@+id/tvSpecial"
                 android:layout_marginTop="@dimen/activity_horizontal_margin"
                 android:text="품목명"
                 android:textSize="@dimen/text_smallest"/>
@@ -62,8 +52,17 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignBottom="@+id/tvTitleForName"
-                android:layout_alignParentRight="true"
+                android:layout_centerHorizontal="true"
                 android:text="납품량"
+                android:textSize="@dimen/text_smallest"/>
+
+            <TextView
+                android:id="@+id/tvTitleForPrice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/tvTitleForName"
+                android:layout_alignParentRight="true"
+                android:text="가격"
                 android:textSize="@dimen/text_smallest"/>
 
             <View
@@ -82,21 +81,11 @@
     </RelativeLayout>
 
     <Button
-        android:id="@+id/btnAccept"
+        android:id="@+id/btnDeliveryFinish"
         android:layout_width="match_parent"
         android:layout_height="44dp"
         android:layout_alignParentBottom="true"
         android:background="@color/primaryOrange"
-        android:text="주문확인"
-        android:visibility="gone"/>
-
-    <Button
-        android:id="@+id/btnDeliveryCompletion"
-        android:layout_width="match_parent"
-        android:layout_height="44dp"
-        android:layout_alignParentBottom="true"
-        android:background="@color/primaryOrange"
-        android:text="납품완료"
-        android:visibility="gone"/>
+        android:text="납품완료"/>
 
 </RelativeLayout>
