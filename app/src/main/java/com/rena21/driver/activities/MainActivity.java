@@ -50,9 +50,10 @@ public class MainActivity extends BaseActivity implements OrderClickedListener, 
 
     @Override protected void onResume() {
         super.onResume();
-
-        if (getIntent().getExtras() != null) {
-            final String fileName = getIntent().getExtras().getString("orderKey");
+        Bundle bundle = getIntent().getExtras();
+        if (bundle != null && bundle.getString("orderKey") != null) {
+            final String fileName = bundle.getString("orderKey");
+            getIntent().removeExtra("orderKey");
             goToDetailActivity(fileName);
         }
     }
