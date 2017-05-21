@@ -181,6 +181,12 @@ public class SplashActivity extends BaseActivity {
 
     private void goToMain() {
         Intent intent = new Intent(SplashActivity.this, MainActivity.class);
+
+        if(getIntent().getExtras() != null) {
+            String fileName = getIntent().getExtras().getString("orderKey");
+            intent.putExtra("orderKey", fileName);
+        }
+        
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);

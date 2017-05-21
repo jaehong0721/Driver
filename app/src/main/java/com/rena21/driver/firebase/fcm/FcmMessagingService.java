@@ -13,7 +13,7 @@ import android.util.Log;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.rena21.driver.R;
-import com.rena21.driver.activities.MainActivity;
+import com.rena21.driver.activities.SplashActivity;
 
 public class FcmMessagingService extends FirebaseMessagingService {
 
@@ -48,7 +48,7 @@ public class FcmMessagingService extends FirebaseMessagingService {
 
         String contentText = restaurantName + "에서 새로운 주문을 요청했습니다.";
 
-        Intent intent = new Intent(this, MainActivity.class);
+        Intent intent = new Intent(this, SplashActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         intent.putExtra("orderKey", orderKey);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
