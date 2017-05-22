@@ -1,12 +1,24 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             xmlns:tools="http://schemas.android.com/tools"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent"
-             tools:context="com.rena21.driver.view.fragment.LedgerFragment">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:layout_marginTop="@dimen/activity_horizontal_margin"
+              android:orientation="vertical"
+              tools:context="com.rena21.driver.view.fragment.LedgerFragment">
 
     <com.rena21.driver.view.layout.DateSelectLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
     </com.rena21.driver.view.layout.DateSelectLayout>
 
-</RelativeLayout>
+    <com.rena21.driver.view.layout.AmountSummaryLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    </com.rena21.driver.view.layout.AmountSummaryLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="@dimen/activity_horizontal_margin"
+        android:background="@color/itemDividerForListView"/>
+</LinearLayout>
