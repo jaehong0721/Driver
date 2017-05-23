@@ -21,6 +21,8 @@ import com.rena21.driver.viewmodel.MainTabViewModel;
 
 public class MainActivity extends BaseActivity implements OrderClickedListener, MainTabViewModel.MainTabClickListener {
 
+    public static final int REQUEST_CODE = 100;
+
     private AppPreferenceManager appPreferenceManager;
     private FirebaseDbManager dbManager;
 
@@ -28,6 +30,8 @@ public class MainActivity extends BaseActivity implements OrderClickedListener, 
 
     private OrderListFragment orderListFragment;
     private LedgerFragment ledgerFragment;
+
+    private boolean isCallAfterDeliveryCompletion;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +51,6 @@ public class MainActivity extends BaseActivity implements OrderClickedListener, 
         RelativeLayout mainTabContainer = (RelativeLayout) findViewById(R.id.main_tab_container);
         mainTabViewModel = new MainTabViewModel((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE), mainTabContainer);
         mainTabViewModel.setMainTabClickListener(this);
-        mainTabViewModel.showInitialTab();
     }
 
     @Override protected void onResume() {
@@ -57,6 +60,26 @@ public class MainActivity extends BaseActivity implements OrderClickedListener, 
             final String fileName = bundle.getString("orderKey");
             getIntent().removeExtra("orderKey");
             goToDetailActivity(fileName);
+        }
+    }
+
+    @Override protected void onPostResume() {
+        super.onPostResume();
+        if(isCallAfterDeliveryCompletion) {
+            mainTabViewModel.showLedgerTab();
+        } else {
+            mainTabViewModel.showOrdersTab();
+        }
+        isCallAfterDeliveryCompletion = false;
+    }
+
+    @Override protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            case REQUEST_CODE :
+                if(resultCode == RESULT_OK) {
+                   isCallAfterDeliveryCompletion = true;
+                }
+                break;
         }
     }
 
@@ -84,6 +107,6 @@ public class MainActivity extends BaseActivity implements OrderClickedListener, 
         Intent intent = new Intent(this, OrderDetailActivity.class);
         intent.putExtra("vendorPhoneNumber", appPreferenceManager.getPhoneNumber());
         intent.putExtra("fileName", fileName);
-        startActivity(intent);
+        startActivityForResult(intent, REQUEST_CODE);
     }
 }

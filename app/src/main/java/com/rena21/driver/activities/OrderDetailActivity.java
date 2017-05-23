@@ -11,9 +11,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
 import com.rena21.driver.R;
-
 import com.rena21.driver.firebase.FirebaseDbManager;
 import com.rena21.driver.listener.OrderAcceptedListener;
 import com.rena21.driver.listener.OrderDeliveryFinishedListener;
@@ -101,6 +99,7 @@ public class OrderDetailActivity extends BaseActivity implements OrderAcceptedLi
             }
         });
 
+        setResult(RESULT_OK);
         finish();
     }
 }

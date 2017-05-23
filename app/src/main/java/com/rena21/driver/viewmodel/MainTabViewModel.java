@@ -37,8 +37,12 @@ public class MainTabViewModel implements View.OnClickListener {
         this.mainTabClickListener = listener;
     }
 
-    public void showInitialTab() {
+    public void showOrdersTab() {
         onClick(btnTab1Orders);
+    }
+
+    public void showLedgerTab() {
+        onClick(btnTab2Ledger);
     }
 
     @Override public void onClick(View v) {
