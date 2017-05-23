@@ -2,6 +2,8 @@ package com.rena21.driver.view.adapter;
 
 
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,8 +22,13 @@ public class OrderDetailWithPriceAdapter extends RecyclerView.Adapter<OrderDetai
         TextView tvItemCount;
         EditText etItemPrice;
 
-        public OrderDetailViewHolder(View itemView) {
+        OrderDetailWithPriceAdapter adapter;
+
+        public OrderDetailViewHolder(OrderDetailWithPriceAdapter adapter, View itemView) {
             super(itemView);
+
+            this.adapter = adapter;
+
             tvItemName = (TextView) itemView.findViewById(R.id.tvItemName);
             tvItemCount = (TextView) itemView.findViewById(R.id.tvItemCount);
             etItemPrice = (EditText) itemView.findViewById(R.id.etItemPrice);
@@ -31,6 +38,15 @@ public class OrderDetailWithPriceAdapter extends RecyclerView.Adapter<OrderDetai
             tvItemName.setText(itemName);
             tvItemCount.setText(itemCount);
             etItemPrice.setText(itemPrice + "");
+            etItemPrice.addTextChangedListener(new TextWatcher() {
+                @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+                @Override public void afterTextChanged(Editable s) {}
+                @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    if(!s.toString().equals("")) {
+                        adapter.setOrderItemPrice(getAdapterPosition(), Integer.parseInt(s.toString()));
+                    }
+                }
+            });
         }
     }
 
@@ -42,7 +58,7 @@ public class OrderDetailWithPriceAdapter extends RecyclerView.Adapter<OrderDetai
 
     @Override public OrderDetailViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_recyclerview_order_detail_with_price, parent, false);
-        return new OrderDetailViewHolder(view);
+        return new OrderDetailViewHolder(this, view);
     }
 
     @Override public void onBindViewHolder(OrderDetailViewHolder holder, int position) {
@@ -55,4 +71,11 @@ public class OrderDetailWithPriceAdapter extends RecyclerView.Adapter<OrderDetai
         return orderItems.size();
     }
 
+    public List getOrderItems() {
+        return orderItems;
+    }
+
+    private void setOrderItemPrice(int position, int itemPrice) {
+        orderItems.get(position).price = itemPrice;
+    }
 }

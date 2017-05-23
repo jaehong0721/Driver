@@ -17,11 +17,13 @@ import com.rena21.driver.R;
 import com.rena21.driver.firebase.FirebaseDbManager;
 import com.rena21.driver.listener.OrderAcceptedListener;
 import com.rena21.driver.listener.OrderDeliveryFinishedListener;
+import com.rena21.driver.models.OrderItem;
 import com.rena21.driver.view.actionbar.ActionBarViewModel;
 import com.rena21.driver.view.fragment.OrderAcceptFragment;
 import com.rena21.driver.view.fragment.OrderDeliveryFinishFragment;
 
 import java.util.HashMap;
+import java.util.List;
 
 
 public class OrderDetailActivity extends BaseActivity implements OrderAcceptedListener, OrderDeliveryFinishedListener {
@@ -83,10 +85,13 @@ public class OrderDetailActivity extends BaseActivity implements OrderAcceptedLi
         finish();
     }
 
-    @Override public void onOrderDeliveryFinished(String fileName) {
+    @Override public void onOrderDeliveryFinished(List<OrderItem> orderItems, String fileName) {
         HashMap<String, Object> pathMap = new HashMap<>();
         pathMap.put("/orders/vendors/" + vendorPhoneNumber + "/" + fileName + "/delivered/", true);
+        pathMap.put("/orders/vendors/" + vendorPhoneNumber + "/" + fileName + "/orderItems/", orderItems);
+
         pathMap.put("/orders/restaurants/" + fileName + "/" + vendorPhoneNumber + "/delivered/", true);
+        pathMap.put("/orders/restaurants/" + fileName + "/" + vendorPhoneNumber + "/orderItems/", orderItems);
 
         dbManager.multiPathUpdateValue(pathMap, new OnCompleteListener<Void>() {
             @Override public void onComplete(@NonNull Task<Void> task) {

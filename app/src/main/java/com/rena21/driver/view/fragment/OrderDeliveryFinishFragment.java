@@ -35,6 +35,8 @@ public class OrderDeliveryFinishFragment extends Fragment implements ValueEventL
 
     private OrderDeliveryFinishedListener listener;
 
+    private OrderDetailWithPriceAdapter orderDetailWithPriceAdapter;
+
     private TextView tvRestaurantName;
     private RecyclerView rvOrderDetail;
     private Button btnDeliveryFinish;
@@ -77,7 +79,7 @@ public class OrderDeliveryFinishFragment extends Fragment implements ValueEventL
         btnDeliveryFinish = (Button) view.findViewById(R.id.btnDeliveryFinish);
         btnDeliveryFinish.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
-                listener.onOrderDeliveryFinished(fileName);
+                listener.onOrderDeliveryFinished(orderDetailWithPriceAdapter.getOrderItems(), fileName);
             }
         });
 
@@ -121,7 +123,7 @@ public class OrderDeliveryFinishFragment extends Fragment implements ValueEventL
             return;
         }
 
-        OrderDetailWithPriceAdapter orderDetailWithPriceAdapter = new OrderDetailWithPriceAdapter(order.orderItems);
+        orderDetailWithPriceAdapter = new OrderDetailWithPriceAdapter(order.orderItems);
         rvOrderDetail.setLayoutManager(new LinearLayoutManager(getActivity()));
         rvOrderDetail.addItemDecoration(new DividerItemDecoration(getActivity(), R.drawable.shape_divider_for_received_orders));
         rvOrderDetail.setAdapter(orderDetailWithPriceAdapter);
