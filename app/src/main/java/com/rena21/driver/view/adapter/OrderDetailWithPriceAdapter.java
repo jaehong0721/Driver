@@ -27,10 +27,10 @@ public class OrderDetailWithPriceAdapter extends RecyclerView.Adapter<OrderDetai
             etItemPrice = (EditText) itemView.findViewById(R.id.etItemPrice);
         }
 
-        public void bind(String itemName, String itemCount, String itemPrice) {
+        public void bind(String itemName, String itemCount, int itemPrice) {
             tvItemName.setText(itemName);
             tvItemCount.setText(itemCount);
-            if(itemPrice != null) etItemPrice.setText(itemPrice);
+            etItemPrice.setText(itemPrice + "");
         }
     }
 
