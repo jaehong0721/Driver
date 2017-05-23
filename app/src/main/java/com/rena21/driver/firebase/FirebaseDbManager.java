@@ -21,8 +21,8 @@ public class FirebaseDbManager {
 
     private DatabaseReference getSynchronizedAllOrdersRef() {
         DatabaseReference orderRef = instance.getReference("orders")
-                                            .child("vendors")
-                                            .child(vendorPhoneNumber);
+                                                .child("vendors")
+                                                .child(vendorPhoneNumber);
         orderRef.keepSynced(true);
         return orderRef;
     }
@@ -71,5 +71,19 @@ public class FirebaseDbManager {
 
     public void removeValueEventListenerFromSpecificOrderRef(String orderKey, ValueEventListener listener) {
         getSpecificOrderRef(orderKey).removeEventListener(listener);
+    }
+
+    public void addChildEventListenerToOrderRefOnSpecificDate(long dateMillis, ChildEventListener listener) {
+        getSynchronizedAllOrdersRef()
+                .orderByChild("deliveredTime")
+                .equalTo(dateMillis)
+                .addChildEventListener(listener);
+    }
+
+    public void removeChildEventListenerFromOrderRefOnSpecificDate(long dateMillis, ChildEventListener listener) {
+        getSynchronizedAllOrdersRef()
+                .orderByChild("deliveredTime")
+                .equalTo(dateMillis)
+                .removeEventListener(listener);
     }
 }

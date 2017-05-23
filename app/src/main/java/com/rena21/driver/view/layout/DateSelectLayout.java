@@ -18,10 +18,13 @@ import org.joda.time.DateTime;
 public class DateSelectLayout extends RelativeLayout {
 
     public interface DateChangedListener {
-        void onDateChanged(DateTime dateTime);
+        void onDateChanged(DateTime prevDateTime, DateTime dateTime);
     }
 
-    DateTime displayDate;
+    private DateTime displayDate;
+    private DateTime prevDisplayDate;
+
+    private DateChangedListener listener;
 
     private TextView tvDate;
     private ImageButton btnBefore;
@@ -35,8 +38,10 @@ public class DateSelectLayout extends RelativeLayout {
         btnBefore = (ImageButton) view.findViewById(R.id.btnBefore);
         btnBefore.setOnClickListener(new OnClickListener() {
             @Override public void onClick(View v) {
+                prevDisplayDate = displayDate;
                 displayDate = displayDate.minusDays(1);
                 showDisplayDate();
+                notifyCurrentDate();
             }
         });
 
@@ -46,20 +51,38 @@ public class DateSelectLayout extends RelativeLayout {
                 if (isTodayDisplayed()) {
                     Toast.makeText(context, "마지막 날짜입니다", Toast.LENGTH_SHORT).show();
                 } else {
+                    prevDisplayDate = displayDate;
                     displayDate = displayDate.plusDays(1);
                     showDisplayDate();
+                    notifyCurrentDate();
                 }
             }
         });
 
         displayDate = DateTime.now().withTimeAtStartOfDay();
+    }
 
+    public void setDateChangedListener(DateChangedListener listener) {
+        this.listener = listener;
         showDisplayDate();
+        notifyCurrentDate();
+    }
+
+    public void removeDateChangedListener(DateChangedListener listener) {
+        this.listener = null;
+    }
+
+    public DateTime getDisplayDate() {
+        return displayDate;
     }
 
     private void showDisplayDate() {
         String dateText = JodaTimeUtil.yyyyMMddSimple(displayDate);
         tvDate.setText(dateText);
+    }
+
+    private void notifyCurrentDate() {
+        listener.onDateChanged(prevDisplayDate, displayDate);
     }
 
     private boolean isTodayDisplayed() {

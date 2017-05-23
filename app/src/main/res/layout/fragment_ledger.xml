@@ -8,12 +8,14 @@
 
     <com.rena21.driver.view.layout.DateSelectLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:id="@+id/dateSelectLayout">
     </com.rena21.driver.view.layout.DateSelectLayout>
 
     <com.rena21.driver.view.layout.AmountSummaryLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:id="@+id/amountSummaryLayout">
     </com.rena21.driver.view.layout.AmountSummaryLayout>
 
     <View
@@ -21,4 +23,10 @@
         android:layout_height="1dp"
         android:layout_marginTop="@dimen/activity_horizontal_margin"
         android:background="@color/itemDividerForListView"/>
+
+    <android.support.v7.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/rvOrdersWithPrice">
+    </android.support.v7.widget.RecyclerView>
 </LinearLayout>
