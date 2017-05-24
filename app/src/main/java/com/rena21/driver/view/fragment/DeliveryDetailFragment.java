@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -17,6 +18,7 @@ import com.rena21.driver.R;
 import com.rena21.driver.activities.DeliveryDetailActivity;
 import com.rena21.driver.firebase.FirebaseDbManager;
 import com.rena21.driver.models.Order;
+import com.rena21.driver.util.AmountCalculateUtil;
 import com.rena21.driver.view.DividerItemDecoration;
 import com.rena21.driver.view.adapter.DeliveryDetailAdapter;
 
@@ -30,6 +32,7 @@ public class DeliveryDetailFragment extends Fragment implements ValueEventListen
     private FirebaseDbManager dbManager;
 
     private RecyclerView rvDeliveryDetail;
+    private TextView tvTotalPrice;
 
     public DeliveryDetailFragment() {}
 
@@ -55,6 +58,7 @@ public class DeliveryDetailFragment extends Fragment implements ValueEventListen
         View view = inflater.inflate(R.layout.fragment_delivery_detail, container, false);
 
         rvDeliveryDetail = (RecyclerView) view.findViewById(R.id.rvDeliveryDetail);
+        tvTotalPrice = (TextView) view.findViewById(R.id.tvTotalPrice);
 
         return view;
     }
@@ -82,6 +86,8 @@ public class DeliveryDetailFragment extends Fragment implements ValueEventListen
         rvDeliveryDetail.setLayoutManager(new LinearLayoutManager(getActivity()));
         rvDeliveryDetail.addItemDecoration(new DividerItemDecoration(getActivity(), R.drawable.shape_divider_for_received_orders));
         rvDeliveryDetail.setAdapter(adapter);
+
+        tvTotalPrice.setText(AmountCalculateUtil.sumOfEachOrderItem(order.orderItems) + "원");
     }
 
     @Override public void onCancelled(DatabaseError databaseError) {
