@@ -18,12 +18,15 @@ import com.rena21.driver.activities.MainActivity;
 import com.rena21.driver.firebase.FirebaseDbManager;
 import com.rena21.driver.listener.OrderClickedListener;
 import com.rena21.driver.models.Order;
+import com.rena21.driver.util.AmountCalculateUtil;
 import com.rena21.driver.view.DividerItemDecoration;
 import com.rena21.driver.view.adapter.OrderSummaryOnLedgerAdapter;
 import com.rena21.driver.view.layout.AmountSummaryLayout;
 import com.rena21.driver.view.layout.DateSelectLayout;
 
 import org.joda.time.DateTime;
+
+import java.util.ArrayList;
 
 
 public class LedgerFragment extends Fragment implements DateSelectLayout.DateChangedListener {
@@ -35,10 +38,11 @@ public class LedgerFragment extends Fragment implements DateSelectLayout.DateCha
     private FirebaseDbManager dbManager;
 
     private OrderClickedListener orderClickedListener;
-
     private ChildEventListener eventListener;
 
     private OrderSummaryOnLedgerAdapter orderSummaryOnLedgerAdapter;
+
+    private ArrayList<Integer> totalPriceList;
 
     @Override public void onAttach(Context context) {
         super.onAttach(context);
@@ -65,6 +69,8 @@ public class LedgerFragment extends Fragment implements DateSelectLayout.DateCha
 
         dbManager = ((MainActivity)getActivity()).getDbManager();
 
+        totalPriceList = new ArrayList<>();
+
         orderSummaryOnLedgerAdapter = new OrderSummaryOnLedgerAdapter(dbManager);
 
         rvOrdersWithPrice.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -79,8 +85,13 @@ public class LedgerFragment extends Fragment implements DateSelectLayout.DateCha
 
         eventListener = new ChildEventListener() {
             @Override public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                String fileName = dataSnapshot.getKey();
                 Order order = dataSnapshot.getValue(Order.class);
-                orderSummaryOnLedgerAdapter.addedItem(dataSnapshot.getKey(), order);
+
+                orderSummaryOnLedgerAdapter.addedItem(fileName, order);
+
+                totalPriceList.add(order.totalPrice);
+                setAmountSummary(totalPriceList);
             }
 
             @Override public void onChildChanged(DataSnapshot dataSnapshot, String s) {}
@@ -107,7 +118,14 @@ public class LedgerFragment extends Fragment implements DateSelectLayout.DateCha
         if(prevDisplayTime != null) {
             dbManager.removeChildEventListenerFromOrderRefOnSpecificDate(prevDisplayTime.getMillis(), eventListener);
             orderSummaryOnLedgerAdapter.clearData();
+            totalPriceList.clear();
+            amountSummaryLayout.clearData();
         }
         dbManager.addChildEventListenerToOrderRefOnSpecificDate(displayTime.getMillis(), eventListener);
+    }
+
+    private void setAmountSummary(ArrayList<Integer> totalPriceList) {
+        int sumOfTotalPrices = AmountCalculateUtil.sumOfTotalPrices(totalPriceList);
+        amountSummaryLayout.setTotalSumOfOrders(sumOfTotalPrices);
     }
 }
