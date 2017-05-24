@@ -51,6 +51,7 @@ public class MainActivity extends BaseActivity implements OrderClickedListener, 
         RelativeLayout mainTabContainer = (RelativeLayout) findViewById(R.id.main_tab_container);
         mainTabViewModel = new MainTabViewModel((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE), mainTabContainer);
         mainTabViewModel.setMainTabClickListener(this);
+        mainTabViewModel.showOrdersTab();
     }
 
     @Override protected void onResume() {
@@ -67,8 +68,6 @@ public class MainActivity extends BaseActivity implements OrderClickedListener, 
         super.onPostResume();
         if(isCallAfterDeliveryCompletion) {
             mainTabViewModel.showLedgerTab();
-        } else {
-            mainTabViewModel.showOrdersTab();
         }
         isCallAfterDeliveryCompletion = false;
     }
