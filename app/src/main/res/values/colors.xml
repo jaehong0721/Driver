@@ -11,4 +11,6 @@
     <color name="textBackground">#F0F0F0</color>
 
     <color name="itemDividerForListView">#CCCCCC</color>
+
+    <color name="recyclerViewBackground">#F0F0F0</color>
 </resources>
