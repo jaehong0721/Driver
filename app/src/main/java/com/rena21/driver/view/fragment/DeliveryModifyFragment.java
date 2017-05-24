@@ -90,7 +90,7 @@ public class DeliveryModifyFragment extends Fragment implements ValueEventListen
                 order.orderItems = orderItems;
                 order.totalPrice = AmountCalculateUtil.sumOfEachOrderItem(orderItems);
 
-                finishedListener.onModifyFinish(order, fileName);
+                finishedListener.onModifyFinished(order, fileName);
             }
         });
 

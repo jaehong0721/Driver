@@ -100,7 +100,7 @@ public class DeliveryDetailActivity extends BaseActivity implements DeliveryOrde
         }
     }
 
-    @Override public void onModifyFinish(Order order, String fileName) {
+    @Override public void onModifyFinished(Order order, String fileName) {
         HashMap<String, Object> pathMap = new HashMap<>();
         pathMap.put("/orders/vendors/" + vendorPhoneNumber + "/" + fileName + "/", order);
         pathMap.put("/orders/restaurants/" + fileName + "/" + vendorPhoneNumber + "/", order);
