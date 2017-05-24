@@ -22,16 +22,25 @@ import com.rena21.driver.activities.OrderDetailActivity;
 import com.rena21.driver.firebase.FirebaseDbManager;
 import com.rena21.driver.listener.OrderDeliveryFinishedListener;
 import com.rena21.driver.models.Order;
+import com.rena21.driver.models.OrderItem;
+import com.rena21.driver.util.AmountCalculateUtil;
 import com.rena21.driver.view.DividerItemDecoration;
 import com.rena21.driver.view.adapter.OrderDetailWithPriceAdapter;
 
+import org.joda.time.DateTime;
+
+import java.util.List;
+
 
 public class OrderDeliveryFinishFragment extends Fragment implements ValueEventListener{
+
     private static final String FILE_NAME = "fileName";
 
     private String fileName;
 
     private FirebaseDbManager dbManager;
+
+    private Order selectedOrder;
 
     private OrderDeliveryFinishedListener listener;
 
@@ -79,7 +88,13 @@ public class OrderDeliveryFinishFragment extends Fragment implements ValueEventL
         btnDeliveryFinish = (Button) view.findViewById(R.id.btnDeliveryFinish);
         btnDeliveryFinish.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
-                listener.onOrderDeliveryFinished(orderDetailWithPriceAdapter.getOrderItems(), fileName);
+                List<OrderItem> orderItems = orderDetailWithPriceAdapter.getOrderItems();
+                selectedOrder.delivered = true;
+                selectedOrder.deliveredTime = DateTime.now().withTimeAtStartOfDay().getMillis();
+                selectedOrder.orderItems = orderItems;
+                selectedOrder.totalPrice = AmountCalculateUtil.sumOfEachOrderItem(orderItems);
+
+                listener.onOrderDeliveryFinished(selectedOrder, fileName);
             }
         });
 
@@ -117,13 +132,13 @@ public class OrderDeliveryFinishFragment extends Fragment implements ValueEventL
     }
 
     @Override public void onDataChange(DataSnapshot dataSnapshot) {
-        final Order order = dataSnapshot.getValue(Order.class);
+        selectedOrder = dataSnapshot.getValue(Order.class);
 
-        if(order == null) {
+        if(selectedOrder == null) {
             return;
         }
 
-        orderDetailWithPriceAdapter = new OrderDetailWithPriceAdapter(order.orderItems);
+        orderDetailWithPriceAdapter = new OrderDetailWithPriceAdapter(selectedOrder.orderItems);
         rvOrderDetail.setLayoutManager(new LinearLayoutManager(getActivity()));
         rvOrderDetail.addItemDecoration(new DividerItemDecoration(getActivity(), R.drawable.shape_divider_for_received_orders));
         rvOrderDetail.setAdapter(orderDetailWithPriceAdapter);

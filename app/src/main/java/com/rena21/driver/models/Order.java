@@ -7,6 +7,7 @@ public class Order{
     public boolean accepted;
     public boolean delivered;
     public long deliveredTime;
+    public int totalPrice;
 
     public Order() {}
 }
