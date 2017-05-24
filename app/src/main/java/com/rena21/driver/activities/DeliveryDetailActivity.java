@@ -1,6 +1,7 @@
 package com.rena21.driver.activities;
 
 import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -11,6 +12,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.rena21.driver.R;
 import com.rena21.driver.firebase.FirebaseDbManager;
 import com.rena21.driver.view.actionbar.ActionBarViewModel;
+import com.rena21.driver.view.fragment.DeliverySummaryFragment;
 import com.rena21.driver.view.layout.DeliveryOrderTabsLayout;
 
 
@@ -23,6 +25,8 @@ public class DeliveryDetailActivity extends BaseActivity implements DeliveryOrde
 
     private String fileName;
     private String vendorPhoneNumber;
+
+    private DeliverySummaryFragment deliverySummaryFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,15 +56,20 @@ public class DeliveryDetailActivity extends BaseActivity implements DeliveryOrde
             @Override public void onCancelled(DatabaseError databaseError) { }
         });
 
+        deliverySummaryFragment = DeliverySummaryFragment.newInstance(fileName);
+
         tabsLayout = (DeliveryOrderTabsLayout) findViewById(R.id.deliveryDetailTab);
         tabsLayout.setTabClickListener(this);
         tabsLayout.showInitialView();
     }
 
     @Override public void onClickTab(DeliveryOrderTabsLayout.DeliveryOrderTab tab) {
+
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+
         switch (tab) {
             case TAB_1_ORDER_DETAILS:
-                Toast.makeText(this, "detail", Toast.LENGTH_SHORT).show();
+                ft.replace(R.id.delivery_detail_fragment_container, deliverySummaryFragment).commit();
                 break;
 
             case TAB_2_MODIFY:

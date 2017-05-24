@@ -28,4 +28,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/layoutHeader"/>
+
+    <FrameLayout
+        android:id="@+id/delivery_detail_fragment_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/deliveryDetailTab">
+    </FrameLayout>
 </RelativeLayout>
