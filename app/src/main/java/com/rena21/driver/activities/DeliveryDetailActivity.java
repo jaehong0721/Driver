@@ -121,6 +121,18 @@ public class DeliveryDetailActivity extends BaseActivity implements DeliveryOrde
     }
 
     @Override public void onPaymentFinished(String fileName, int totalDeposit) {
+        HashMap<String, Object> pathMap = new HashMap<>();
+        pathMap.put("/orders/vendors/" + vendorPhoneNumber + "/" + fileName + "/totalDeposit/", totalDeposit);
+        pathMap.put("/orders/restaurants/" + fileName + "/" + vendorPhoneNumber + "/totalDeposit/", totalDeposit);
+
+        dbManager.multiPathUpdateValue(pathMap, new OnCompleteListener<Void>() {
+            @Override public void onComplete(@NonNull Task<Void> task) {
+                if (!task.isSuccessful()) {
+                    Log.e("error", task.getResult().toString());
+                }
+            }
+        });
+        
         tabsLayout.showInitialView();
     }
 

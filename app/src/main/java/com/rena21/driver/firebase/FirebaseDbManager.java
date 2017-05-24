@@ -51,6 +51,15 @@ public class FirebaseDbManager {
                 .addListenerForSingleValueEvent(listener);
     }
 
+    public void getTotalPrice(String fileName, ValueEventListener listener) {
+        instance.getReference("orders")
+                .child("vendors")
+                .child(vendorPhoneNumber)
+                .child(fileName)
+                .child("totalPrice")
+                .addListenerForSingleValueEvent(listener);
+    }
+
     public void multiPathUpdateValue(HashMap<String, Object> pathMap, OnCompleteListener<Void> listener) {
         instance.getReference()
                 .updateChildren(pathMap)
