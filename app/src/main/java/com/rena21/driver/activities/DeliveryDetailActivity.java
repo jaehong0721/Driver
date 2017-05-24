@@ -20,7 +20,7 @@ import com.rena21.driver.firebase.FirebaseDbManager;
 import com.rena21.driver.listener.ModifyFinishedListener;
 import com.rena21.driver.listener.PaymentFinishedListener;
 import com.rena21.driver.models.Order;
-import com.rena21.driver.view.actionbar.ActionBarViewModel;
+import com.rena21.driver.view.actionbar.ActionBarWithButtonViewModel;
 import com.rena21.driver.view.fragment.DeliveryDetailFragment;
 import com.rena21.driver.view.fragment.DeliveryModifyFragment;
 import com.rena21.driver.view.fragment.PaymentFragment;
@@ -50,8 +50,13 @@ public class DeliveryDetailActivity extends BaseActivity implements DeliveryOrde
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_delivery_detail);
 
-        ActionBarViewModel.createWithActionBar(getSupportActionBar())
-                .setTitle("납품상세");
+        ActionBarWithButtonViewModel.createWithActionBar(getSupportActionBar())
+                .setTitle("납품상세")
+                .setRegistButtonClickListener(new View.OnClickListener() {
+                    @Override public void onClick(View v) {
+                        finish();
+                    }
+                });
 
         fileName = getIntent().getStringExtra("fileName");
         vendorPhoneNumber = getIntent().getStringExtra("vendorPhoneNumber");
