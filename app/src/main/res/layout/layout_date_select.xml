@@ -23,24 +23,22 @@
 
         <ImageButton
             android:id="@+id/btnBefore"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_toLeftOf="@id/tvDate"
             android:background="@null"
             android:padding="8dp"
-            android:scaleType="fitXY"
             android:src="@drawable/btn_date_prev"/>
 
         <ImageButton
             android:id="@+id/btnNext"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_toRightOf="@id/tvDate"
             android:background="@null"
             android:padding="8dp"
-            android:scaleType="fitXY"
             android:src="@drawable/btn_date_next"/>
     </RelativeLayout>
 </LinearLayout>
