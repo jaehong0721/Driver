@@ -110,6 +110,15 @@ public class OrderSummaryOnLedgerAdapter extends RecyclerView.Adapter<OrderSumma
         }
     }
 
+    public void changedItem(String fileName, Order order) {
+        int position = fileNameList.indexOf(fileName);
+
+        orderMap.remove(fileName);
+        orderMap.put(fileName, order);
+
+        notifyItemChanged(position);
+    }
+
     public void clearData() {
         fileNameList.clear();
         orderMap.clear();

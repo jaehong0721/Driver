@@ -3,7 +3,7 @@ package com.rena21.driver.util;
 
 import com.rena21.driver.models.OrderItem;
 
-import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 public class AmountCalculateUtil {
@@ -15,10 +15,10 @@ public class AmountCalculateUtil {
         return result;
     }
 
-    public static int sumOfTotalPrices(ArrayList<Integer> totalPriceList) {
+    public static int sumOfTotalPrices(Collection<Integer> totalPrices) {
         int result = 0;
-        for(int i = 0; i<totalPriceList.size(); i++) {
-            result += totalPriceList.get(i);
+        for(Integer price : totalPrices) {
+            result += price;
         }
         return result;
     }
