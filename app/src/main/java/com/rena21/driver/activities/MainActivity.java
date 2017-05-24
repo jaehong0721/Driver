@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.google.firebase.database.FirebaseDatabase;
 import com.rena21.driver.App;
@@ -83,8 +84,16 @@ public class MainActivity extends BaseActivity implements OrderClickedListener, 
         }
     }
 
-    @Override public void onOrderClicked(String orderKey) {
-        goToDetailActivity(orderKey);
+    @Override public void onOrderClicked(String from, String orderKey) {
+        switch (from) {
+            case "detail":
+                goToDetailActivity(orderKey);
+                break;
+
+            case "ledger":
+                Toast.makeText(this, "ledger", Toast.LENGTH_SHORT).show();
+                break;
+        }
     }
 
     @Override public void onMainTabClick(MainTabViewModel.MainTab tab) {

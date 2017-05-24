@@ -58,7 +58,7 @@ public class OrderListFragment extends Fragment implements ChildEventListener {
 
         receivedOrdersAdapter.addOnItemClickListener(new ReceivedOrdersAdapter.OnItemClickListener() {
             @Override public void onItemClick(String fileName) {
-                orderClickedListener.onOrderClicked(fileName);
+                orderClickedListener.onOrderClicked("detail", fileName);
             }
         });
         return view;
