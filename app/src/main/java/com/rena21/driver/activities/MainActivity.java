@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import com.google.firebase.database.FirebaseDatabase;
 import com.rena21.driver.App;
@@ -91,7 +90,7 @@ public class MainActivity extends BaseActivity implements OrderClickedListener, 
                 break;
 
             case "ledger":
-                Toast.makeText(this, "ledger", Toast.LENGTH_SHORT).show();
+                goToDeliveryDetailActivity(orderKey);
                 break;
         }
     }
@@ -117,5 +116,12 @@ public class MainActivity extends BaseActivity implements OrderClickedListener, 
         intent.putExtra("vendorPhoneNumber", appPreferenceManager.getPhoneNumber());
         intent.putExtra("fileName", fileName);
         startActivityForResult(intent, REQUEST_CODE);
+    }
+
+    private void goToDeliveryDetailActivity(String fileName) {
+        Intent intent = new Intent(this, DeliveryDetailActivity.class);
+        intent.putExtra("vendorPhoneNumber", appPreferenceManager.getPhoneNumber());
+        intent.putExtra("fileName", fileName);
+        startActivity(intent);
     }
 }
