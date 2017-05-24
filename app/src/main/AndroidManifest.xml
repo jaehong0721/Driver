@@ -42,6 +42,8 @@
 
         <activity android:name=".activities.OrderDetailActivity">
         </activity>
+        <activity android:name=".activities.DeliveryDetailActivity">
+        </activity>
     </application>
 
 </manifest>
