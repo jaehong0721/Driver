@@ -37,7 +37,7 @@
         android:textSize="@dimen/text_default"/>
 
     <TextView
-        android:id="@+id/tvDeposit"
+        android:id="@+id/tvTotalDeposit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/tvItems"

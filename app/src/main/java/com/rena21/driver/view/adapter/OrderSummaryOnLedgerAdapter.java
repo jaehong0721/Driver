@@ -31,19 +31,23 @@ public class OrderSummaryOnLedgerAdapter extends RecyclerView.Adapter<OrderSumma
         private TextView tvRestaurantName;
         private TextView tvItems;
         private TextView tvTotalPrice;
+        private TextView tvTotalDeposit;
 
         public MyViewHolder(View itemView) {
             super(itemView);
             tvRestaurantName = (TextView) itemView.findViewById(R.id.tvRestaurantName);
             tvItems = (TextView) itemView.findViewById(R.id.tvItems);
             tvTotalPrice = (TextView) itemView.findViewById(R.id.tvTotalPrice);
+            tvTotalDeposit = (TextView) itemView.findViewById(R.id.tvTotalDeposit);
         }
 
-        public void bind(String restaurantName, String orderItems, int totalPrice, View.OnClickListener onClickListener) {
+        public void bind(String restaurantName, String orderItems, int totalPrice,
+                         int totalDeposit, View.OnClickListener onClickListener) {
             tvItems.setText(orderItems);
             itemView.setOnClickListener(onClickListener);
             tvRestaurantName.setText(restaurantName);
             tvTotalPrice.setText(totalPrice + "원");
+            tvTotalDeposit.setText(totalDeposit+"원");
         }
 
 
@@ -79,7 +83,11 @@ public class OrderSummaryOnLedgerAdapter extends RecyclerView.Adapter<OrderSumma
 
         int totalPrice = order.totalPrice;
 
-        holder.bind(restaurantName, orderItems, totalPrice, new View.OnClickListener() {
+        int totalDeposit = order.totalDeposit;
+
+        holder.bind(restaurantName, orderItems, totalPrice,
+                    totalDeposit, new View.OnClickListener() {
+
             @Override public void onClick(View v) {
                 onItemClickListener.onItemClick(fileName);
             }

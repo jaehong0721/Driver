@@ -81,6 +81,7 @@ public class LedgerFragment extends Fragment implements DateSelectLayout.DateCha
 
         eventListener = new ChildEventListener() {
             HashMap<String, Integer> totalPriceMap = new HashMap<>();
+            HashMap<String, Integer> totalDepositMap = new HashMap<>();
 
             @Override public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 String fileName = dataSnapshot.getKey();
@@ -89,7 +90,8 @@ public class LedgerFragment extends Fragment implements DateSelectLayout.DateCha
                 orderSummaryOnLedgerAdapter.addedItem(fileName, order);
 
                 totalPriceMap.put(fileName,order.totalPrice);
-                setAmountSummary(totalPriceMap);
+                totalDepositMap.put(fileName,order.totalDeposit);
+                setAmountSummary(totalPriceMap, totalDepositMap);
             }
 
             @Override public void onChildChanged(DataSnapshot dataSnapshot, String s) {
@@ -100,7 +102,10 @@ public class LedgerFragment extends Fragment implements DateSelectLayout.DateCha
 
                 totalPriceMap.remove(fileName);
                 totalPriceMap.put(fileName, order.totalPrice);
-                setAmountSummary(totalPriceMap);
+
+                totalDepositMap.remove(fileName);
+                totalDepositMap.put(fileName, order.totalDeposit);
+                setAmountSummary(totalPriceMap, totalDepositMap);
             }
 
             @Override public void onChildRemoved(DataSnapshot dataSnapshot) {}
@@ -130,8 +135,12 @@ public class LedgerFragment extends Fragment implements DateSelectLayout.DateCha
         dbManager.addChildEventListenerToOrderRefOnSpecificDate(displayTime.getMillis(), eventListener);
     }
 
-    private void setAmountSummary(HashMap<String, Integer> totalPriceMap) {
-        int sumOfTotalPrices = AmountCalculateUtil.sumOfTotalPrices(totalPriceMap.values());
+    private void setAmountSummary(HashMap totalPriceMap, HashMap totalDepositMap) {
+        int sumOfTotalPrices = AmountCalculateUtil.sumOfTotal(totalPriceMap.values());
+        int sumOfTotalDeposit = AmountCalculateUtil.sumOfTotal(totalDepositMap.values());
+
         amountSummaryLayout.setTotalSumOfOrders(sumOfTotalPrices);
+        amountSummaryLayout.setTotalSumOfIncomes(sumOfTotalDeposit);
+        amountSummaryLayout.setTotalSumOfUnpaid(sumOfTotalPrices - sumOfTotalDeposit);
     }
 }

@@ -15,9 +15,9 @@ public class AmountCalculateUtil {
         return result;
     }
 
-    public static int sumOfTotalPrices(Collection<Integer> totalPrices) {
+    public static int sumOfTotal(Collection<Integer> total) {
         int result = 0;
-        for(Integer price : totalPrices) {
+        for(Integer price : total) {
             result += price;
         }
         return result;
