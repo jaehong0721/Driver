@@ -64,6 +64,8 @@
         android:layout_height="44dp"
         android:layout_alignParentBottom="true"
         android:background="@color/primaryOrange"
-        android:text="저장"/>
+        android:text="저장"
+        android:textSize="@dimen/text_large_accent"
+        android:textColor="@android:color/white"/>
 
 </RelativeLayout>

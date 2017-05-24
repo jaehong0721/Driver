@@ -87,6 +87,8 @@
         android:layout_height="44dp"
         android:layout_alignParentBottom="true"
         android:background="@color/primaryOrange"
-        android:text="주문확인"/>
+        android:text="주문확인"
+        android:textColor="@android:color/white"
+        android:textSize="@dimen/text_large_accent"/>
 
 </RelativeLayout>
