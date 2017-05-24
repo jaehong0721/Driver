@@ -8,7 +8,6 @@ import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -19,17 +18,20 @@ import com.google.firebase.database.ValueEventListener;
 import com.rena21.driver.R;
 import com.rena21.driver.firebase.FirebaseDbManager;
 import com.rena21.driver.listener.ModifyFinishedListener;
+import com.rena21.driver.listener.PaymentFinishedListener;
 import com.rena21.driver.models.Order;
 import com.rena21.driver.view.actionbar.ActionBarViewModel;
 import com.rena21.driver.view.fragment.DeliveryDetailFragment;
 import com.rena21.driver.view.fragment.DeliveryModifyFragment;
+import com.rena21.driver.view.fragment.PaymentFragment;
 import com.rena21.driver.view.layout.DeliveryOrderTabsLayout;
 
 import java.util.HashMap;
 
 
 public class DeliveryDetailActivity extends BaseActivity implements DeliveryOrderTabsLayout.DeliveryOrderTabClickListener,
-                                                                    ModifyFinishedListener {
+                                                                    ModifyFinishedListener,
+                                                                    PaymentFinishedListener {
 
     private TextView tvRestaurantName;
     private DeliveryOrderTabsLayout tabsLayout;
@@ -41,6 +43,7 @@ public class DeliveryDetailActivity extends BaseActivity implements DeliveryOrde
 
     private DeliveryDetailFragment deliveryDetailFragment;
     private DeliveryModifyFragment deliveryModifyFragment;
+    private PaymentFragment paymentFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +75,7 @@ public class DeliveryDetailActivity extends BaseActivity implements DeliveryOrde
 
         deliveryDetailFragment = DeliveryDetailFragment.newInstance(fileName);
         deliveryModifyFragment = DeliveryModifyFragment.newInstance(fileName);
+        paymentFragment = PaymentFragment.newInstance(fileName);
 
         tabsLayout = (DeliveryOrderTabsLayout) findViewById(R.id.deliveryDetailTab);
         tabsLayout.setTabClickListener(this);
@@ -95,7 +99,7 @@ public class DeliveryDetailActivity extends BaseActivity implements DeliveryOrde
                 break;
 
             case TAB_3_BILLS:
-                Toast.makeText(this, "bills", Toast.LENGTH_SHORT).show();
+                ft.replace(R.id.delivery_detail_fragment_container, paymentFragment).commit();
                 break;
         }
     }
@@ -113,6 +117,10 @@ public class DeliveryDetailActivity extends BaseActivity implements DeliveryOrde
             }
         });
 
+        tabsLayout.showInitialView();
+    }
+
+    @Override public void onPaymentFinished(String fileName, int totalDeposit) {
         tabsLayout.showInitialView();
     }
 
