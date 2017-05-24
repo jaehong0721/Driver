@@ -1,0 +1,118 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="@dimen/activity_horizontal_margin"
+                tools:context="com.rena21.driver.view.fragment.DeliveryDetailFragment">
+
+    <RelativeLayout
+        android:id="@+id/recyclerViewHeader"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/activity_vertical_margin"
+        android:layout_marginRight="@dimen/activity_vertical_margin">
+
+        <TextView
+            android:id="@+id/tvTitleForName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_marginTop="@dimen/activity_horizontal_margin"
+            android:text="품목명"
+            android:textSize="@dimen/text_smallest"/>
+
+        <TextView
+            android:id="@+id/tvTitleForCount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/tvTitleForName"
+            android:layout_centerHorizontal="true"
+            android:text="납품량"
+            android:textSize="@dimen/text_smallest"/>
+
+        <TextView
+            android:id="@+id/tvTitleForPrice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/tvTitleForName"
+            android:layout_alignParentRight="true"
+            android:text="가격"
+            android:textSize="@dimen/text_smallest"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@+id/tvTitleForName"
+            android:layout_marginTop="@dimen/activity_horizontal_margin"
+            android:background="@color/itemDividerForListView"/>
+    </RelativeLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rvDeliveryDetail"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/price_view"
+        android:layout_below="@+id/recyclerViewHeader"/>
+
+    <View
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@+id/rvDeliveryDetail"
+        android:layout_marginBottom="@dimen/activity_horizontal_margin"
+        android:background="@color/itemDividerForListView"/>
+
+    <RelativeLayout
+        android:id="@+id/price_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/deposit_view"
+        android:layout_marginBottom="@dimen/activity_horizontal_margin"
+        android:layout_marginLeft="@dimen/activity_vertical_margin"
+        android:layout_marginRight="@dimen/activity_vertical_margin"
+        android:layout_marginTop="@dimen/activity_horizontal_margin">
+
+        <TextView
+            android:id="@+id/label_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/tvTotalPrice"
+            android:layout_alignParentLeft="true"
+            android:text="납품금액"/>
+
+        <TextView
+            android:id="@+id/tvTotalPrice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:text="0원"
+            android:textSize="@dimen/text_large_accent"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/deposit_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/activity_horizontal_margin"
+        android:layout_marginLeft="@dimen/activity_vertical_margin"
+        android:layout_marginRight="@dimen/activity_vertical_margin">
+
+        <TextView
+            android:id="@+id/label_deposit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/tvTotalDeposit"
+            android:layout_alignParentLeft="true"
+            android:text="결제/수금액"/>
+
+        <TextView
+            android:id="@+id/tvTotalDeposit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:text="0원"
+            android:textSize="@dimen/text_large_accent"
+            android:textColor="@color/primaryOrange"/>
+    </RelativeLayout>
+</RelativeLayout>

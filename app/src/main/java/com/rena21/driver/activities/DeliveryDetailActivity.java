@@ -12,7 +12,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.rena21.driver.R;
 import com.rena21.driver.firebase.FirebaseDbManager;
 import com.rena21.driver.view.actionbar.ActionBarViewModel;
-import com.rena21.driver.view.fragment.DeliverySummaryFragment;
+import com.rena21.driver.view.fragment.DeliveryDetailFragment;
 import com.rena21.driver.view.layout.DeliveryOrderTabsLayout;
 
 
@@ -26,7 +26,7 @@ public class DeliveryDetailActivity extends BaseActivity implements DeliveryOrde
     private String fileName;
     private String vendorPhoneNumber;
 
-    private DeliverySummaryFragment deliverySummaryFragment;
+    private DeliveryDetailFragment deliveryDetailFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +56,7 @@ public class DeliveryDetailActivity extends BaseActivity implements DeliveryOrde
             @Override public void onCancelled(DatabaseError databaseError) { }
         });
 
-        deliverySummaryFragment = DeliverySummaryFragment.newInstance(fileName);
+        deliveryDetailFragment = DeliveryDetailFragment.newInstance(fileName);
 
         tabsLayout = (DeliveryOrderTabsLayout) findViewById(R.id.deliveryDetailTab);
         tabsLayout.setTabClickListener(this);
@@ -69,7 +69,7 @@ public class DeliveryDetailActivity extends BaseActivity implements DeliveryOrde
 
         switch (tab) {
             case TAB_1_ORDER_DETAILS:
-                ft.replace(R.id.delivery_detail_fragment_container, deliverySummaryFragment).commit();
+                ft.replace(R.id.delivery_detail_fragment_container, deliveryDetailFragment).commit();
                 break;
 
             case TAB_2_MODIFY:
@@ -84,5 +84,9 @@ public class DeliveryDetailActivity extends BaseActivity implements DeliveryOrde
 
     private String getPhoneNumber(String fileName) {
         return fileName.split("_")[0];
+    }
+
+    public FirebaseDbManager getDbManager() {
+        return dbManager;
     }
 }
