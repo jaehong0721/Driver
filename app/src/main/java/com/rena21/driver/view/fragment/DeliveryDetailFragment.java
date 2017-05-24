@@ -18,7 +18,6 @@ import com.rena21.driver.R;
 import com.rena21.driver.activities.DeliveryDetailActivity;
 import com.rena21.driver.firebase.FirebaseDbManager;
 import com.rena21.driver.models.Order;
-import com.rena21.driver.util.AmountCalculateUtil;
 import com.rena21.driver.view.DividerItemDecoration;
 import com.rena21.driver.view.adapter.DeliveryDetailAdapter;
 
@@ -33,6 +32,7 @@ public class DeliveryDetailFragment extends Fragment implements ValueEventListen
 
     private RecyclerView rvDeliveryDetail;
     private TextView tvTotalPrice;
+    private TextView tvTotalDeposit;
 
     public DeliveryDetailFragment() {}
 
@@ -59,6 +59,7 @@ public class DeliveryDetailFragment extends Fragment implements ValueEventListen
 
         rvDeliveryDetail = (RecyclerView) view.findViewById(R.id.rvDeliveryDetail);
         tvTotalPrice = (TextView) view.findViewById(R.id.tvTotalPrice);
+        tvTotalDeposit = (TextView) view.findViewById(R.id.tvTotalDeposit);
 
         return view;
     }
@@ -87,7 +88,8 @@ public class DeliveryDetailFragment extends Fragment implements ValueEventListen
         rvDeliveryDetail.addItemDecoration(new DividerItemDecoration(getActivity(), R.drawable.shape_divider_for_received_orders));
         rvDeliveryDetail.setAdapter(adapter);
 
-        tvTotalPrice.setText(AmountCalculateUtil.sumOfEachOrderItem(order.orderItems) + "원");
+        tvTotalPrice.setText(order.totalPrice + "원");
+        tvTotalDeposit.setText(order.totalDeposit + "원");
     }
 
     @Override public void onCancelled(DatabaseError databaseError) {
