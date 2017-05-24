@@ -1,5 +1,6 @@
 package com.rena21.driver.view.adapter;
 
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.ViewHolder;
 import android.view.LayoutInflater;
@@ -31,22 +32,37 @@ public class ReceivedOrdersAdapter extends RecyclerView.Adapter<ReceivedOrdersAd
         private TextView tvTimeStamp;
         private TextView tvRestaurantName;
         private TextView tvItems;
+        private TextView tvDeliveryFinish;
 
         public MyViewHolder(View itemView) {
             super(itemView);
             tvTimeStamp = (TextView) itemView.findViewById(R.id.tvTimeStamp);
             tvRestaurantName = (TextView) itemView.findViewById(R.id.tvRestaurantName);
             tvItems = (TextView) itemView.findViewById(R.id.tvItems);
+            tvDeliveryFinish = (TextView) itemView.findViewById(R.id.tvDeliveryFinish);
         }
 
         public void bind(String timeStamp, String restaurantName, String orderItems, View.OnClickListener onClickListener) {
             tvTimeStamp.setText(timeStamp);
             tvItems.setText(orderItems);
-            itemView.setOnClickListener(onClickListener);
             tvRestaurantName.setText(restaurantName);
+            itemView.setOnClickListener(onClickListener);
         }
 
+        public void bind(String timeStamp, String restaurantName, String orderItems) {
+            tvTimeStamp.setText(timeStamp);
+            tvTimeStamp.setTextColor(Color.GRAY);
 
+            tvItems.setText(orderItems);
+            tvItems.setTextColor(Color.GRAY);
+
+            tvRestaurantName.setText(restaurantName);
+            tvRestaurantName.setTextColor(Color.GRAY);
+
+            tvDeliveryFinish.setVisibility(View.VISIBLE);
+
+            itemView.setBackgroundResource(R.color.textBackground);
+        }
     }
 
     private final FirebaseDbManager dbManager;
@@ -78,12 +94,15 @@ public class ReceivedOrdersAdapter extends RecyclerView.Adapter<ReceivedOrdersAd
         String restaurantName = restaurantNameMapCache.containsKey(restaurantPhoneNumber) ?
                 restaurantNameMapCache.get(restaurantPhoneNumber) : restaurantPhoneNumber;
 
-
-        holder.bind(timeStamp, restaurantName, orderItems, new View.OnClickListener() {
-            @Override public void onClick(View v) {
-                onItemClickListener.onItemClick(fileName);
-            }
-        });
+        if(order.delivered) {
+            holder.bind(timeStamp, restaurantName, orderItems);
+        } else {
+            holder.bind(timeStamp, restaurantName, orderItems, new View.OnClickListener() {
+                @Override public void onClick(View v) {
+                    onItemClickListener.onItemClick(fileName);
+                }
+            });
+        }
 
     }
 
