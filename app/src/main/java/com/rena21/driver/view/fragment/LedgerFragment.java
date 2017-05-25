@@ -42,6 +42,9 @@ public class LedgerFragment extends Fragment implements DateSelectLayout.DateCha
 
     private OrderSummaryOnLedgerAdapter orderSummaryOnLedgerAdapter;
 
+    HashMap<String, Integer> totalPriceMap;
+    HashMap<String, Integer> totalDepositMap;
+
     @Override public void onAttach(Context context) {
         super.onAttach(context);
         try {
@@ -79,9 +82,10 @@ public class LedgerFragment extends Fragment implements DateSelectLayout.DateCha
             }
         });
 
+        totalPriceMap = new HashMap<>();
+        totalDepositMap = new HashMap<>();
+
         eventListener = new ChildEventListener() {
-            HashMap<String, Integer> totalPriceMap = new HashMap<>();
-            HashMap<String, Integer> totalDepositMap = new HashMap<>();
 
             @Override public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 String fileName = dataSnapshot.getKey();
@@ -131,6 +135,8 @@ public class LedgerFragment extends Fragment implements DateSelectLayout.DateCha
             dbManager.removeChildEventListenerFromOrderRefOnSpecificDate(prevDisplayTime.getMillis(), eventListener);
             orderSummaryOnLedgerAdapter.clearData();
             amountSummaryLayout.clearData();
+            totalPriceMap.clear();
+            totalDepositMap.clear();
         }
         dbManager.addChildEventListenerToOrderRefOnSpecificDate(displayTime.getMillis(), eventListener);
     }
