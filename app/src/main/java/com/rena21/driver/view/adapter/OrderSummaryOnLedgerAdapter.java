@@ -110,7 +110,7 @@ public class OrderSummaryOnLedgerAdapter extends RecyclerView.Adapter<OrderSumma
                 @Override public void onDataChange(DataSnapshot dataSnapshot) {
                     String restaurantName = dataSnapshot.getValue(String.class);
                     restaurantNameMapCache.put(restaurantPhoneNumber, (restaurantName == null) ? restaurantPhoneNumber : restaurantName);
-                    notifyItemChanged(0);
+                    notifyDataSetChanged();
                 }
 
                 @Override public void onCancelled(DatabaseError databaseError) { }

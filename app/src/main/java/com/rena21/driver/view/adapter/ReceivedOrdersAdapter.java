@@ -121,7 +121,8 @@ public class ReceivedOrdersAdapter extends RecyclerView.Adapter<ReceivedOrdersAd
                 @Override public void onDataChange(DataSnapshot dataSnapshot) {
                     String restaurantName = dataSnapshot.getValue(String.class);
                     restaurantNameMapCache.put(restaurantPhoneNumber, (restaurantName == null) ? restaurantPhoneNumber : restaurantName);
-                    notifyItemChanged(0);
+                    //todo notifyItemChanged()로 
+                    notifyDataSetChanged();
                 }
 
                 @Override public void onCancelled(DatabaseError databaseError) { }
