@@ -1,6 +1,7 @@
 package com.rena21.driver.view.adapter;
 
 import android.graphics.Color;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.ViewHolder;
 import android.view.LayoutInflater;
@@ -20,6 +21,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import me.grantland.widget.AutofitTextView;
+
 
 public class ReceivedOrdersAdapter extends RecyclerView.Adapter<ReceivedOrdersAdapter.MyViewHolder> {
 
@@ -29,39 +32,49 @@ public class ReceivedOrdersAdapter extends RecyclerView.Adapter<ReceivedOrdersAd
 
     static class MyViewHolder extends ViewHolder {
 
-        private TextView tvTimeStamp;
+        private AutofitTextView tvProfileName;
         private TextView tvRestaurantName;
         private TextView tvItems;
         private TextView tvDeliveryFinish;
 
         public MyViewHolder(View itemView) {
             super(itemView);
-            tvTimeStamp = (TextView) itemView.findViewById(R.id.tvTimeStamp);
+            tvProfileName = (AutofitTextView) itemView.findViewById(R.id.tvProfileName);
             tvRestaurantName = (TextView) itemView.findViewById(R.id.tvRestaurantName);
             tvItems = (TextView) itemView.findViewById(R.id.tvItems);
             tvDeliveryFinish = (TextView) itemView.findViewById(R.id.tvDeliveryFinish);
         }
 
-        public void bind(String timeStamp, String restaurantName, String orderItems, View.OnClickListener onClickListener) {
-            tvTimeStamp.setText(timeStamp);
-            tvItems.setText(orderItems);
-            tvRestaurantName.setText(restaurantName);
-            itemView.setOnClickListener(onClickListener);
-        }
-
-        public void bind(String timeStamp, String restaurantName, String orderItems) {
-            tvTimeStamp.setText(timeStamp);
-            tvTimeStamp.setTextColor(Color.GRAY);
+        public void bind(String restaurantName, String orderItems, String state) {
 
             tvItems.setText(orderItems);
             tvItems.setTextColor(Color.GRAY);
 
+            tvProfileName.setText(restaurantName);
+            tvProfileName.setTextColor(Color.GRAY);
+
             tvRestaurantName.setText(restaurantName);
             tvRestaurantName.setTextColor(Color.GRAY);
 
-            tvDeliveryFinish.setVisibility(View.VISIBLE);
+            tvDeliveryFinish.setText(state);
 
             itemView.setBackgroundResource(R.color.textBackground);
+        }
+
+        public void bind(String restaurantName, String orderItems, String state, View.OnClickListener onClickListener) {
+            tvProfileName.setText(restaurantName);
+            tvProfileName.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.primaryOrange));
+
+            tvRestaurantName.setText(restaurantName);
+            tvRestaurantName.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.textBlack));
+
+            tvItems.setText(orderItems);
+            tvItems.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.textBlackSub));
+
+            tvDeliveryFinish.setText(state);
+
+            itemView.setOnClickListener(onClickListener);
+            itemView.setBackgroundResource(0);
         }
     }
 
@@ -88,22 +101,26 @@ public class ReceivedOrdersAdapter extends RecyclerView.Adapter<ReceivedOrdersAd
         final Order order = orderMap.get(fileName);
         final String restaurantPhoneNumber = getPhoneNumber(fileName);
 
-        String timeStamp = getDisplayTimeFromfileName(fileName);
         String orderItems = makeOrderItemsString(order.orderItems);
 
         String restaurantName = restaurantNameMapCache.containsKey(restaurantPhoneNumber) ?
                 restaurantNameMapCache.get(restaurantPhoneNumber) : restaurantPhoneNumber;
 
         if(order.delivered) {
-            holder.bind(timeStamp, restaurantName, orderItems);
+            holder.bind(restaurantName, orderItems, "납품완료");
+        } else if(order.accepted) {
+            holder.bind(restaurantName, orderItems, "주문확인", new View.OnClickListener() {
+                @Override public void onClick(View v) {
+                    onItemClickListener.onItemClick(fileName);
+                }
+            });
         } else {
-            holder.bind(timeStamp, restaurantName, orderItems, new View.OnClickListener() {
+            holder.bind(restaurantName, orderItems, "주문접수", new View.OnClickListener() {
                 @Override public void onClick(View v) {
                     onItemClickListener.onItemClick(fileName);
                 }
             });
         }
-
     }
 
     @Override public int getItemCount() {
@@ -121,7 +138,7 @@ public class ReceivedOrdersAdapter extends RecyclerView.Adapter<ReceivedOrdersAd
                 @Override public void onDataChange(DataSnapshot dataSnapshot) {
                     String restaurantName = dataSnapshot.getValue(String.class);
                     restaurantNameMapCache.put(restaurantPhoneNumber, (restaurantName == null) ? restaurantPhoneNumber : restaurantName);
-                    //todo notifyItemChanged()로 
+                    //todo notifyItemChanged()로
                     notifyDataSetChanged();
                 }
 
@@ -154,27 +171,6 @@ public class ReceivedOrdersAdapter extends RecyclerView.Adapter<ReceivedOrdersAd
 
     private String getPhoneNumber(String fileName) {
         return fileName.split("_")[0];
-    }
-
-    private String getDisplayTimeFromfileName(String fileName) {
-        StringBuffer sb = new StringBuffer();
-        String timeStamp = fileName.substring(16, 26);
-        for (int i = 0; i < timeStamp.length(); i++) {
-            if (i == 2) {
-                sb.append(".");
-            }
-            if (i == 4) {
-                sb.append("  ");
-            }
-            if (i == 6) {
-                sb.append(":");
-            }
-            if (i == 8) {
-                sb.append(":");
-            }
-            sb.append(timeStamp.charAt(i));
-        }
-        return sb.toString();
     }
 
     private String makeOrderItemsString(List<OrderItem> orderItems) {
