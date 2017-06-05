@@ -30,14 +30,13 @@
         android:layout_height="wrap_content"
         android:layout_weight="1">
 
-        <EditText
+        <com.rena21.driver.view.widget.CurrencyFormatEditText
             android:id="@+id/etItemPrice"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_toLeftOf="@+id/tvWon"
             android:background="@color/textBackground"
             android:gravity="center_horizontal"
-            android:inputType="number"
             android:lines="1"
             android:maxLines="1"
             android:paddingLeft="8dp"

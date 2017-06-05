@@ -9,7 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
@@ -19,6 +18,7 @@ import com.rena21.driver.R;
 import com.rena21.driver.activities.DeliveryDetailActivity;
 import com.rena21.driver.firebase.FirebaseDbManager;
 import com.rena21.driver.listener.PaymentFinishedListener;
+import com.rena21.driver.view.widget.CurrencyFormatEditText;
 import com.rena21.driver.view.widget.CurrencyFormatTextView;
 
 
@@ -35,7 +35,7 @@ public class PaymentFragment extends Fragment {
     private PaymentFinishedListener finishedListener;
 
     private CurrencyFormatTextView tvTotalPrice;
-    private EditText etDeposit;
+    private CurrencyFormatEditText etDeposit;
     private Button btnSave;
 
     public PaymentFragment() {}
@@ -74,11 +74,11 @@ public class PaymentFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_payment, container, false);
 
         tvTotalPrice = (CurrencyFormatTextView) view.findViewById(R.id.tvTotalPrice);
-        etDeposit = (EditText) view.findViewById(R.id.etDeposit);
+        etDeposit = (CurrencyFormatEditText) view.findViewById(R.id.etDeposit);
         btnSave = (Button) view.findViewById(R.id.btnSave);
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
-                int totalDeposit = Integer.parseInt(etDeposit.getText().toString());
+                int totalDeposit = (int)etDeposit.getAmount();
                 if(totalDeposit > totalPrice) {  //비동기에 따른 문제 발생 가능성
                     Toast.makeText(getContext(), "총 납품금액보다 큰 금액을 수금할 수 없습니다.", Toast.LENGTH_SHORT).show();
                     return;

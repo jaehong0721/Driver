@@ -40,15 +40,13 @@
             android:background="@color/textBackground"
             android:padding="@dimen/activity_vertical_margin">
 
-            <EditText
+            <com.rena21.driver.view.widget.CurrencyFormatEditText
                 android:id="@+id/etDeposit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_toLeftOf="@+id/tvWon"
                 android:background="@null"
-                android:inputType="number"
                 android:maxLines="1"
-                android:text="0"
                 android:textSize="@dimen/text_xxx_large"/>
 
             <TextView

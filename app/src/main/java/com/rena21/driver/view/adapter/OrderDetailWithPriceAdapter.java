@@ -2,16 +2,14 @@ package com.rena21.driver.view.adapter;
 
 
 import android.support.v7.widget.RecyclerView;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import com.rena21.driver.R;
 import com.rena21.driver.models.OrderItem;
+import com.rena21.driver.view.widget.CurrencyFormatEditText;
 
 import java.util.List;
 
@@ -20,33 +18,29 @@ public class OrderDetailWithPriceAdapter extends RecyclerView.Adapter<OrderDetai
     class OrderDetailViewHolder extends RecyclerView.ViewHolder {
         TextView tvItemName;
         TextView tvItemCount;
-        EditText etItemPrice;
+        CurrencyFormatEditText etItemPrice;
 
         OrderDetailWithPriceAdapter adapter;
 
-        public OrderDetailViewHolder(OrderDetailWithPriceAdapter adapter, View itemView) {
+        public OrderDetailViewHolder(final OrderDetailWithPriceAdapter adapter, View itemView) {
             super(itemView);
 
             this.adapter = adapter;
 
             tvItemName = (TextView) itemView.findViewById(R.id.tvItemName);
             tvItemCount = (TextView) itemView.findViewById(R.id.tvItemCount);
-            etItemPrice = (EditText) itemView.findViewById(R.id.etItemPrice);
+            etItemPrice = (CurrencyFormatEditText) itemView.findViewById(R.id.etItemPrice);
+            etItemPrice.addTextChangedFinishListener(new CurrencyFormatEditText.AmountInputFinishListener() {
+                @Override public void onAmountInputFinish(long amount) {
+                    adapter.setOrderItemPrice(getAdapterPosition(), (int)amount);
+                }
+            });
         }
 
         public void bind(String itemName, String itemCount, int itemPrice) {
             tvItemName.setText(itemName);
             tvItemCount.setText(itemCount);
             etItemPrice.setText(itemPrice + "");
-            etItemPrice.addTextChangedListener(new TextWatcher() {
-                @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-                @Override public void afterTextChanged(Editable s) {}
-                @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    if(!s.toString().equals("")) {
-                        adapter.setOrderItemPrice(getAdapterPosition(), Integer.parseInt(s.toString()));
-                    }
-                }
-            });
         }
     }
 
