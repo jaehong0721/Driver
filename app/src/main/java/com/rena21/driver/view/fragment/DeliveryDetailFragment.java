@@ -9,7 +9,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -20,6 +19,7 @@ import com.rena21.driver.firebase.FirebaseDbManager;
 import com.rena21.driver.models.Order;
 import com.rena21.driver.view.DividerItemDecoration;
 import com.rena21.driver.view.adapter.DeliveryDetailAdapter;
+import com.rena21.driver.view.widget.CurrencyFormatTextView;
 
 
 public class DeliveryDetailFragment extends Fragment implements ValueEventListener{
@@ -31,8 +31,8 @@ public class DeliveryDetailFragment extends Fragment implements ValueEventListen
     private FirebaseDbManager dbManager;
 
     private RecyclerView rvDeliveryDetail;
-    private TextView tvTotalPrice;
-    private TextView tvTotalDeposit;
+    private CurrencyFormatTextView tvTotalPrice;
+    private CurrencyFormatTextView tvTotalDeposit;
 
     public DeliveryDetailFragment() {}
 
@@ -58,8 +58,8 @@ public class DeliveryDetailFragment extends Fragment implements ValueEventListen
         View view = inflater.inflate(R.layout.fragment_delivery_detail, container, false);
 
         rvDeliveryDetail = (RecyclerView) view.findViewById(R.id.rvDeliveryDetail);
-        tvTotalPrice = (TextView) view.findViewById(R.id.tvTotalPrice);
-        tvTotalDeposit = (TextView) view.findViewById(R.id.tvTotalDeposit);
+        tvTotalPrice = (CurrencyFormatTextView) view.findViewById(R.id.tvTotalPrice);
+        tvTotalDeposit = (CurrencyFormatTextView) view.findViewById(R.id.tvTotalDeposit);
 
         return view;
     }
@@ -88,8 +88,8 @@ public class DeliveryDetailFragment extends Fragment implements ValueEventListen
         rvDeliveryDetail.addItemDecoration(new DividerItemDecoration(getActivity(), R.drawable.shape_divider_for_received_orders));
         rvDeliveryDetail.setAdapter(adapter);
 
-        tvTotalPrice.setText(order.totalPrice + "원");
-        tvTotalDeposit.setText(order.totalDeposit + "원");
+        tvTotalPrice.setWon(order.totalPrice);
+        tvTotalDeposit.setWon(order.totalDeposit);
     }
 
     @Override public void onCancelled(DatabaseError databaseError) {

@@ -23,7 +23,7 @@
             android:text="오늘 납품금액"
             android:textSize="@dimen/text_large"/>
 
-        <TextView
+        <com.rena21.driver.view.widget.CurrencyFormatTextView
             android:id="@+id/tvTotalPrice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

@@ -80,7 +80,7 @@
             android:layout_alignParentLeft="true"
             android:text="납품금액"/>
 
-        <TextView
+        <com.rena21.driver.view.widget.CurrencyFormatTextView
             android:id="@+id/tvTotalPrice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -106,7 +106,7 @@
             android:layout_alignParentLeft="true"
             android:text="결제/수금액"/>
 
-        <TextView
+        <com.rena21.driver.view.widget.CurrencyFormatTextView
             android:id="@+id/tvTotalDeposit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

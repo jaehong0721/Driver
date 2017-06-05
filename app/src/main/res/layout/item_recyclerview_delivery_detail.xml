@@ -20,7 +20,7 @@
         android:layout_centerHorizontal="true"
         android:text="text"/>
 
-    <TextView
+    <com.rena21.driver.view.widget.CurrencyFormatTextView
         android:id="@+id/tvItemPrice"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

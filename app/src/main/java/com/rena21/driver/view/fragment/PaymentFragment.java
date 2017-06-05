@@ -10,7 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
@@ -20,6 +19,7 @@ import com.rena21.driver.R;
 import com.rena21.driver.activities.DeliveryDetailActivity;
 import com.rena21.driver.firebase.FirebaseDbManager;
 import com.rena21.driver.listener.PaymentFinishedListener;
+import com.rena21.driver.view.widget.CurrencyFormatTextView;
 
 
 public class PaymentFragment extends Fragment {
@@ -34,7 +34,7 @@ public class PaymentFragment extends Fragment {
 
     private PaymentFinishedListener finishedListener;
 
-    private TextView tvTotalPrice;
+    private CurrencyFormatTextView tvTotalPrice;
     private EditText etDeposit;
     private Button btnSave;
 
@@ -73,7 +73,7 @@ public class PaymentFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_payment, container, false);
 
-        tvTotalPrice = (TextView) view.findViewById(R.id.tvTotalPrice);
+        tvTotalPrice = (CurrencyFormatTextView) view.findViewById(R.id.tvTotalPrice);
         etDeposit = (EditText) view.findViewById(R.id.etDeposit);
         btnSave = (Button) view.findViewById(R.id.btnSave);
         btnSave.setOnClickListener(new View.OnClickListener() {
@@ -97,7 +97,7 @@ public class PaymentFragment extends Fragment {
         dbManager.getTotalPrice(fileName, new ValueEventListener() {
             @Override public void onDataChange(DataSnapshot dataSnapshot) {
                 totalPrice = dataSnapshot.getValue(Integer.class);
-                tvTotalPrice.setText(totalPrice + "원");
+                tvTotalPrice.setWon(totalPrice);
             }
 
             @Override public void onCancelled(DatabaseError databaseError) {

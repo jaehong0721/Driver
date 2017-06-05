@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.rena21.driver.R;
 import com.rena21.driver.models.OrderItem;
+import com.rena21.driver.view.widget.CurrencyFormatTextView;
 
 import java.util.List;
 
@@ -17,19 +18,19 @@ public class DeliveryDetailAdapter extends RecyclerView.Adapter<DeliveryDetailAd
     class OrderDetailViewHolder extends RecyclerView.ViewHolder {
         TextView tvItemName;
         TextView tvItemCount;
-        TextView tvItemPrice;
+        CurrencyFormatTextView tvItemPrice;
 
         public OrderDetailViewHolder(View itemView) {
             super(itemView);
             tvItemName = (TextView) itemView.findViewById(R.id.tvItemName);
             tvItemCount = (TextView) itemView.findViewById(R.id.tvItemCount);
-            tvItemPrice = (TextView) itemView.findViewById(R.id.tvItemPrice);
+            tvItemPrice = (CurrencyFormatTextView) itemView.findViewById(R.id.tvItemPrice);
         }
 
         public void bind(String itemName, String itemCount, int itemPrice) {
             tvItemName.setText(itemName);
             tvItemCount.setText(itemCount);
-            tvItemPrice.setText(itemPrice + "원");
+            tvItemPrice.setWon(itemPrice);
         }
     }
 

@@ -14,6 +14,7 @@ import com.rena21.driver.R;
 import com.rena21.driver.firebase.FirebaseDbManager;
 import com.rena21.driver.models.Order;
 import com.rena21.driver.models.OrderItem;
+import com.rena21.driver.view.widget.CurrencyFormatTextView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -30,15 +31,15 @@ public class OrderSummaryOnLedgerAdapter extends RecyclerView.Adapter<OrderSumma
 
         private TextView tvRestaurantName;
         private TextView tvItems;
-        private TextView tvTotalPrice;
-        private TextView tvTotalDeposit;
+        private CurrencyFormatTextView tvTotalPrice;
+        private CurrencyFormatTextView tvTotalDeposit;
 
         public MyViewHolder(View itemView) {
             super(itemView);
             tvRestaurantName = (TextView) itemView.findViewById(R.id.tvRestaurantName);
             tvItems = (TextView) itemView.findViewById(R.id.tvItems);
-            tvTotalPrice = (TextView) itemView.findViewById(R.id.tvTotalPrice);
-            tvTotalDeposit = (TextView) itemView.findViewById(R.id.tvTotalDeposit);
+            tvTotalPrice = (CurrencyFormatTextView) itemView.findViewById(R.id.tvTotalPrice);
+            tvTotalDeposit = (CurrencyFormatTextView) itemView.findViewById(R.id.tvTotalDeposit);
         }
 
         public void bind(String restaurantName, String orderItems, int totalPrice,
@@ -46,8 +47,8 @@ public class OrderSummaryOnLedgerAdapter extends RecyclerView.Adapter<OrderSumma
             tvItems.setText(orderItems);
             itemView.setOnClickListener(onClickListener);
             tvRestaurantName.setText(restaurantName);
-            tvTotalPrice.setText(totalPrice + "원");
-            tvTotalDeposit.setText(totalDeposit+"원");
+            tvTotalPrice.setWon(totalPrice);
+            tvTotalDeposit.setWon(totalDeposit);
         }
 
 
