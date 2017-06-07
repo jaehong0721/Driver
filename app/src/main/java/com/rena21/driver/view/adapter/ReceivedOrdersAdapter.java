@@ -13,11 +13,13 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 import com.rena21.driver.R;
+import com.rena21.driver.etc.ComparatorTimeSort;
 import com.rena21.driver.firebase.FirebaseDbManager;
 import com.rena21.driver.models.Order;
 import com.rena21.driver.models.OrderItem;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -130,7 +132,12 @@ public class ReceivedOrdersAdapter extends RecyclerView.Adapter<ReceivedOrdersAd
     public void addedItem(final String fileName, Order order) {
         orderMap.put(fileName, order);
         fileNameList.add(0, fileName);
+
+        ComparatorTimeSort orderByTime = new ComparatorTimeSort();
+        Collections.sort(fileNameList, orderByTime);
+
         final String restaurantPhoneNumber = getPhoneNumber(fileName);
+
         notifyItemInserted(0);
         // 식당 이름이 저장되지 않은 경우
         if (!restaurantNameMapCache.containsKey(restaurantPhoneNumber)) {
