@@ -9,7 +9,7 @@ public class ComparatorTimeSort implements Comparator<String> {
         o1 = getTimeStampToCompare(o1);
         o2 = getTimeStampToCompare(o2);
 
-        return -o1.compareTo(o2);
+        return o2.compareTo(o1);
     }
 
     private String getTimeStampToCompare(String fileName) {
