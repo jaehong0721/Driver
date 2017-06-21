@@ -129,17 +129,15 @@ public class ReceivedOrdersAdapter extends RecyclerView.Adapter<ReceivedOrdersAd
         return fileNameList.size();
     }
 
-    public void addedItem(final String fileName, Order order) {
+    public int addedItem(final String fileName, Order order) {
         orderMap.put(fileName, order);
-        fileNameList.add(fileName);
+        fileNameList.add(0, fileName);
 
         ComparatorTimeSort orderByTime = new ComparatorTimeSort();
         Collections.sort(fileNameList, orderByTime);
 
         final String restaurantPhoneNumber = getPhoneNumber(fileName);
 
-        //시간순으로 다시 정렬되면서 데이터셋이 전체적으로 바뀌기 때문에 notifyDataSetChanged()호출
-        notifyDataSetChanged();
         // 식당 이름이 저장되지 않은 경우
         if (!restaurantNameMapCache.containsKey(restaurantPhoneNumber)) {
             dbManager.getRestaurantName(restaurantPhoneNumber, new ValueEventListener() {
@@ -153,15 +151,20 @@ public class ReceivedOrdersAdapter extends RecyclerView.Adapter<ReceivedOrdersAd
                 @Override public void onCancelled(DatabaseError databaseError) { }
             });
         }
+        int position = fileNameList.indexOf(fileName);
+        notifyItemInserted(position);
+        return position;
     }
 
-    public void changedItem(String fileName, Order order) {
+    public int changedItem(String fileName, Order order) {
         int position = fileNameList.indexOf(fileName);
 
         orderMap.remove(fileName);
         orderMap.put(fileName, order);
 
         notifyItemChanged(position);
+
+        return position;
     }
 
     public void removedItem(String fileName) {

@@ -73,14 +73,16 @@ public class OrderListFragment extends Fragment implements ChildEventListener {
         String fileName = dataSnapshot.getKey();
         Order order = dataSnapshot.getValue(Order.class);
 
-        receivedOrdersAdapter.addedItem(fileName, order);
+        int position = receivedOrdersAdapter.addedItem(fileName, order);
+        rvReceivedOrders.smoothScrollToPosition(position);
     }
 
     @Override public void onChildChanged(DataSnapshot dataSnapshot, String s) {
         String fileName = dataSnapshot.getKey();
         Order order = dataSnapshot.getValue(Order.class);
 
-        receivedOrdersAdapter.changedItem(fileName, order);
+        int position = receivedOrdersAdapter.changedItem(fileName, order);
+        rvReceivedOrders.smoothScrollToPosition(position);
     }
 
     @Override public void onChildRemoved(DataSnapshot dataSnapshot) {
