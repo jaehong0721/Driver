@@ -1,21 +1,16 @@
 package com.rena21.driver.etc;
 
 
+import com.rena21.driver.util.FileNameUtil;
+
 import java.util.Comparator;
 
 public class ComparatorTimeSort implements Comparator<String> {
 
     @Override public int compare(String o1, String o2) {
-        o1 = getTimeStampToCompare(o1);
-        o2 = getTimeStampToCompare(o2);
+        o1 = FileNameUtil.getTimeFromFileName(o1);
+        o2 = FileNameUtil.getTimeFromFileName(o2);
 
         return o2.compareTo(o1);
-    }
-
-    private String getTimeStampToCompare(String fileName) {
-        if(fileName.length() != 26 ) {
-            throw new RuntimeException("옳지 않은 fileName 형식입니다");
-        }
-        return fileName.split("_")[1];
     }
 }
