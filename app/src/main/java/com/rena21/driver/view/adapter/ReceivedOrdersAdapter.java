@@ -1,6 +1,5 @@
 package com.rena21.driver.view.adapter;
 
-import android.graphics.Color;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.ViewHolder;
@@ -17,6 +16,7 @@ import com.rena21.driver.etc.ComparatorTimeSort;
 import com.rena21.driver.firebase.FirebaseDbManager;
 import com.rena21.driver.models.Order;
 import com.rena21.driver.models.OrderItem;
+import com.rena21.driver.util.FileNameUtil;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -34,44 +34,44 @@ public class ReceivedOrdersAdapter extends RecyclerView.Adapter<ReceivedOrdersAd
 
     static class MyViewHolder extends ViewHolder {
 
-        private AutofitTextView tvProfileName;
-        private TextView tvRestaurantName;
-        private TextView tvItems;
+        private AutofitTextView tvRestaurantName;
+        private AutofitTextView tvItems;
+        private TextView tvTimeStamp;
         private TextView tvDeliveryFinish;
 
         public MyViewHolder(View itemView) {
             super(itemView);
-            tvProfileName = (AutofitTextView) itemView.findViewById(R.id.tvProfileName);
-            tvRestaurantName = (TextView) itemView.findViewById(R.id.tvRestaurantName);
-            tvItems = (TextView) itemView.findViewById(R.id.tvItems);
+            tvRestaurantName = (AutofitTextView) itemView.findViewById(R.id.tvRestaurantName);
+            tvTimeStamp = (TextView) itemView.findViewById(R.id.tvTimeStamp);
+            tvItems = (AutofitTextView) itemView.findViewById(R.id.tvItems);
             tvDeliveryFinish = (TextView) itemView.findViewById(R.id.tvDeliveryFinish);
         }
 
-        public void bind(String restaurantName, String orderItems, String state) {
-
-            tvItems.setText(orderItems);
-            tvItems.setTextColor(Color.GRAY);
-
-            tvProfileName.setText(restaurantName);
-            tvProfileName.setTextColor(Color.GRAY);
+        public void bind(String restaurantName, String orderItems, String timeStamp, String state) {
+            int dimColor = ContextCompat.getColor(itemView.getContext(), R.color.textDim);
 
             tvRestaurantName.setText(restaurantName);
-            tvRestaurantName.setTextColor(Color.GRAY);
+            tvRestaurantName.setTextColor(dimColor);
+
+            tvItems.setText(orderItems);
+            tvItems.setTextColor(dimColor);
+
+            tvTimeStamp.setText(timeStamp);
+            tvTimeStamp.setTextColor(dimColor);
 
             tvDeliveryFinish.setText(state);
-
-            itemView.setBackgroundResource(R.color.textBackground);
+            tvDeliveryFinish.setTextColor(dimColor);
         }
 
-        public void bind(String restaurantName, String orderItems, String state, View.OnClickListener onClickListener) {
-            tvProfileName.setText(restaurantName);
-            tvProfileName.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.primaryOrange));
-
+        public void bind(String restaurantName, String orderItems, String timeStamp, String state, View.OnClickListener onClickListener) {
             tvRestaurantName.setText(restaurantName);
             tvRestaurantName.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.textBlack));
 
             tvItems.setText(orderItems);
             tvItems.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.textBlackSub));
+
+            tvTimeStamp.setText(timeStamp);
+            tvTimeStamp.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.primaryOrange));
 
             tvDeliveryFinish.setText(state);
 
@@ -100,24 +100,24 @@ public class ReceivedOrdersAdapter extends RecyclerView.Adapter<ReceivedOrdersAd
 
     @Override public void onBindViewHolder(MyViewHolder holder, int position) {
         final String fileName = fileNameList.get(position);
+        final String timeStamp = FileNameUtil.getDisplayTimeFromfileName(fileName);
         final Order order = orderMap.get(fileName);
         final String restaurantPhoneNumber = getPhoneNumber(fileName);
 
         String orderItems = makeOrderItemsString(order.orderItems);
-
         String restaurantName = restaurantNameMapCache.containsKey(restaurantPhoneNumber) ?
                 restaurantNameMapCache.get(restaurantPhoneNumber) : restaurantPhoneNumber;
 
         if(order.delivered) {
-            holder.bind(restaurantName, orderItems, "납품완료");
+            holder.bind(restaurantName, orderItems, timeStamp, "납품완료");
         } else if(order.accepted) {
-            holder.bind(restaurantName, orderItems, "주문확인", new View.OnClickListener() {
+            holder.bind(restaurantName, orderItems, timeStamp, "주문확인", new View.OnClickListener() {
                 @Override public void onClick(View v) {
                     onItemClickListener.onItemClick(fileName);
                 }
             });
         } else {
-            holder.bind(restaurantName, orderItems, "주문접수", new View.OnClickListener() {
+            holder.bind(restaurantName, orderItems, timeStamp, "주문접수", new View.OnClickListener() {
                 @Override public void onClick(View v) {
                     onItemClickListener.onItemClick(fileName);
                 }

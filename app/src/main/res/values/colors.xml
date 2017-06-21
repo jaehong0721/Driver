@@ -6,9 +6,10 @@
     <color name="primaryOrange">#CE6531</color>
     <color name="primaryMahogany">#390405</color>
 
-    <color name="textBlack">#313131</color>
-    <color name="textBlackSub">#838383</color>
+    <color name="textBlack">#333333</color>
+    <color name="textBlackSub">#8e8e8e</color>
     <color name="textBackground">#F0F0F0</color>
+    <color name="textDim">#bfbfbf</color>
 
     <color name="itemDividerForListView">#CCCCCC</color>
 

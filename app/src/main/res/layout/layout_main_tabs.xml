@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_weight="1"
-        android:text="받은 주문"/>
+        android:text="주문목록"/>
 
     <com.rena21.driver.view.widget.MainTabButton
         android:id="@+id/btnTabLedger"
