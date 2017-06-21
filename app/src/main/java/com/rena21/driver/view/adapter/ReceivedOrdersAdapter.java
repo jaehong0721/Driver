@@ -74,9 +74,9 @@ public class ReceivedOrdersAdapter extends RecyclerView.Adapter<ReceivedOrdersAd
             tvTimeStamp.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.primaryOrange));
 
             tvDeliveryFinish.setText(state);
+            tvDeliveryFinish.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.textBlack));
 
             itemView.setOnClickListener(onClickListener);
-            itemView.setBackgroundResource(0);
         }
     }
 
@@ -131,14 +131,15 @@ public class ReceivedOrdersAdapter extends RecyclerView.Adapter<ReceivedOrdersAd
 
     public void addedItem(final String fileName, Order order) {
         orderMap.put(fileName, order);
-        fileNameList.add(0, fileName);
+        fileNameList.add(fileName);
 
         ComparatorTimeSort orderByTime = new ComparatorTimeSort();
         Collections.sort(fileNameList, orderByTime);
 
         final String restaurantPhoneNumber = getPhoneNumber(fileName);
 
-        notifyItemInserted(0);
+        //시간순으로 다시 정렬되면서 데이터셋이 전체적으로 바뀌기 때문에 notifyDataSetChanged()호출
+        notifyDataSetChanged();
         // 식당 이름이 저장되지 않은 경우
         if (!restaurantNameMapCache.containsKey(restaurantPhoneNumber)) {
             dbManager.getRestaurantName(restaurantPhoneNumber, new ValueEventListener() {
