@@ -11,7 +11,6 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -30,6 +29,8 @@ import com.rena21.driver.network.NoConnectivityException;
 import com.rena21.driver.pojo.UserToken;
 import com.rena21.driver.util.LauncherUtil;
 import com.rena21.driver.view.dialogs.Dialogs;
+
+import java.util.HashMap;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -122,20 +123,24 @@ public class SplashActivity extends BaseActivity {
     private void storeFcmToken() {
         String phoneNumber = appPreferenceManager.getPhoneNumber();
         String fcmToken = appPreferenceManager.getFcmToken();
+
+        HashMap<String, String> infoHashMap = new HashMap<>();
+        infoHashMap.put("fcmId", fcmToken);
+        infoHashMap.put("vendorName", "등록필요");
+        infoHashMap.put("phoneNumber", phoneNumber);
+
         FirebaseDatabase.getInstance().getReference().child("vendors")
                 .child(phoneNumber)
                 .child("info")
-                .child("fcmId")
-                .setValue(fcmToken)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override public void onSuccess(Void aVoid) {
-                        Log.d("fcm", "Fcm 토큰 등록 성공");
-                        goToMain();
-                    }
-                })
+                .setValue(infoHashMap)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override public void onComplete(@NonNull Task<Void> task) {
-                        FirebaseCrash.logcat(Log.ERROR, "fcm", "Fcm 등록 실패");
+                        if (task.isSuccessful()) {
+                            Log.d("fcm", "Fcm 토큰 등록 성공");
+                            goToMain();
+                        } else {
+                            FirebaseCrash.logcat(Log.ERROR, "fcm", "Fcm 등록 실패");
+                        }
                     }
                 });
 
@@ -154,6 +159,7 @@ public class SplashActivity extends BaseActivity {
                         if (t instanceof NoConnectivityException) {
                             Toast.makeText(SplashActivity.this, "인터넷이 연결 되어 있지 않습니다. 연결을 확인해주세요.", Toast.LENGTH_SHORT).show();
                         } else {
+                            Log.d("test", "reqsuest token failed : " + t.getMessage());
                             FirebaseCrash.report(t);
                         }
                     }
