@@ -19,19 +19,11 @@ public class FirebaseDbManager {
         this.vendorPhoneNumber = vendorPhoneNumber;
     }
 
-    private DatabaseReference getSynchronizedAllOrdersRef() {
-        DatabaseReference orderRef = instance.getReference("orders")
-                                                .child("vendors")
-                                                .child(vendorPhoneNumber);
-        orderRef.keepSynced(true);
-        return orderRef;
-    }
-
-    private DatabaseReference getSpecificOrderRef(String fileName) {
-        return instance.getReference("orders")
-                .child("vendors")
+    public void getVendorInfoDataSnapshot(ValueEventListener listener) {
+        instance.getReference().child("vendors")
                 .child(vendorPhoneNumber)
-                .child(fileName);
+                .child("info")
+                .addListenerForSingleValueEvent(listener);
     }
 
     public void getRestaurantName(String restaurantPhoneNumber, ValueEventListener listener) {
@@ -94,5 +86,20 @@ public class FirebaseDbManager {
                 .orderByChild("deliveredTime")
                 .equalTo(dateMillis)
                 .removeEventListener(listener);
+    }
+
+    private DatabaseReference getSynchronizedAllOrdersRef() {
+        DatabaseReference orderRef = instance.getReference("orders")
+                .child("vendors")
+                .child(vendorPhoneNumber);
+        orderRef.keepSynced(true);
+        return orderRef;
+    }
+
+    private DatabaseReference getSpecificOrderRef(String fileName) {
+        return instance.getReference("orders")
+                .child("vendors")
+                .child(vendorPhoneNumber)
+                .child(fileName);
     }
 }

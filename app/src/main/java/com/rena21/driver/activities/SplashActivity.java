@@ -16,6 +16,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.crash.FirebaseCrash;
+import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.FirebaseDatabase;
 import com.rena21.driver.App;
 import com.rena21.driver.R;
@@ -23,6 +24,8 @@ import com.rena21.driver.etc.AppPreferenceManager;
 import com.rena21.driver.etc.PermissionManager;
 import com.rena21.driver.etc.PlayServiceManager;
 import com.rena21.driver.etc.VersionManager;
+import com.rena21.driver.firebase.FirebaseDbManager;
+import com.rena21.driver.firebase.fcm.ToastErrorHandlingListener;
 import com.rena21.driver.network.ApiService;
 import com.rena21.driver.network.NetworkUtil;
 import com.rena21.driver.network.NoConnectivityException;
@@ -113,37 +116,10 @@ public class SplashActivity extends BaseActivity {
     private void checkUserSignedIn() {
         FirebaseUser user = firebaseAuth.getCurrentUser();
         if (user != null) {
-            storeFcmToken();
+            storeVendorInfo();
         } else {
             requestUserToken();
         }
-    }
-
-
-    private void storeFcmToken() {
-        String phoneNumber = appPreferenceManager.getPhoneNumber();
-        String fcmToken = appPreferenceManager.getFcmToken();
-
-        HashMap<String, String> infoHashMap = new HashMap<>();
-        infoHashMap.put("fcmId", fcmToken);
-        infoHashMap.put("vendorName", "등록필요");
-        infoHashMap.put("phoneNumber", phoneNumber);
-
-        FirebaseDatabase.getInstance().getReference().child("vendors")
-                .child(phoneNumber)
-                .child("info")
-                .setValue(infoHashMap)
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            Log.d("fcm", "Fcm 토큰 등록 성공");
-                            goToMain();
-                        } else {
-                            FirebaseCrash.logcat(Log.ERROR, "fcm", "Fcm 등록 실패");
-                        }
-                    }
-                });
-
     }
 
     private void requestUserToken() {
@@ -172,7 +148,7 @@ public class SplashActivity extends BaseActivity {
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            storeFcmToken();
+                            storeVendorInfo();
                         } else {
                             Dialogs.createPlayServiceUpdateWarningDialog(SplashActivity.this, new Dialog.OnClickListener() {
                                 @Override
@@ -183,6 +159,35 @@ public class SplashActivity extends BaseActivity {
                         }
                     }
                 });
+    }
+
+    private void storeVendorInfo() {
+
+        final String phoneNumber = appPreferenceManager.getPhoneNumber();
+        final String fcmToken = appPreferenceManager.getFcmToken();
+
+        final HashMap<String, Object> pathMap = new HashMap<>();
+        pathMap.put("/vendors/" + phoneNumber + "/" + "info" + "/fcmId/", fcmToken);
+        pathMap.put("/vendors/" + phoneNumber + "/" + "info" + "/phoneNumber", phoneNumber);
+
+        final FirebaseDbManager dbManager = new FirebaseDbManager(FirebaseDatabase.getInstance(), phoneNumber);
+
+        dbManager.getVendorInfoDataSnapshot(new ToastErrorHandlingListener(this) {
+            @Override public void onDataChange(DataSnapshot dataSnapshot) {
+                if(!dataSnapshot.child("vendorName").exists())
+                    pathMap.put("/vendors/" + phoneNumber + "/" + "info" + "/vendorName/", "등록필요");
+
+                dbManager.multiPathUpdateValue(pathMap, new OnCompleteListener<Void>() {
+                    @Override public void onComplete(@NonNull Task<Void> task) {
+                        if(task.isSuccessful()) {
+                            goToMain();
+                        } else {
+                            FirebaseCrash.logcat(Log.ERROR, "vendorInfo", "vendorInfo 등록 실패");
+                        }
+                    }
+                });
+            }
+        });
     }
 
     private void goToMain() {
