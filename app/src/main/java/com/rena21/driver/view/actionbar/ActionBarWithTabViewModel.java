@@ -11,7 +11,9 @@ public class ActionBarWithTabViewModel implements View.OnClickListener{
 
     public enum MainTab {
         TAB_1_ORDERS,
-        TAB_2_LEDGER
+        TAB_2_LEDGER,
+        TAB_3_INFO,
+        TAB_4_ESTIMATE
     }
 
     public interface MainTabClickListener {
@@ -24,6 +26,8 @@ public class ActionBarWithTabViewModel implements View.OnClickListener{
 
     private MainTabButton btnTabOrders;
     private MainTabButton btnTabLedger;
+    private MainTabButton btnTabMyInfo;
+    private MainTabButton btnTabEstimate;
 
 
     public static ActionBarWithTabViewModel createWithActionBarTab(ActionBar supportActionBar) {
@@ -47,6 +51,8 @@ public class ActionBarWithTabViewModel implements View.OnClickListener{
     @Override public void onClick(View v) {
         btnTabOrders.setSelected(false);
         btnTabLedger.setSelected(false);
+        btnTabMyInfo.setSelected(false);
+        btnTabEstimate.setSelected(false);
 
         switch (v.getId()) {
             case R.id.btnTabOrders:
@@ -57,6 +63,16 @@ public class ActionBarWithTabViewModel implements View.OnClickListener{
             case R.id.btnTabLedger:
                 mainTabClickListener.onMainTabClick(MainTab.TAB_2_LEDGER);
                 btnTabLedger.setSelected(true);
+                break;
+
+            case R.id.btnTabMyInfo:
+                mainTabClickListener.onMainTabClick(MainTab.TAB_3_INFO);
+                btnTabMyInfo.setSelected(true);
+                break;
+
+            case R.id.btnTabEstimate:
+                mainTabClickListener.onMainTabClick(MainTab.TAB_4_ESTIMATE);
+                btnTabEstimate.setSelected(true);
                 break;
         }
     }
@@ -73,8 +89,12 @@ public class ActionBarWithTabViewModel implements View.OnClickListener{
 
         btnTabOrders = (MainTabButton) tabView.findViewById(R.id.btnTabOrders);
         btnTabLedger = (MainTabButton) tabView.findViewById(R.id.btnTabLedger);
+        btnTabMyInfo = (MainTabButton) tabView.findViewById(R.id.btnTabMyInfo);
+        btnTabEstimate = (MainTabButton) tabView.findViewById(R.id.btnTabEstimate);
 
         btnTabOrders.setOnClickListener(this);
         btnTabLedger.setOnClickListener(this);
+        btnTabMyInfo.setOnClickListener(this);
+        btnTabEstimate.setOnClickListener(this);
     }
 }

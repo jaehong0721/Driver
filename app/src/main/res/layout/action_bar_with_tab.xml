@@ -26,4 +26,26 @@
         app:text="거래장부"
         app:unselectedColor="@color/white_30"
         app:unselectedImage="@drawable/note_unselected"/>
+
+    <com.rena21.driver.view.widget.MainTabButton
+        android:id="@+id/btnTabMyInfo"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        app:selectedColor="@color/white"
+        app:selectedImage="@drawable/my_selected"
+        app:text="내정보"
+        app:unselectedColor="@color/white_30"
+        app:unselectedImage="@drawable/my_unselected"/>
+
+    <com.rena21.driver.view.widget.MainTabButton
+        android:id="@+id/btnTabEstimate"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        app:selectedColor="@color/white"
+        app:selectedImage="@drawable/estimate_selected"
+        app:text="견적요청"
+        app:unselectedColor="@color/white_30"
+        app:unselectedImage="@drawable/estimate_unselected"/>
 </LinearLayout>

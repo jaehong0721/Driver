@@ -11,7 +11,9 @@ import com.rena21.driver.etc.AppPreferenceManager;
 import com.rena21.driver.firebase.FirebaseDbManager;
 import com.rena21.driver.listener.OrderClickedListener;
 import com.rena21.driver.view.actionbar.ActionBarWithTabViewModel;
+import com.rena21.driver.view.fragment.EstimateFragment;
 import com.rena21.driver.view.fragment.LedgerFragment;
+import com.rena21.driver.view.fragment.MyInfoFragment;
 import com.rena21.driver.view.fragment.OrderListFragment;
 
 
@@ -23,8 +25,11 @@ public class MainActivity extends BaseActivity implements OrderClickedListener, 
     private FirebaseDbManager dbManager;
 
     private ActionBarWithTabViewModel mainTab;
+
     private OrderListFragment orderListFragment;
     private LedgerFragment ledgerFragment;
+    private MyInfoFragment myInfoFragment;
+    private EstimateFragment estimateFragment;
 
     private boolean isCallAfterDeliveryCompletion;
 
@@ -41,6 +46,8 @@ public class MainActivity extends BaseActivity implements OrderClickedListener, 
 
         orderListFragment = new OrderListFragment();
         ledgerFragment = new LedgerFragment();
+        myInfoFragment = new MyInfoFragment();
+        estimateFragment = new EstimateFragment();
 
         mainTab.setMainTabClickListener(this);
         mainTab.showOrdersTab();
@@ -94,6 +101,12 @@ public class MainActivity extends BaseActivity implements OrderClickedListener, 
                 break;
             case TAB_2_LEDGER:
                 transaction.replace(R.id.main_fragment_container, ledgerFragment).commit();
+                break;
+            case TAB_3_INFO:
+                transaction.replace(R.id.main_fragment_container, myInfoFragment).commit();
+                break;
+            case TAB_4_ESTIMATE:
+                transaction.replace(R.id.main_fragment_container, estimateFragment).commit();
                 break;
         }
     }
