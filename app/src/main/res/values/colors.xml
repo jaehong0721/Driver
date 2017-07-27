@@ -16,4 +16,7 @@
     <color name="itemDividerForContactListView">#E5E5E5</color>
 
     <color name="recyclerViewBackground">#F0F0F0</color>
+
+    <color name="white">#ffffff</color>
+    <color name="white_30">#4dffffff</color>
 </resources>
