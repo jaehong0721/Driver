@@ -16,7 +16,7 @@ import com.rena21.driver.firebase.FirebaseDbManager;
 import com.rena21.driver.listener.OrderAcceptedListener;
 import com.rena21.driver.listener.OrderDeliveryFinishedListener;
 import com.rena21.driver.models.Order;
-import com.rena21.driver.view.actionbar.ActionBarViewModel;
+import com.rena21.driver.view.actionbar.ActionBarWithButtonViewModel;
 import com.rena21.driver.view.fragment.OrderAcceptFragment;
 import com.rena21.driver.view.fragment.OrderDeliveryFinishFragment;
 
@@ -34,7 +34,7 @@ public class OrderDetailActivity extends BaseActivity implements OrderAcceptedLi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_detail);
 
-        ActionBarViewModel.createWithActionBar(getSupportActionBar())
+        ActionBarWithButtonViewModel.createWithActionBar(getSupportActionBar())
                 .setTitle("주문 상세");
 
         vendorPhoneNumber = getIntent().getStringExtra("vendorPhoneNumber");

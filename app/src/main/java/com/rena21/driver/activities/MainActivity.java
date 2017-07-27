@@ -1,11 +1,8 @@
 package com.rena21.driver.activities;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
-import android.view.LayoutInflater;
-import android.widget.RelativeLayout;
 
 import com.google.firebase.database.FirebaseDatabase;
 import com.rena21.driver.App;
@@ -13,21 +10,19 @@ import com.rena21.driver.R;
 import com.rena21.driver.etc.AppPreferenceManager;
 import com.rena21.driver.firebase.FirebaseDbManager;
 import com.rena21.driver.listener.OrderClickedListener;
-import com.rena21.driver.view.actionbar.ActionBarViewModel;
+import com.rena21.driver.view.actionbar.ActionBarWithTabViewModel;
 import com.rena21.driver.view.fragment.LedgerFragment;
 import com.rena21.driver.view.fragment.OrderListFragment;
-import com.rena21.driver.viewmodel.MainTabViewModel;
 
 
-public class MainActivity extends BaseActivity implements OrderClickedListener, MainTabViewModel.MainTabClickListener {
+public class MainActivity extends BaseActivity implements OrderClickedListener, ActionBarWithTabViewModel.MainTabClickListener {
 
     public static final int REQUEST_CODE = 100;
 
     private AppPreferenceManager appPreferenceManager;
     private FirebaseDbManager dbManager;
 
-    private MainTabViewModel mainTabViewModel;
-
+    private ActionBarWithTabViewModel mainTab;
     private OrderListFragment orderListFragment;
     private LedgerFragment ledgerFragment;
 
@@ -38,8 +33,7 @@ public class MainActivity extends BaseActivity implements OrderClickedListener, 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        ActionBarViewModel.createWithActionBar(getSupportActionBar())
-                .setTitle("");
+        mainTab = ActionBarWithTabViewModel.createWithActionBarTab(getSupportActionBar());
 
         appPreferenceManager = App.getApplication(getApplicationContext()).getPreferenceManager();
 
@@ -48,10 +42,8 @@ public class MainActivity extends BaseActivity implements OrderClickedListener, 
         orderListFragment = new OrderListFragment();
         ledgerFragment = new LedgerFragment();
 
-        RelativeLayout mainTabContainer = (RelativeLayout) findViewById(R.id.main_tab_container);
-        mainTabViewModel = new MainTabViewModel((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE), mainTabContainer);
-        mainTabViewModel.setMainTabClickListener(this);
-        mainTabViewModel.showOrdersTab();
+        mainTab.setMainTabClickListener(this);
+        mainTab.showOrdersTab();
     }
 
     @Override protected void onResume() {
@@ -67,7 +59,7 @@ public class MainActivity extends BaseActivity implements OrderClickedListener, 
     @Override protected void onPostResume() {
         super.onPostResume();
         if(isCallAfterDeliveryCompletion) {
-            mainTabViewModel.showLedgerTab();
+            mainTab.showLedgerTab();
         }
         isCallAfterDeliveryCompletion = false;
     }
@@ -94,7 +86,7 @@ public class MainActivity extends BaseActivity implements OrderClickedListener, 
         }
     }
 
-    @Override public void onMainTabClick(MainTabViewModel.MainTab tab) {
+    @Override public void onMainTabClick(ActionBarWithTabViewModel.MainTab tab) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         switch (tab) {
             case TAB_1_ORDERS:
