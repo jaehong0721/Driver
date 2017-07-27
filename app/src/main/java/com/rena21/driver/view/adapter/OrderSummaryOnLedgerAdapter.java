@@ -131,6 +131,7 @@ public class OrderSummaryOnLedgerAdapter extends RecyclerView.Adapter<OrderSumma
     public void clearData() {
         fileNameList.clear();
         orderMap.clear();
+        notifyDataSetChanged();
     }
 
     public void addOnItemClickListener(OnItemClickListener onItemClickListener) {
