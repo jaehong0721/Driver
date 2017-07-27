@@ -1,21 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="horizontal"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
               android:layout_width="match_parent"
-              android:layout_height="wrap_content">
+              android:layout_height="wrap_content"
+              android:orientation="horizontal">
 
     <com.rena21.driver.view.widget.MainTabButton
         android:id="@+id/btnTabOrders"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
         android:layout_weight="1"
-        android:text="주문목록"/>
+        app:selectedColor="@color/white"
+        app:selectedImage="@drawable/delivery_selected"
+        app:text="주문목록"
+        app:unselectedColor="@color/white_30"
+        app:unselectedImage="@drawable/delivery_unselected"/>
 
     <com.rena21.driver.view.widget.MainTabButton
         android:id="@+id/btnTabLedger"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
         android:layout_weight="1"
-        android:text="장부"/>
-
+        app:selectedColor="@color/white"
+        app:selectedImage="@drawable/note_selected"
+        app:text="거래장부"
+        app:unselectedColor="@color/white_30"
+        app:unselectedImage="@drawable/note_unselected"/>
 </LinearLayout>
