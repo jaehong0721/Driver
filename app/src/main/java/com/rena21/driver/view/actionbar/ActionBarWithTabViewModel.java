@@ -65,7 +65,7 @@ public class ActionBarWithTabViewModel implements View.OnClickListener{
 
     private void setup() {
         actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
-        actionBar.setCustomView(R.layout.layout_main_tabs);
+        actionBar.setCustomView(R.layout.action_bar_with_tab);
 
         View tabView = actionBar.getCustomView();
         Toolbar toolbar = (Toolbar) tabView.getParent();
