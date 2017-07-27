@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
+import android.view.View;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -35,7 +36,12 @@ public class OrderDetailActivity extends BaseActivity implements OrderAcceptedLi
         setContentView(R.layout.activity_order_detail);
 
         ActionBarWithButtonViewModel.createWithActionBar(getSupportActionBar())
-                .setTitle("주문 상세");
+                .setTitle("주문 상세")
+                .setCloseButtonListener(new View.OnClickListener() {
+                    @Override public void onClick(View v) {
+                        finish();
+                    }
+                });
 
         vendorPhoneNumber = getIntent().getStringExtra("vendorPhoneNumber");
         fileName = getIntent().getStringExtra("fileName");

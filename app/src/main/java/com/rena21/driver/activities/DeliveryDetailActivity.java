@@ -52,7 +52,7 @@ public class DeliveryDetailActivity extends BaseActivity implements DeliveryOrde
 
         ActionBarWithButtonViewModel.createWithActionBar(getSupportActionBar())
                 .setTitle("납품상세")
-                .setRegistButtonClickListener(new View.OnClickListener() {
+                .setCloseButtonListener(new View.OnClickListener() {
                     @Override public void onClick(View v) {
                         finish();
                     }

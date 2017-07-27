@@ -16,8 +16,6 @@ public class ActionBarWithButtonViewModel {
         return instance;
     }
 
-    private ActionBarWithButtonViewModel() {}
-
     private ActionBarWithButtonViewModel(ActionBar actionBar) { this.actionBar = actionBar; }
 
     private ActionBar actionBar;
@@ -28,11 +26,12 @@ public class ActionBarWithButtonViewModel {
         actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
         actionBar.setCustomView(R.layout.action_bar_with_button);
         View view = actionBar.getCustomView();
+
         tvActionBarTitle = (TextView) view.findViewById(R.id.tvActionBarTitle);
         btnClose = (ImageButton) view.findViewById(R.id.btnClose);
     }
 
-    public void setRegistButtonClickListener(View.OnClickListener listener) {
+    public void setCloseButtonListener(View.OnClickListener listener) {
         btnClose.setOnClickListener(listener);
     }
 
@@ -40,5 +39,4 @@ public class ActionBarWithButtonViewModel {
         tvActionBarTitle.setText(title);
         return this;
     }
-
 }
