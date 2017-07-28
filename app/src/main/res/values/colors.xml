@@ -19,4 +19,8 @@
 
     <color name="white">#ffffff</color>
     <color name="white_30">#4dffffff</color>
+    <color name="white_50">#80ffffff</color>
+    <color name="white_two">#f7f7f7</color>
+
+    <color name="warm_gray">#949494</color>
 </resources>
