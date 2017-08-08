@@ -21,6 +21,17 @@
     <color name="white_30">#4dffffff</color>
     <color name="white_50">#80ffffff</color>
     <color name="white_two">#f7f7f7</color>
+    <color name="white_80">#ccffffff</color>
 
     <color name="warm_gray">#949494</color>
+
+    <color name="sea">#2d8985</color>
+    <color name="butterscotch">#ffc145</color>
+    <color name="purple_brown">#643a3b</color>
+    <color name="dark_maroon">#390405</color>
+    <color name="gunmetal">#494b57</color>
+    <color name="dark_maroon_15">#26390405</color>
+    <color name="rectangle_button">#ce6531</color>
+
+    <color name="business_info_text_color">#333333</color>
 </resources>
