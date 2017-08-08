@@ -1,4 +1,4 @@
-<android.support.v4.widget.NestedScrollView
+<ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -31,11 +31,13 @@
                 android:src="@drawable/edit"/>
         </RelativeLayout>
 
-        <com.rena21.driver.view.layout.ImagesLayout
+        <com.rena21.driver.view.component.VendorImageContainer
+            android:id="@+id/vendorImageContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
+
     </LinearLayout>
 
-</android.support.v4.widget.NestedScrollView>
+</ScrollView>
 
 
