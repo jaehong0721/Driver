@@ -7,6 +7,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.HashMap;
+import java.util.List;
 
 public class FirebaseDbManager {
 
@@ -86,6 +87,31 @@ public class FirebaseDbManager {
                 .orderByChild("deliveredTime")
                 .equalTo(dateMillis)
                 .removeEventListener(listener);
+    }
+
+    public void subscribeBusinessInfo(String phoneNumber, ValueEventListener listener) {
+        instance.getReference()
+                .child("vendors")
+                .child(phoneNumber)
+                .child("businessInfo")
+                .addValueEventListener(listener);
+    }
+
+    public void removeBusinessInfoListener(String phoneNumber, ValueEventListener listener) {
+        instance.getReference()
+                .child("vendors")
+                .child(phoneNumber)
+                .child("businessInfo")
+                .removeEventListener(listener);
+    }
+
+    public void updateMajorItems(String phoneNumber, List<String> items) {
+        instance.getReference()
+                .child("vendors")
+                .child(phoneNumber)
+                .child("businessInfo")
+                .child("majorItems")
+                .setValue(items);
     }
 
     private DatabaseReference getSynchronizedAllOrdersRef() {

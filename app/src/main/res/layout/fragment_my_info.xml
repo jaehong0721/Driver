@@ -36,6 +36,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 
+        <com.rena21.driver.view.component.BusinessInfoContainer
+            android:id="@+id/businessInfoContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
     </LinearLayout>
 
 </ScrollView>

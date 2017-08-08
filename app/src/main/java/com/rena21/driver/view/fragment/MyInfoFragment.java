@@ -13,12 +13,18 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.rena21.driver.R;
+import com.rena21.driver.activities.MainActivity;
+import com.rena21.driver.firebase.FirebaseDbManager;
+import com.rena21.driver.models.BusinessInfoData;
+import com.rena21.driver.models.ContainerToObserve;
 import com.rena21.driver.models.VendorImageData;
 import com.rena21.driver.services.FileUploadService;
 import com.rena21.driver.util.ImagePickUpUtil;
+import com.rena21.driver.view.component.BusinessInfoContainer;
 import com.rena21.driver.view.component.VendorImageContainer;
 import com.rena21.driver.viewmodel.MyInfoViewModel;
 
+import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -35,6 +41,7 @@ public class MyInfoFragment extends Fragment {
     private BroadcastReceiver fileUploadSuccessReceiver;
 
     private VendorImageContainer vendorImageContainer;
+    private BusinessInfoContainer businessInfoContainer;
 
     public MyInfoFragment() {}
 
@@ -60,7 +67,9 @@ public class MyInfoFragment extends Fragment {
                 if(success) myInfoViewModel.addVendorImage();
             }
         };
-        myInfoViewModel = new MyInfoViewModel(getContext(), phoneNumber);
+        FirebaseDbManager dbManager = ((MainActivity)getActivity()).getDbManager();
+        myInfoViewModel = new MyInfoViewModel(getContext(), phoneNumber, dbManager);
+        myInfoViewModel.onCreate();
     }
 
     @Override
@@ -68,6 +77,7 @@ public class MyInfoFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_my_info, container, false);
         initVendorImageContainer(rootView);
+        initBusinessInfoContainer(rootView);
         return rootView;
     }
 
@@ -79,6 +89,11 @@ public class MyInfoFragment extends Fragment {
     @Override public void onStop() {
         getContext().unregisterReceiver(fileUploadSuccessReceiver);
         super.onStop();
+    }
+
+    @Override public void onDestroy() {
+        myInfoViewModel.onDestroy();
+        super.onDestroy();
     }
 
     @Override public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -130,5 +145,25 @@ public class MyInfoFragment extends Fragment {
             }
         };
         myInfoViewModel.getVendorImagesData().addObserver(vendorImagesObserver);
+    }
+
+    private void initBusinessInfoContainer(View rootView) {
+        businessInfoContainer = (BusinessInfoContainer) rootView.findViewById(R.id.businessInfoContainer);
+        businessInfoContainer.setAddMajorItemListener(new BusinessInfoContainer.AddMajorItemListener() {
+            @Override public void onAddMajorItem() {
+                Toast.makeText(getContext(), "품목 추가!!", Toast.LENGTH_SHORT).show();
+            }
+        });
+        businessInfoContainer.setRemoveMajorItemListener(new BusinessInfoContainer.RemoveMajorItemListener() {
+            @Override public void onRemoveMajorItem(List<String> items) {
+                myInfoViewModel.removeMajorItem(items);
+            }
+        });
+        Observer businessInfoObserver = new Observer() {
+            @Override public void update(Observable o, Object arg) {
+                businessInfoContainer.setBusinessInfoData(((ContainerToObserve<BusinessInfoData>)o).getObject());
+            }
+        };
+        myInfoViewModel.getBusinessInfoDataContainer().addObserver(businessInfoObserver);
     }
 }
