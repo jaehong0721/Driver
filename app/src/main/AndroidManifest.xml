@@ -4,6 +4,8 @@
 
     <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
     <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 
     <application
         android:name=".App"
@@ -45,6 +47,27 @@
                 <action android:name="com.google.firebase.MESSAGING_EVENT"/>
             </intent-filter>
         </service>
+
+        <provider
+            android:name = "android.support.v4.content.FileProvider"
+            android:authorities = "@string/authority"
+            android:exported = "false"
+            android:grantUriPermissions = "true">
+            <meta-data
+                android:name = "android.support.FILE_PROVIDER_PATHS"
+                android:resource = "@xml/file_path"/>
+        </provider>
+        <service
+            android:name="com.amazonaws.mobileconnectors.s3.transferutility.TransferService"
+            android:enabled="true"/>
+        <service
+            android:name=".services.NetworkJobService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.firebase.jobdispatcher.ACTION_EXECUTE"/>
+            </intent-filter>
+        </service>
+        <service android:name=".services.FileUploadService"/>
     </application>
 
 </manifest>
