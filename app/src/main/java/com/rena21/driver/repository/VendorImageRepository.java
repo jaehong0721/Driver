@@ -14,13 +14,15 @@ import com.rena21.driver.network.FileTransferUtil;
 public class VendorImageRepository {
 
     private final Context context;
+    private final String phoneNumber;
     private VendorImageData vendorImagesData;
 
     private final String S3_ADDRESS = "https://s3.ap-northeast-2.amazonaws.com/thegreatmerchant/";
     private AmazonS3 s3;
 
-    public VendorImageRepository(Context context) {
+    public VendorImageRepository(Context context, String phoneNumber) {
         this.context = context;
+        this.phoneNumber = phoneNumber;
         this.vendorImagesData = new VendorImageData();
 
         s3 = FileTransferUtil.getS3Client(context);
@@ -37,7 +39,7 @@ public class VendorImageRepository {
         final Handler handler = new Handler(context.getMainLooper());
         new Thread(new Runnable() {
             @Override public void run() {
-                for(final S3ObjectSummary file : s3.listObjects("thegreatmerchant", "image/").getObjectSummaries()) {
+                for(final S3ObjectSummary file : s3.listObjects("thegreatmerchant", "image/" + phoneNumber + "/").getObjectSummaries()) {
                     if(file.getKey().equals("image/")) continue;
                     handler.post(new Runnable() {
                         @Override public void run() {
@@ -55,7 +57,7 @@ public class VendorImageRepository {
     public void removeImage(final String data) {
         new Thread(new Runnable() {
             @Override public void run() {
-                s3.deleteObject(new DeleteObjectRequest("thegreatmerchant", data.substring(data.indexOf("image/"))));
+                s3.deleteObject(new DeleteObjectRequest("thegreatmerchant", data.substring(data.indexOf("image/" + phoneNumber + "/"))));
             }
         }).start();
 

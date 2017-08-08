@@ -46,7 +46,7 @@ public class MainActivity extends BaseActivity implements OrderClickedListener, 
 
         orderListFragment = new OrderListFragment();
         ledgerFragment = new LedgerFragment();
-        myInfoFragment = new MyInfoFragment();
+        myInfoFragment = MyInfoFragment.newInstance(appPreferenceManager.getPhoneNumber());
         estimateFragment = new EstimateFragment();
 
         mainTab.setMainTabClickListener(this);
@@ -77,6 +77,10 @@ public class MainActivity extends BaseActivity implements OrderClickedListener, 
                 if(resultCode == RESULT_OK) {
                    isCallAfterDeliveryCompletion = true;
                 }
+                break;
+
+            default:
+                super.onActivityResult(requestCode,resultCode,data);
                 break;
         }
     }
