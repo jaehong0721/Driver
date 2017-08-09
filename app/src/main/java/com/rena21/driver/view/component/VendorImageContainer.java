@@ -68,8 +68,10 @@ public class VendorImageContainer extends FrameLayout {
     public void setRemovePhotoListener(final RemovePhotoListener removePhotoListener) {
         ivRemovePhoto.setOnClickListener(new OnClickListener() {
             @Override public void onClick(View v) {
-                String imageUrlToRemove = vendorImageAdapter.getCurrentImageUrl(viewPagerWithIndicator.getCurrentItem());
-                removePhotoListener.onRemovePhoto(imageUrlToRemove);
+                try {
+                    String imageUrlToRemove = vendorImageAdapter.getCurrentImageUrl(viewPagerWithIndicator.getCurrentItem());
+                    removePhotoListener.onRemovePhoto(imageUrlToRemove);
+                } catch (IndexOutOfBoundsException e) {}
             }
         });
     }
@@ -91,11 +93,13 @@ public class VendorImageContainer extends FrameLayout {
 
     private void showEmptyView() {
         emptyView.setVisibility(VISIBLE);
+        ivRemovePhoto.setVisibility(View.GONE);
         viewPagerWithIndicator.setVisibility(GONE);
     }
 
     private void showImageView() {
         viewPagerWithIndicator.setVisibility(VISIBLE);
+        ivRemovePhoto.setVisibility(View.VISIBLE);
         emptyView.setVisibility(GONE);
     }
 }
