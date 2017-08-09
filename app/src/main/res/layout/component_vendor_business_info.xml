@@ -3,15 +3,15 @@
               xmlns:app="http://schemas.android.com/apk/res-auto"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
+              android:layout_marginBottom="24dp"
               android:layout_marginLeft="19dp"
               android:layout_marginRight="23dp"
-              android:layout_marginBottom="24dp"
               android:gravity="center_horizontal"
               android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="48dp"
+        android:layout_height="wrap_content"
         android:orientation="horizontal">
 
         <RelativeLayout
@@ -30,15 +30,30 @@
 
             <TextView
                 android:id="@+id/tvPartnerNum"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/label1"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="8dp"
+                android:gravity="center"
                 android:hint="0개"
-                android:textColor="#333333"
-                android:textColorHint="#333333"
+                android:textColor="@color/business_info_text_color"
+                android:textColorHint="@color/business_info_text_color"
                 android:textSize="19sp"/>
+
+            <com.rena21.driver.view.layout.InputInfoLayout
+                android:id="@+id/inputPartnerNum"
+                android:layout_width="83dp"
+                android:layout_height="48dp"
+                android:layout_below="@+id/label1"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="8dp"
+                android:background="@color/input_text_background"
+                android:gravity="center"
+                android:hint="0개"
+                android:inputType="number"
+                android:visibility="gone"
+                app:clearable="false"/>
 
         </RelativeLayout>
 
@@ -69,9 +84,24 @@
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="8dp"
                 android:hint="0개"
-                android:textColor="#333333"
-                android:textColorHint="#333333"
+                android:textColor="@color/business_info_text_color"
+                android:textColorHint="@color/business_info_text_color"
                 android:textSize="19sp"/>
+
+            <com.rena21.driver.view.layout.InputInfoLayout
+                android:id="@+id/inputOrderNum"
+                android:layout_width="83dp"
+                android:layout_height="48dp"
+                android:layout_below="@+id/label2"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="8dp"
+                android:background="@color/input_text_background"
+                android:gravity="center"
+                android:hint="0개"
+                android:inputType="number"
+                android:visibility="gone"
+                app:clearable="false"/>
+
         </RelativeLayout>
 
         <View
@@ -100,10 +130,24 @@
                 android:layout_below="@+id/label3"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="8dp"
-                android:hint="0개"
-                android:textColor="#333333"
-                android:textColorHint="#333333"
+                android:hint="0년"
+                android:textColor="@color/business_info_text_color"
+                android:textColorHint="@color/business_info_text_color"
                 android:textSize="19sp"/>
+
+            <com.rena21.driver.view.layout.InputInfoLayout
+                android:id="@+id/inputAge"
+                android:layout_width="83dp"
+                android:layout_height="48dp"
+                android:layout_below="@+id/label3"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="8dp"
+                android:background="@color/input_text_background"
+                android:gravity="center"
+                android:hint="0년"
+                android:inputType="number"
+                android:visibility="gone"
+                app:clearable="false"/>
 
         </RelativeLayout>
     </LinearLayout>
@@ -170,10 +214,22 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/label5"
             android:layout_marginTop="10dp"
-            android:text="예) 금정동, 팔달동"
-            android:textColor="@color/warm_gray"
+            android:hint="예) 금정동, 팔달동"
+            android:textColor="@color/business_info_text_color"
             android:textSize="14sp"
             android:visibility="gone"/>
+
+        <com.rena21.driver.view.layout.InputInfoLayout
+            android:id="@+id/inputDeliveryArea"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_below="@+id/label5"
+            android:layout_marginTop="10dp"
+            android:background="@color/input_text_background"
+            android:hint="예) 금정동, 팔달동"
+            android:inputType="text"
+            android:visibility="gone"
+            app:clearable="true"/>
 
     </RelativeLayout>
 
@@ -212,6 +268,17 @@
                 android:textColor="#333333"
                 android:textSize="14sp"/>
 
+            <com.rena21.driver.view.layout.InputInfoLayout
+                android:id="@+id/inputClosedDay"
+                android:layout_width="130dp"
+                android:layout_height="48dp"
+                android:layout_below="@+id/label6"
+                android:layout_marginTop="10dp"
+                android:background="@color/input_text_background"
+                android:hint="예) 매주 일요일"
+                android:inputType="text"
+                android:visibility="gone"
+                app:clearable="false"/>
         </RelativeLayout>
 
         <View
@@ -242,6 +309,18 @@
                 android:hint="예) 월~토, 9시~8시"
                 android:textColor="#333333"
                 android:textSize="14sp"/>
+
+            <com.rena21.driver.view.layout.InputInfoLayout
+                android:id="@+id/inputDeliveryTime"
+                android:layout_width="144dp"
+                android:layout_height="48dp"
+                android:layout_below="@+id/label7"
+                android:layout_marginTop="10dp"
+                android:background="@color/input_text_background"
+                android:hint="예) 9시~8시"
+                android:inputType="text"
+                android:visibility="gone"
+                app:clearable="false"/>
         </RelativeLayout>
 
     </LinearLayout>
@@ -275,6 +354,18 @@
             android:hint="예) 123-45-67890"
             android:textColor="#333333"
             android:textSize="14sp"/>
+
+        <com.rena21.driver.view.layout.InputInfoLayout
+            android:id="@+id/inputBusinessLicenseNumber"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_below="@+id/label8"
+            android:layout_marginTop="10dp"
+            android:background="@color/input_text_background"
+            android:hint="예) 123-45-67890"
+            android:inputType="text"
+            android:visibility="gone"
+            app:clearable="false"/>
     </RelativeLayout>
 
 </LinearLayout>

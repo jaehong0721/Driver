@@ -34,4 +34,5 @@
     <color name="rectangle_button">#ce6531</color>
 
     <color name="business_info_text_color">#333333</color>
+    <color name="input_text_background">#ececec</color>
 </resources>
