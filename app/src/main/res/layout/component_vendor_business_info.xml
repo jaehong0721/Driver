@@ -206,18 +206,19 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/label5"
             android:layout_marginTop="10dp"
-            app:flexWrap="wrap"/>
+            app:flexWrap="wrap">
 
-        <TextView
-            android:id="@+id/tvDeliveryArea"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/label5"
-            android:layout_marginTop="10dp"
-            android:hint="예) 금정동, 팔달동"
-            android:textColor="@color/business_info_text_color"
-            android:textSize="14sp"
-            android:visibility="gone"/>
+            <TextView
+                android:id="@+id/tvDeliveryArea"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/label5"
+                android:layout_marginTop="10dp"
+                android:hint="예) 금정동, 팔달동"
+                android:textColor="@color/business_info_text_color"
+                android:textSize="14sp"/>
+
+        </com.google.android.flexbox.FlexboxLayout>
 
         <com.rena21.driver.view.layout.InputInfoLayout
             android:id="@+id/inputDeliveryArea"

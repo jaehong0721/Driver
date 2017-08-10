@@ -12,13 +12,15 @@ import android.widget.TextView;
 import com.google.android.flexbox.FlexboxLayout;
 import com.rena21.driver.R;
 import com.rena21.driver.models.BusinessInfoData;
+import com.rena21.driver.util.TransformDataUtil;
 import com.rena21.driver.view.layout.InputInfoLayout;
 import com.rena21.driver.view.widget.AddMajorItemButton;
 import com.rena21.driver.view.widget.DeliveryAreaView;
 import com.rena21.driver.view.widget.MajorItemView;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class BusinessInfoContainer extends FrameLayout {
 
@@ -52,8 +54,8 @@ public class BusinessInfoContainer extends FrameLayout {
     private InputInfoLayout inputDeliveryTime;
     private InputInfoLayout inputBusinessNumber;
 
-    private ArrayList<View> viewsOnEditMode;
-    private ArrayList<View> viewsOnNormalMode;
+    private HashMap<View, View> transformableView;
+    private String deliveryAreas;
 
     public BusinessInfoContainer(@NonNull Context context) {
         super(context, null);
@@ -64,72 +66,66 @@ public class BusinessInfoContainer extends FrameLayout {
 
         inflate(context, R.layout.component_vendor_business_info, this);
 
-        viewsOnNormalMode = new ArrayList<>();
+        transformableView = new HashMap<>();
 
         tvPartnerNum = (TextView) findViewById(R.id.tvPartnerNum);
-        viewsOnNormalMode.add(tvPartnerNum);
+        inputPartnerNum = (InputInfoLayout) findViewById(R.id.inputPartnerNum);
+        transformableView.put(tvPartnerNum, inputPartnerNum);
 
         tvOrderNum = (TextView) findViewById(R.id.tvOrderNum);
-        viewsOnNormalMode.add(tvOrderNum);
+        inputOrderNum = (InputInfoLayout) findViewById(R.id.inputOrderNum);
+        transformableView.put(tvOrderNum, inputOrderNum);
 
         tvAge = (TextView) findViewById(R.id.tvAge);
-        viewsOnNormalMode.add(tvAge);
+        inputAge = (InputInfoLayout) findViewById(R.id.inputAge);
+        transformableView.put(tvAge, inputAge);
 
         tvClosedDay = (TextView) findViewById(R.id.tvClosedDay);
-        viewsOnNormalMode.add(tvClosedDay);
+        inputClosedDay = (InputInfoLayout) findViewById(R.id.inputClosedDay);
+        transformableView.put(tvClosedDay, inputClosedDay);
 
         tvDeliveryTime = (TextView) findViewById(R.id.tvDeliveryTime);
-        viewsOnNormalMode.add(tvDeliveryTime);
+        inputDeliveryTime = (InputInfoLayout) findViewById(R.id.inputDeliveryTime);
+        transformableView.put(tvDeliveryTime, inputDeliveryTime);
 
         tvBusinessLicenseNumber = (TextView) findViewById(R.id.tvBusinessLicenseNumber);
-        viewsOnNormalMode.add(tvBusinessLicenseNumber);
-
-        majorItemsLayout = (FlexboxLayout) findViewById(R.id.majorItemsLayout);
-        deliveryAreasLayout = (FlexboxLayout) findViewById(R.id.deliveryAreasLayout);
-        tvDeliveryArea = (TextView) findViewById(R.id.tvDeliveryArea);
-
-        viewsOnEditMode = new ArrayList<>();
-
-        inputPartnerNum = (InputInfoLayout) findViewById(R.id.inputPartnerNum);
-        viewsOnEditMode.add(inputPartnerNum);
-
-        inputOrderNum = (InputInfoLayout) findViewById(R.id.inputOrderNum);
-        viewsOnEditMode.add(inputOrderNum);
-
-        inputAge = (InputInfoLayout) findViewById(R.id.inputAge);
-        viewsOnEditMode.add(inputAge);
-
-        inputDeliveryArea = (InputInfoLayout) findViewById(R.id.inputDeliveryArea);
-        viewsOnEditMode.add(inputDeliveryArea);
-
-        inputClosedDay = (InputInfoLayout) findViewById(R.id.inputClosedDay);
-        viewsOnEditMode.add(inputClosedDay);
-
-        inputDeliveryTime = (InputInfoLayout) findViewById(R.id.inputDeliveryTime);
-        viewsOnEditMode.add(inputDeliveryTime);
-
         inputBusinessNumber = (InputInfoLayout) findViewById(R.id.inputBusinessLicenseNumber);
-        viewsOnEditMode.add(inputBusinessNumber);
+        transformableView.put(tvBusinessLicenseNumber, inputBusinessNumber);
+
+        deliveryAreasLayout = (FlexboxLayout) findViewById(R.id.deliveryAreasLayout);
+        inputDeliveryArea = (InputInfoLayout) findViewById(R.id.inputDeliveryArea);
+        transformableView.put(deliveryAreasLayout, inputDeliveryArea);
+
+        tvDeliveryArea = (TextView) findViewById(R.id.tvDeliveryArea);
+        majorItemsLayout = (FlexboxLayout) findViewById(R.id.majorItemsLayout);
     }
 
     public void setViewOnEditMode() {
-        for(View view : viewsOnNormalMode) {
-            view.setVisibility(View.GONE);
-        }
+        for(Map.Entry<View, View> entry : transformableView.entrySet()) {
+            int id = entry.getKey().getId();
+            if(id == deliveryAreasLayout.getId()) {
+                ((InputInfoLayout)entry.getValue()).setText(deliveryAreas);
+            } else {
+                TextView tv = (TextView)entry.getKey();
+                InputInfoLayout input = (InputInfoLayout) entry.getValue();
 
-        inputPartnerNum.setVisibility(View.VISIBLE);
-        for(View view : viewsOnEditMode) {
-            view.setVisibility(View.VISIBLE);
+                String text = tv.getText().toString();
+                if(id == tvPartnerNum.getId() || id == tvOrderNum.getId() || id == tvAge.getId()) {
+                    if(text.length() != 0) {
+                        text = text.substring(0,text.length()-1);
+                    }
+                }
+                input.setText(text);
+            }
+            entry.getKey().setVisibility(View.GONE);
+            entry.getValue().setVisibility(View.VISIBLE);
         }
     }
 
     public void setNormalMode() {
-        for(View view : viewsOnEditMode) {
-            view.setVisibility(View.GONE);
-        }
-
-        for(View view : viewsOnNormalMode) {
-            view.setVisibility(View.VISIBLE);
+        for(Map.Entry<View, View> entry : transformableView.entrySet()) {
+            entry.getValue().setVisibility(View.GONE);
+            entry.getKey().setVisibility(View.VISIBLE);
         }
     }
 
@@ -173,16 +169,14 @@ public class BusinessInfoContainer extends FrameLayout {
 
         deliveryAreasLayout.removeAllViews();
         if(businessInfoData.deliveryAreas != null) {
-            tvDeliveryArea.setVisibility(View.GONE);
-            deliveryAreasLayout.setVisibility(View.VISIBLE);
+            deliveryAreas = TransformDataUtil.makeDeliveryAreaListInLine(businessInfoData.deliveryAreas);
             for (String deliveryArea : businessInfoData.deliveryAreas) {
                 DeliveryAreaView deliveryAreaView = new DeliveryAreaView(getContext());
                 deliveryAreaView.setArea(deliveryArea);
                 deliveryAreasLayout.addView(deliveryAreaView);
             }
         } else {
-            deliveryAreasLayout.setVisibility(View.GONE);
-            tvDeliveryArea.setVisibility(View.VISIBLE);
+            deliveryAreasLayout.addView(tvDeliveryArea);
         }
 
         tvClosedDay.setText(businessInfoData.closedDay);
