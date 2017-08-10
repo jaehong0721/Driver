@@ -115,6 +115,18 @@ public class FirebaseDbManager {
                 .setValue(businessInfoData);
     }
 
+    public void subscribeContactInfo(ValueEventListener listener) {
+        getSynchronizedVendorRef()
+                .child("info")
+                .addValueEventListener(listener);
+    }
+
+    public void removeContactInfoListener(ValueEventListener listener) {
+        getSynchronizedVendorRef()
+                .child("info")
+                .removeEventListener(listener);
+    }
+
     private DatabaseReference getSynchronizedAllOrdersRef() {
         DatabaseReference orderRef = instance.getReference("orders")
                 .child("vendors")
@@ -136,5 +148,4 @@ public class FirebaseDbManager {
                 .child(vendorPhoneNumber)
                 .child(fileName);
     }
-
 }
