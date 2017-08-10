@@ -1,47 +1,89 @@
-<ScrollView
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.rena21.driver.view.fragment.MyInfoFragment">
 
-    <LinearLayout
+    <RelativeLayout
+        android:id="@+id/titleBar"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="50dp"
+        android:gravity="center_vertical"
+        android:background="@color/primaryGreen"
+        android:visibility="gone">
 
-        <RelativeLayout
-            android:layout_width="match_parent"
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingBottom="14dp"
-            android:paddingLeft="18dp"
-            android:paddingRight="23dp"
-            android:paddingTop="31dp">
+            android:paddingLeft="20dp"
+            android:text="내정보 수정"
+            android:textSize="20sp"
+            android:textColor="@color/white"/>
 
-            <com.rena21.driver.view.layout.VendorContactInfoLayout
-                android:id="@+id/vendorContactInfo"
-                android:layout_width="wrap_content"
+        <ImageView
+            android:id="@+id/ivClose"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingRight="16dp"
+            android:layout_alignParentRight="true"
+            android:src="@drawable/close"/>
+
+    </RelativeLayout>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/titleBar">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="14dp"
+                android:paddingLeft="18dp"
+                android:paddingRight="23dp"
+                android:paddingTop="31dp">
+
+                <com.rena21.driver.view.layout.VendorContactInfoLayout
+                    android:id="@+id/vendorContactInfo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+                <ImageView
+                    android:id="@+id/ivEditMode"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:src="@drawable/edit"/>
+            </RelativeLayout>
+
+            <com.rena21.driver.view.component.VendorImageContainer
+                android:id="@+id/vendorImageContainer"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
 
-            <ImageView
-                android:id="@+id/ivEdit"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:src="@drawable/edit"/>
-        </RelativeLayout>
+            <com.rena21.driver.view.component.BusinessInfoContainer
+                android:id="@+id/businessInfoContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
 
-        <com.rena21.driver.view.component.VendorImageContainer
-            android:id="@+id/vendorImageContainer"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            <Button
+                android:id="@+id/btnSaveInfo"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@color/primaryOrange"
+                android:text="저장"
+                android:textSize="16sp"
+                android:textColor="@color/white"
+                android:visibility="gone"/>
+        </LinearLayout>
 
-        <com.rena21.driver.view.component.BusinessInfoContainer
-            android:id="@+id/businessInfoContainer"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-    </LinearLayout>
+    </ScrollView>
 
-</ScrollView>
+</RelativeLayout>
 
 
