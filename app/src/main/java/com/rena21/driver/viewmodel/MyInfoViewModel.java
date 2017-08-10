@@ -5,9 +5,11 @@ import android.content.Context;
 
 import com.rena21.driver.firebase.FirebaseDbManager;
 import com.rena21.driver.models.BusinessInfoData;
+import com.rena21.driver.models.ContactInfoData;
 import com.rena21.driver.models.ContainerToObserve;
 import com.rena21.driver.models.VendorImageData;
 import com.rena21.driver.repository.BusinessInfoRepository;
+import com.rena21.driver.repository.ContactInfoRepository;
 import com.rena21.driver.repository.VendorImageRepository;
 
 import java.util.List;
@@ -17,9 +19,11 @@ public class MyInfoViewModel {
     private final Context context;
 
     private VendorImageRepository vendorImageRepository;
+    private ContactInfoRepository contactInfoRepository;
     private BusinessInfoRepository businessInfoRepository;
 
     private VendorImageData vendorImagesData;
+    private ContainerToObserve<ContactInfoData> contactInfoDataContainer;
     private ContainerToObserve<BusinessInfoData> businessInfoDataContainer;
 
     private final FirebaseDbManager dbManager;
@@ -35,6 +39,9 @@ public class MyInfoViewModel {
     public void onCreate() {
         this.vendorImageRepository = new VendorImageRepository(context, phoneNumber);
         this.vendorImagesData = vendorImageRepository.loadImage();
+
+        this.contactInfoRepository = new ContactInfoRepository(dbManager);
+        this.contactInfoDataContainer = contactInfoRepository.subscribeContactInfo();
 
         this.businessInfoRepository = new BusinessInfoRepository(dbManager);
         this.businessInfoDataContainer = businessInfoRepository.subscribeBusinessInfo();
@@ -56,6 +63,9 @@ public class MyInfoViewModel {
         vendorImageRepository.removeImage(imageUrl);
     }
 
+    public ContainerToObserve getContactInfoDataContainer() {
+        return contactInfoDataContainer;
+    }
     public void saveBusinessInfoData(BusinessInfoData businessInfoData) {
         businessInfoRepository.saveBusinessInfoData(businessInfoData);
     }

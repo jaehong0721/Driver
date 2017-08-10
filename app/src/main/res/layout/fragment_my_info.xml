@@ -49,7 +49,7 @@
                 android:paddingTop="31dp">
 
                 <com.rena21.driver.view.component.ContactInfoContainer
-                    android:id="@+id/vendorContactInfo"
+                    android:id="@+id/contactInfoContainer"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
 

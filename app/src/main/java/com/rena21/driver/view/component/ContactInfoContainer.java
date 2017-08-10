@@ -8,6 +8,7 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.rena21.driver.R;
+import com.rena21.driver.models.ContactInfoData;
 
 public class ContactInfoContainer extends FrameLayout {
 
@@ -34,4 +35,9 @@ public class ContactInfoContainer extends FrameLayout {
     }
 
 
+    public void setContactInfoData(ContactInfoData contactInfoData) {
+        tvName.setText(contactInfoData.vendorName);
+        tvAddress.setText(contactInfoData.address);
+        tvPhoneNumber.setText(contactInfoData.phoneNumber);
+    }
 }

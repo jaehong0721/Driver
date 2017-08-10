@@ -20,11 +20,13 @@ import com.rena21.driver.R;
 import com.rena21.driver.activities.MainActivity;
 import com.rena21.driver.firebase.FirebaseDbManager;
 import com.rena21.driver.models.BusinessInfoData;
+import com.rena21.driver.models.ContactInfoData;
 import com.rena21.driver.models.ContainerToObserve;
 import com.rena21.driver.models.VendorImageData;
 import com.rena21.driver.services.FileUploadService;
 import com.rena21.driver.util.ImagePickUpUtil;
 import com.rena21.driver.view.component.BusinessInfoContainer;
+import com.rena21.driver.view.component.ContactInfoContainer;
 import com.rena21.driver.view.component.VendorImageContainer;
 import com.rena21.driver.viewmodel.MyInfoViewModel;
 
@@ -44,6 +46,7 @@ public class MyInfoFragment extends Fragment {
     private MyInfoViewModel myInfoViewModel;
     private BroadcastReceiver fileUploadSuccessReceiver;
 
+    private ContactInfoContainer contactInfoContainer;
     private VendorImageContainer vendorImageContainer;
     private BusinessInfoContainer businessInfoContainer;
     private RelativeLayout titleBar;
@@ -85,6 +88,7 @@ public class MyInfoFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_my_info, container, false);
 
+        initContactInfoContainer(rootView);
         initVendorImageContainer(rootView);
         initBusinessInfoContainer(rootView);
 
@@ -183,6 +187,16 @@ public class MyInfoFragment extends Fragment {
             }
         };
         myInfoViewModel.getVendorImagesData().addObserver(vendorImagesObserver);
+    }
+
+    private void initContactInfoContainer(View rootView) {
+        contactInfoContainer = (ContactInfoContainer) rootView.findViewById(R.id.contactInfoContainer);
+        Observer contactInfoObserver = new Observer() {
+            @Override public void update(Observable o, Object arg) {
+                contactInfoContainer.setContactInfoData(((ContainerToObserve<ContactInfoData>)o).getObject());
+            }
+        };
+        myInfoViewModel.getContactInfoDataContainer().addObserver(contactInfoObserver);
     }
 
     private void initBusinessInfoContainer(View rootView) {
