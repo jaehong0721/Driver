@@ -37,11 +37,11 @@ public class MyInfoViewModel {
         this.vendorImagesData = vendorImageRepository.loadImage();
 
         this.businessInfoRepository = new BusinessInfoRepository(dbManager);
-        this.businessInfoDataContainer = businessInfoRepository.subscribeBusinessInfo(phoneNumber);
+        this.businessInfoDataContainer = businessInfoRepository.subscribeBusinessInfo();
     }
 
     public void onDestroy() {
-        businessInfoRepository.cancelSubscription(phoneNumber);
+        businessInfoRepository.cancelSubscription();
     }
 
     public VendorImageData getVendorImagesData() {
@@ -56,11 +56,15 @@ public class MyInfoViewModel {
         vendorImageRepository.removeImage(imageUrl);
     }
 
+    public void saveBusinessInfoData(BusinessInfoData businessInfoData) {
+        businessInfoRepository.saveBusinessInfoData(businessInfoData);
+    }
+
     public ContainerToObserve getBusinessInfoDataContainer() {
         return businessInfoDataContainer;
     }
 
     public void removeMajorItem(List<String> items) {
-        businessInfoRepository.removeMajorItem(phoneNumber, items);
+        businessInfoRepository.removeMajorItem(items);
     }
 }

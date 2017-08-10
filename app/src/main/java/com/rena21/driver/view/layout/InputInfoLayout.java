@@ -45,6 +45,10 @@ public class InputInfoLayout extends RelativeLayout{
         etInput.setText(s);
     }
 
+    public String getText() {
+        return etInput.getText().toString();
+    }
+
     private void initEditText(Context context, AttributeSet attrs) {
         etInput = new EditText(context, attrs);
         etInput.setTextSize(14);

@@ -36,16 +36,20 @@ public class BusinessInfoRepository implements ValueEventListener {
         Log.d("test", databaseError.getMessage());
     }
 
-    public ContainerToObserve<BusinessInfoData> subscribeBusinessInfo(String phoneNumber) {
-        dbManager.subscribeBusinessInfo(phoneNumber, this);
+    public void saveBusinessInfoData(BusinessInfoData businessInfoData) {
+        dbManager.updateBusinessInfoData(businessInfoData);
+    }
+
+    public ContainerToObserve<BusinessInfoData> subscribeBusinessInfo() {
+        dbManager.subscribeBusinessInfo(this);
         return dataContainer;
     }
 
-    public void cancelSubscription(String phoneNumber) {
-        dbManager.removeBusinessInfoListener(phoneNumber, this);
+    public void cancelSubscription() {
+        dbManager.removeBusinessInfoListener(this);
     }
 
-    public void removeMajorItem(String phoneNumber, List<String> items) {
-        dbManager.updateMajorItems(phoneNumber, items);
+    public void removeMajorItem(List<String> items) {
+        dbManager.updateMajorItems(items);
     }
 }

@@ -5,6 +5,7 @@ import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.rena21.driver.models.BusinessInfoData;
 
 import java.util.HashMap;
 import java.util.List;
@@ -89,29 +90,29 @@ public class FirebaseDbManager {
                 .removeEventListener(listener);
     }
 
-    public void subscribeBusinessInfo(String phoneNumber, ValueEventListener listener) {
-        instance.getReference()
-                .child("vendors")
-                .child(phoneNumber)
+    public void subscribeBusinessInfo(ValueEventListener listener) {
+        getSynchronizedVendorRef()
                 .child("businessInfo")
                 .addValueEventListener(listener);
     }
 
-    public void removeBusinessInfoListener(String phoneNumber, ValueEventListener listener) {
-        instance.getReference()
-                .child("vendors")
-                .child(phoneNumber)
+    public void removeBusinessInfoListener(ValueEventListener listener) {
+        getSynchronizedVendorRef()
                 .child("businessInfo")
                 .removeEventListener(listener);
     }
 
-    public void updateMajorItems(String phoneNumber, List<String> items) {
-        instance.getReference()
-                .child("vendors")
-                .child(phoneNumber)
+    public void updateMajorItems(List<String> items) {
+        getSynchronizedVendorRef()
                 .child("businessInfo")
                 .child("majorItems")
                 .setValue(items);
+    }
+
+    public void updateBusinessInfoData(BusinessInfoData businessInfoData) {
+        getSynchronizedVendorRef()
+                .child("businessInfo")
+                .setValue(businessInfoData);
     }
 
     private DatabaseReference getSynchronizedAllOrdersRef() {
@@ -122,10 +123,18 @@ public class FirebaseDbManager {
         return orderRef;
     }
 
+    private DatabaseReference getSynchronizedVendorRef() {
+        DatabaseReference vendorRef = instance.getReference("vendors")
+                .child(vendorPhoneNumber);
+        vendorRef.keepSynced(true);
+        return vendorRef;
+    }
+
     private DatabaseReference getSpecificOrderRef(String fileName) {
         return instance.getReference("orders")
                 .child("vendors")
                 .child(vendorPhoneNumber)
                 .child(fileName);
     }
+
 }

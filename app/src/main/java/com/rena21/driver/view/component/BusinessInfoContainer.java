@@ -169,7 +169,7 @@ public class BusinessInfoContainer extends FrameLayout {
 
         deliveryAreasLayout.removeAllViews();
         if(businessInfoData.deliveryAreas != null) {
-            deliveryAreas = TransformDataUtil.makeDeliveryAreaListInLine(businessInfoData.deliveryAreas);
+            deliveryAreas = TransformDataUtil.makeDeliveryAreasString(businessInfoData.deliveryAreas);
             for (String deliveryArea : businessInfoData.deliveryAreas) {
                 DeliveryAreaView deliveryAreaView = new DeliveryAreaView(getContext());
                 deliveryAreaView.setArea(deliveryArea);
@@ -182,5 +182,23 @@ public class BusinessInfoContainer extends FrameLayout {
         tvClosedDay.setText(businessInfoData.closedDay);
         tvDeliveryTime.setText(businessInfoData.deliveryTime);
         tvBusinessLicenseNumber.setText(businessInfoData.businessLicenseNumber);
+    }
+
+    public BusinessInfoData getNewBusinessInfoData() {
+        BusinessInfoData businessInfoData = new BusinessInfoData();
+
+        String partnerNum = inputPartnerNum.getText();
+        String orderNum = inputOrderNum.getText();
+        String age = inputAge.getText();
+
+        businessInfoData.partnerNum = partnerNum.equals("") ? 0 : Integer.parseInt(partnerNum);
+        businessInfoData.orderNum = orderNum.equals("") ? 0 : Integer.parseInt(orderNum);
+        businessInfoData.age = age.equals("") ? 0 : Integer.parseInt(age);
+        businessInfoData.deliveryAreas = TransformDataUtil.makeDeliveryAreasList(inputDeliveryArea.getText());
+        businessInfoData.closedDay = inputClosedDay.getText();
+        businessInfoData.deliveryTime = inputDeliveryTime.getText();
+        businessInfoData.businessLicenseNumber = inputBusinessNumber.getText();
+
+        return businessInfoData;
     }
 }
