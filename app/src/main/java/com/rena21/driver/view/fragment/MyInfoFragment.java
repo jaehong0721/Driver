@@ -98,6 +98,7 @@ public class MyInfoFragment extends Fragment {
         ivClose.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
                 setNormalMode();
+                contactInfoContainer.setNormalMode();
                 businessInfoContainer.setNormalMode();
             }
         });
@@ -106,6 +107,7 @@ public class MyInfoFragment extends Fragment {
         ivEdit.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
                 setEditMode();
+                contactInfoContainer.setEditMode();
                 businessInfoContainer.setViewOnEditMode();
             }
         });
@@ -117,6 +119,7 @@ public class MyInfoFragment extends Fragment {
                 BusinessInfoData newBusinessInfoData = businessInfoContainer.getNewBusinessInfoData();
                 myInfoViewModel.saveBusinessInfoData(newBusinessInfoData);
                 setNormalMode();
+                contactInfoContainer.setNormalMode();
                 businessInfoContainer.setNormalMode();
             }
         });
