@@ -1,4 +1,4 @@
-package com.rena21.driver.view.layout;
+package com.rena21.driver.view.component;
 
 
 import android.content.Context;
@@ -9,17 +9,17 @@ import android.widget.TextView;
 
 import com.rena21.driver.R;
 
-public class VendorContactInfoLayout extends FrameLayout {
+public class ContactInfoContainer extends FrameLayout {
 
     private TextView tvName;
     private TextView tvAddress;
     private TextView tvPhoneNumber;
 
-    public VendorContactInfoLayout(Context context) {
+    public ContactInfoContainer(Context context) {
         super(context,null);
     }
 
-    public VendorContactInfoLayout(Context context, @Nullable AttributeSet attrs) {
+    public ContactInfoContainer(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
 
         inflate(context, R.layout.layout_vendor_contact_info,this);
