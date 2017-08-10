@@ -9,6 +9,8 @@ import android.widget.RelativeLayout;
 import com.google.android.flexbox.FlexboxLayout;
 import com.rena21.driver.R;
 
+import uk.co.chrisjenx.calligraphy.CalligraphyUtils;
+
 public class AddMajorItemButton extends android.support.v7.widget.AppCompatButton {
 
     public AddMajorItemButton(Context context) {
@@ -25,6 +27,7 @@ public class AddMajorItemButton extends android.support.v7.widget.AppCompatButto
         setBackground(ContextCompat.getDrawable(context, R.drawable.add_major_item_button_shape));
         setTextColor(ContextCompat.getColor(context, R.color.white));
         setTextSize(14);
+        CalligraphyUtils.applyFontToTextView(context,this, getResources().getString(R.string.fonts_path));
         setText("품목추가");
     }
 }

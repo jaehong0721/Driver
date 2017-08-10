@@ -12,6 +12,8 @@ import com.google.android.flexbox.FlexboxLayout;
 import com.rena21.driver.R;
 import com.rena21.driver.util.DpToPxConverter;
 
+import uk.co.chrisjenx.calligraphy.CalligraphyUtils;
+
 public class DeliveryAreaView extends android.support.v7.widget.AppCompatTextView {
 
     public DeliveryAreaView(Context context) {
@@ -34,6 +36,7 @@ public class DeliveryAreaView extends android.support.v7.widget.AppCompatTextVie
         setGravity(Gravity.CENTER);
         setTextSize(13);
         setTextColor(ContextCompat.getColor(context,R.color.business_info_text_color));
+        CalligraphyUtils.applyFontToTextView(context,this, getResources().getString(R.string.fonts_path));
     }
 
     public void setArea(String area) {

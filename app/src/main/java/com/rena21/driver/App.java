@@ -31,7 +31,7 @@ public class App extends Application {
         FirebaseDatabase.getInstance().setPersistenceEnabled(true);
 
         CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
-                .setDefaultFontPath("fonts/dohyun.ttf")
+                .setDefaultFontPath(getString(R.string.fonts_path))
                 .setFontAttrId(R.attr.fontPath)
                 .build()
         );

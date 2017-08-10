@@ -8,4 +8,6 @@
     <string name="request_estimate_sub_3">전화드립니다 출시예정!</string>
 
     <string name="vendor_image_guide">품목, 간판, 차량 등 다양한 사진을 올리시면\n식당에서 업체 선정시에 도움이 됩니다</string>
+
+    <string name="fonts_path">fonts/dohyun.ttf</string>
 </resources>

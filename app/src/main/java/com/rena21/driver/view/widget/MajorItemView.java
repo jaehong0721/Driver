@@ -13,6 +13,8 @@ import com.google.android.flexbox.FlexboxLayout;
 import com.rena21.driver.R;
 import com.rena21.driver.util.DpToPxConverter;
 
+import uk.co.chrisjenx.calligraphy.CalligraphyUtils;
+
 public class MajorItemView extends RelativeLayout {
 
     private TextView tvItemName;
@@ -69,6 +71,7 @@ public class MajorItemView extends RelativeLayout {
 
         tvItemName.setTextColor(ContextCompat.getColor(context, R.color.business_info_text_color));
         tvItemName.setTextSize(14);
+        CalligraphyUtils.applyFontToTextView(context,tvItemName, getResources().getString(R.string.fonts_path));
     }
 
     private void initImageView(Context context, AttributeSet attrs) {

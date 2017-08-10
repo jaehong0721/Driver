@@ -14,6 +14,8 @@ import android.widget.RelativeLayout;
 import com.rena21.driver.R;
 import com.rena21.driver.util.DpToPxConverter;
 
+import uk.co.chrisjenx.calligraphy.CalligraphyUtils;
+
 public class InputInfoLayout extends RelativeLayout{
 
     private EditText etInput;
@@ -48,6 +50,7 @@ public class InputInfoLayout extends RelativeLayout{
         etInput.setTextSize(14);
         etInput.setTextColor(ContextCompat.getColor(context, R.color.business_info_text_color));
         etInput.setMaxLines(1);
+        CalligraphyUtils.applyFontToTextView(context,etInput, getResources().getString(R.string.fonts_path));
 
         LayoutParams lp = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         int rightMargin = DpToPxConverter.convertDpToPx(20,getResources().getDisplayMetrics());
