@@ -6,10 +6,14 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.rena21.driver.R;
@@ -42,6 +46,10 @@ public class MyInfoFragment extends Fragment {
 
     private VendorImageContainer vendorImageContainer;
     private BusinessInfoContainer businessInfoContainer;
+    private RelativeLayout titleBar;
+    private ImageView ivClose;
+    private ImageView ivEdit;
+    private Button btnSaveInfo;
 
     public MyInfoFragment() {}
 
@@ -76,8 +84,36 @@ public class MyInfoFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_my_info, container, false);
+
         initVendorImageContainer(rootView);
         initBusinessInfoContainer(rootView);
+
+        titleBar = (RelativeLayout) rootView.findViewById(R.id.titleBar);
+
+        ivClose = (ImageView) rootView.findViewById(R.id.ivClose);
+        ivClose.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                setNormalMode();
+                businessInfoContainer.setNormalMode();
+            }
+        });
+
+        ivEdit = (ImageView) rootView.findViewById(R.id.ivEditMode);
+        ivEdit.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                setEditMode();
+                businessInfoContainer.setViewOnEditMode();
+            }
+        });
+
+        btnSaveInfo = (Button) rootView.findViewById(R.id.btnSaveInfo);
+        btnSaveInfo.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                Toast.makeText(getContext(), "저장!!", Toast.LENGTH_SHORT).show();
+                setNormalMode();
+                businessInfoContainer.setNormalMode();
+            }
+        });
         return rootView;
     }
 
@@ -165,5 +201,19 @@ public class MyInfoFragment extends Fragment {
             }
         };
         myInfoViewModel.getBusinessInfoDataContainer().addObserver(businessInfoObserver);
+    }
+
+    private void setEditMode() {
+        ((AppCompatActivity)getActivity()).getSupportActionBar().hide();
+        titleBar.setVisibility(View.VISIBLE);
+        ivEdit.setVisibility(View.GONE);
+        btnSaveInfo.setVisibility(View.VISIBLE);
+    }
+
+    private void setNormalMode() {
+        ((AppCompatActivity)getActivity()).getSupportActionBar().show();
+        titleBar.setVisibility(View.GONE);
+        ivEdit.setVisibility(View.VISIBLE);
+        btnSaveInfo.setVisibility(View.GONE);
     }
 }
