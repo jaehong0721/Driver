@@ -2,4 +2,6 @@
     <string name="app_name">거상 납품업체용 dev</string>
     <string name="server_address">http://13.124.47.50:9000</string>
     <string name="authority">com.rena21.driver.dev.fileprovider</string>
+    <string name="s3_bucket_name">tgmorders-backup</string>
+    <string name="s3_base_address">https://s3.ap-northeast-2.amazonaws.com</string>
 </resources>

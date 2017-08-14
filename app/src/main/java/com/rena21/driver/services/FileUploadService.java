@@ -17,6 +17,7 @@ import com.firebase.jobdispatcher.RetryStrategy;
 import com.firebase.jobdispatcher.Trigger;
 import com.google.firebase.crash.FirebaseCrash;
 import com.rena21.driver.App;
+import com.rena21.driver.R;
 import com.rena21.driver.network.FileTransferUtil;
 import com.rena21.driver.network.NetworkUtil;
 
@@ -42,7 +43,7 @@ public class FileUploadService extends IntentService {
 
     @Override public void onCreate() {
         super.onCreate();
-        String bucketName = "thegreatmerchant";
+        String bucketName = getResources().getString(R.string.s3_bucket_name);
 
         fileUploader = new AwsS3FileUploader.Builder()
                 .setBucketName(bucketName)
