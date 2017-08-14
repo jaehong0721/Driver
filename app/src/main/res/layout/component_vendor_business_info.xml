@@ -171,7 +171,7 @@
             android:textColor="@color/warm_gray"
             android:textSize="12sp"/>
 
-        <com.google.android.flexbox.FlexboxLayout
+        <com.rena21.driver.view.layout.TagLayout
             android:id="@+id/majorItemsLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -200,7 +200,7 @@
             android:textColor="@color/warm_gray"
             android:textSize="12sp"/>
 
-        <com.google.android.flexbox.FlexboxLayout
+        <com.rena21.driver.view.layout.TagLayout
             android:id="@+id/deliveryAreasLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -212,13 +212,12 @@
                 android:id="@+id/tvDeliveryArea"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/label5"
                 android:layout_marginTop="10dp"
                 android:hint="예) 금정동, 팔달동"
                 android:textColor="@color/business_info_text_color"
                 android:textSize="14sp"/>
 
-        </com.google.android.flexbox.FlexboxLayout>
+        </com.rena21.driver.view.layout.TagLayout>
 
         <com.rena21.driver.view.layout.InputInfoLayout
             android:id="@+id/inputDeliveryArea"

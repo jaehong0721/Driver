@@ -8,6 +8,8 @@ import java.util.List;
 public class TransformDataUtil {
 
     public static String makeDeliveryAreasString(List<String> areas) {
+        if(areas.size() == 0) return null;
+
         StringBuilder sb = new StringBuilder();
         for(String area : areas) {
             sb.append(area);
@@ -18,6 +20,8 @@ public class TransformDataUtil {
     }
 
     public static List<String> makeDeliveryAreasList(String areas) {
+        if(areas.equals("")) return null;
+
         String[] splitAreas = areas.split(",");
         List<String> areaList = new ArrayList<>(Arrays.asList(splitAreas));
         return areaList;

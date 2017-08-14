@@ -9,11 +9,11 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
-import com.google.android.flexbox.FlexboxLayout;
 import com.rena21.driver.R;
 import com.rena21.driver.models.BusinessInfoData;
 import com.rena21.driver.util.TransformDataUtil;
 import com.rena21.driver.view.layout.InputInfoLayout;
+import com.rena21.driver.view.layout.TagLayout;
 import com.rena21.driver.view.widget.AddMajorItemButton;
 import com.rena21.driver.view.widget.DeliveryAreaView;
 import com.rena21.driver.view.widget.MajorItemView;
@@ -39,8 +39,8 @@ public class BusinessInfoContainer extends FrameLayout {
     private TextView tvOrderNum;
     private TextView tvAge;
 
-    private FlexboxLayout majorItemsLayout;
-    private FlexboxLayout deliveryAreasLayout;
+    private TagLayout majorItemsLayout;
+    private TagLayout deliveryAreasLayout;
     private TextView tvDeliveryArea;
     private TextView tvClosedDay;
     private TextView tvDeliveryTime;
@@ -54,8 +54,11 @@ public class BusinessInfoContainer extends FrameLayout {
     private InputInfoLayout inputDeliveryTime;
     private InputInfoLayout inputBusinessNumber;
 
+    private AddMajorItemButton addMajorItemButton;
+
     private HashMap<View, View> transformableView;
-    private String deliveryAreas;
+
+    private boolean editMode;
 
     public BusinessInfoContainer(@NonNull Context context) {
         super(context, null);
@@ -92,18 +95,28 @@ public class BusinessInfoContainer extends FrameLayout {
         inputBusinessNumber = (InputInfoLayout) findViewById(R.id.inputBusinessLicenseNumber);
         transformableView.put(tvBusinessLicenseNumber, inputBusinessNumber);
 
-        deliveryAreasLayout = (FlexboxLayout) findViewById(R.id.deliveryAreasLayout);
+        deliveryAreasLayout = (TagLayout) findViewById(R.id.deliveryAreasLayout);
         inputDeliveryArea = (InputInfoLayout) findViewById(R.id.inputDeliveryArea);
         transformableView.put(deliveryAreasLayout, inputDeliveryArea);
 
         tvDeliveryArea = (TextView) findViewById(R.id.tvDeliveryArea);
-        majorItemsLayout = (FlexboxLayout) findViewById(R.id.majorItemsLayout);
+        majorItemsLayout = (TagLayout) findViewById(R.id.majorItemsLayout);
+
+        addMajorItemButton = new AddMajorItemButton(getContext());
+        addMajorItemButton.setOnClickListener(new OnClickListener() {
+            @Override public void onClick(View v) {
+                if(addMajorItemListener == null) return;
+                addMajorItemListener.onAddMajorItem();
+            }
+        });
     }
 
     public void setViewOnEditMode() {
+        editMode = true;
         for(Map.Entry<View, View> entry : transformableView.entrySet()) {
             int id = entry.getKey().getId();
             if(id == deliveryAreasLayout.getId()) {
+                String deliveryAreas = TransformDataUtil.makeDeliveryAreasString(deliveryAreasLayout.getTagNames());
                 ((InputInfoLayout)entry.getValue()).setText(deliveryAreas);
             } else {
                 TextView tv = (TextView)entry.getKey();
@@ -123,6 +136,7 @@ public class BusinessInfoContainer extends FrameLayout {
     }
 
     public void setNormalMode() {
+        editMode = false;
         for(Map.Entry<View, View> entry : transformableView.entrySet()) {
             entry.getValue().setVisibility(View.GONE);
             entry.getKey().setVisibility(View.VISIBLE);
@@ -138,20 +152,8 @@ public class BusinessInfoContainer extends FrameLayout {
     }
 
     public void setBusinessInfoData(final BusinessInfoData businessInfoData) {
-        tvPartnerNum.setText(String.valueOf(businessInfoData.partnerNum)+"개");
-        tvOrderNum.setText(String.valueOf(businessInfoData.orderNum)+"회");
-        tvAge.setText(String.valueOf(businessInfoData.age)+"년");
-
         majorItemsLayout.removeAllViews();
-        AddMajorItemButton addMajorItemButton = new AddMajorItemButton(getContext());
-        addMajorItemButton.setOnClickListener(new OnClickListener() {
-            @Override public void onClick(View v) {
-                if(addMajorItemListener == null) return;
-                addMajorItemListener.onAddMajorItem();
-            }
-        });
         majorItemsLayout.addView(addMajorItemButton);
-
         if(businessInfoData.majorItems != null) {
             for (final String majorItem: businessInfoData.majorItems) {
                 final MajorItemView majorItemView = new MajorItemView(getContext());
@@ -163,17 +165,22 @@ public class BusinessInfoContainer extends FrameLayout {
                         removeMajorItemListener.onRemoveMajorItem(businessInfoData.majorItems);
                     }
                 });
-                majorItemsLayout.addView(majorItemView, 0);
+                majorItemsLayout.addView(majorItem, majorItemView, 0);
             }
         }
 
+        if ((editMode)) return;
+
+        tvPartnerNum.setText(String.valueOf(businessInfoData.partnerNum)+"개");
+        tvOrderNum.setText(String.valueOf(businessInfoData.orderNum)+"회");
+        tvAge.setText(String.valueOf(businessInfoData.age)+"년");
+
         deliveryAreasLayout.removeAllViews();
         if(businessInfoData.deliveryAreas != null) {
-            deliveryAreas = TransformDataUtil.makeDeliveryAreasString(businessInfoData.deliveryAreas);
             for (String deliveryArea : businessInfoData.deliveryAreas) {
                 DeliveryAreaView deliveryAreaView = new DeliveryAreaView(getContext());
                 deliveryAreaView.setArea(deliveryArea);
-                deliveryAreasLayout.addView(deliveryAreaView);
+                deliveryAreasLayout.addView(deliveryArea, deliveryAreaView);
             }
         } else {
             deliveryAreasLayout.addView(tvDeliveryArea);
@@ -198,6 +205,7 @@ public class BusinessInfoContainer extends FrameLayout {
         businessInfoData.closedDay = inputClosedDay.getText();
         businessInfoData.deliveryTime = inputDeliveryTime.getText();
         businessInfoData.businessLicenseNumber = inputBusinessNumber.getText();
+        businessInfoData.majorItems = majorItemsLayout.getTagNames();
 
         return businessInfoData;
     }
