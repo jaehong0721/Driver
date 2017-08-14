@@ -6,6 +6,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.rena21.driver.models.BusinessInfoData;
+import com.rena21.driver.models.ContactInfoData;
 
 import java.util.HashMap;
 import java.util.List;
@@ -90,6 +91,12 @@ public class FirebaseDbManager {
                 .removeEventListener(listener);
     }
 
+    public void updateBusinessInfoData(BusinessInfoData businessInfoData) {
+        getSynchronizedVendorRef()
+                .child("businessInfo")
+                .setValue(businessInfoData);
+    }
+
     public void subscribeBusinessInfo(ValueEventListener listener) {
         getSynchronizedVendorRef()
                 .child("businessInfo")
@@ -109,10 +116,14 @@ public class FirebaseDbManager {
                 .setValue(items);
     }
 
-    public void updateBusinessInfoData(BusinessInfoData businessInfoData) {
+    public void updateContactInfoData(ContactInfoData contactInfoData) {
+        HashMap<String,Object> pathMap = new HashMap<>();
+        pathMap.put("/address/", contactInfoData.address);
+        pathMap.put("/phoneNumber/", contactInfoData.phoneNumber);
+        pathMap.put("/vendorName/", contactInfoData.vendorName);
         getSynchronizedVendorRef()
-                .child("businessInfo")
-                .setValue(businessInfoData);
+                .child("info")
+                .updateChildren(pathMap);
     }
 
     public void subscribeContactInfo(ValueEventListener listener) {

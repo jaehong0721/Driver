@@ -7,6 +7,7 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.rena21.driver.R;
 import com.rena21.driver.models.ContactInfoData;
@@ -17,6 +18,7 @@ import java.util.Map;
 
 public class ContactInfoContainer extends FrameLayout {
 
+    private final String[] filter = {"010", "011", "017", "016", "018", "019"};
     private TextView tvName;
     private TextView tvAddress;
     private TextView tvPhoneNumber;
@@ -77,5 +79,32 @@ public class ContactInfoContainer extends FrameLayout {
             entry.getValue().setVisibility(View.GONE);
             entry.getKey().setVisibility(View.VISIBLE);
         }
+    }
+
+    public ContactInfoData getNewContactInfoData() {
+        String phoneNumber = inputPhoneNumber.getText();
+        String vendorName = inputVendorName.getText();
+
+        if(phoneNumber.equals("") || vendorName.equals("")) {
+            Toast.makeText(getContext(),"이름과 핸드폰번호는 필수 입력사항입니다",Toast.LENGTH_SHORT).show();
+            return null;
+        }
+
+
+        for(int i = 0; i<filter.length; i++) {
+            if(phoneNumber.startsWith(filter[i])) {
+                break;
+            } else {
+                if(i != filter.length-1) continue;
+                Toast.makeText(getContext(), "전화번호는 핸드폰번호만 가능합니다", Toast.LENGTH_SHORT).show();
+                return null;
+            }
+        }
+
+        ContactInfoData contactInfoData = new ContactInfoData();
+        contactInfoData.phoneNumber = phoneNumber;
+        contactInfoData.vendorName = vendorName;
+        contactInfoData.address = inputAddress.getText();
+        return contactInfoData;
     }
 }

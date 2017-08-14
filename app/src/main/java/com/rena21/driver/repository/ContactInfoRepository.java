@@ -29,6 +29,10 @@ public class ContactInfoRepository implements ValueEventListener{
         dbManager.removeContactInfoListener(this);
     }
 
+    public void saveContactInfoData(ContactInfoData contactInfoData) {
+        dbManager.updateContactInfoData(contactInfoData);
+    }
+
     @Override public void onDataChange(DataSnapshot dataSnapshot) {
         ContactInfoData contactInfoData = new ContactInfoData();
 

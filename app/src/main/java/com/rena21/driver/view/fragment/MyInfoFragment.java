@@ -115,9 +115,13 @@ public class MyInfoFragment extends Fragment {
         btnSaveInfo = (Button) rootView.findViewById(R.id.btnSaveInfo);
         btnSaveInfo.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
-                Toast.makeText(getContext(), "저장중입니다", Toast.LENGTH_SHORT).show();
+                ContactInfoData newContactInfoData = contactInfoContainer.getNewContactInfoData();
+                if(newContactInfoData == null) return;
+                myInfoViewModel.saveContactInfoData(newContactInfoData);
                 BusinessInfoData newBusinessInfoData = businessInfoContainer.getNewBusinessInfoData();
                 myInfoViewModel.saveBusinessInfoData(newBusinessInfoData);
+
+                Toast.makeText(getContext(), "저장중입니다", Toast.LENGTH_SHORT).show();
                 setNormalMode();
                 contactInfoContainer.setNormalMode();
                 businessInfoContainer.setNormalMode();

@@ -48,6 +48,7 @@ public class MyInfoViewModel {
     }
 
     public void onDestroy() {
+        contactInfoRepository.cancelSubscription();
         businessInfoRepository.cancelSubscription();
     }
 
@@ -61,6 +62,10 @@ public class MyInfoViewModel {
 
     public void removeVendorImage(String imageUrl) {
         vendorImageRepository.removeImage(imageUrl);
+    }
+
+    public void saveContactInfoData(ContactInfoData contactInfoData) {
+        contactInfoRepository.saveContactInfoData(contactInfoData);
     }
 
     public ContainerToObserve getContactInfoDataContainer() {
