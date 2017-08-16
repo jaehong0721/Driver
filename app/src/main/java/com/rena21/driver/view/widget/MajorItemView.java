@@ -76,6 +76,7 @@ public class MajorItemView extends RelativeLayout {
 
     private void initImageView(Context context, AttributeSet attrs) {
         ivDelete = new ImageView(context, attrs);
+        ivDelete.setId(R.id.ivDelete);
 
         LayoutParams ivLayoutParams = new LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT);
         ivLayoutParams.leftMargin = DpToPxConverter.convertDpToPx(8, getResources().getDisplayMetrics());

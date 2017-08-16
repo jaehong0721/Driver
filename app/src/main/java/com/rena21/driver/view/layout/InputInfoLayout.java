@@ -16,6 +16,7 @@ import com.rena21.driver.util.DpToPxConverter;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyUtils;
 
+
 public class InputInfoLayout extends RelativeLayout{
 
     private EditText etInput;
@@ -37,6 +38,7 @@ public class InputInfoLayout extends RelativeLayout{
             initClearButton(context, attrs);
             addView(ivClear);
         }
+
         initEditText(context, attrs);
         addView(etInput);
     }
@@ -51,6 +53,7 @@ public class InputInfoLayout extends RelativeLayout{
 
     private void initEditText(Context context, AttributeSet attrs) {
         etInput = new EditText(context, attrs);
+        etInput.setId(R.id.etInput);
         etInput.setTextSize(14);
         etInput.setTextColor(ContextCompat.getColor(context, R.color.business_info_text_color));
         etInput.setMaxLines(1);
@@ -71,6 +74,8 @@ public class InputInfoLayout extends RelativeLayout{
         int inputType = typedArray.getInt(R.styleable.InputInfoLayout_android_inputType,-1);
         if(inputType != -1)
             etInput.setInputType(inputType);
+
+        typedArray.recycle();
     }
 
     private void initClearButton(Context context, AttributeSet attrs) {
