@@ -10,8 +10,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.rena21.driver.App;
 import com.rena21.driver.R;
 import com.rena21.driver.firebase.FirebaseDbManager;
 import com.rena21.driver.listener.OrderAcceptedListener;
@@ -46,7 +46,7 @@ public class OrderDetailActivity extends BaseActivity implements OrderAcceptedLi
         vendorPhoneNumber = getIntent().getStringExtra("vendorPhoneNumber");
         fileName = getIntent().getStringExtra("fileName");
 
-        dbManager = new FirebaseDbManager(FirebaseDatabase.getInstance(), vendorPhoneNumber);
+        dbManager = App.getApplication(getApplicationContext()).getDbManager();
         dbManager.getOrderAccepted(fileName, new ValueEventListener() {
 
             @Override public void onDataChange(DataSnapshot dataSnapshot) {

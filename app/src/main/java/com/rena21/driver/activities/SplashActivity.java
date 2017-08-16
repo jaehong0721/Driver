@@ -17,7 +17,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.crash.FirebaseCrash;
 import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.FirebaseDatabase;
 import com.rena21.driver.App;
 import com.rena21.driver.R;
 import com.rena21.driver.etc.AppPreferenceManager;
@@ -170,7 +169,7 @@ public class SplashActivity extends BaseActivity {
         pathMap.put("/vendors/" + phoneNumber + "/" + "info" + "/fcmId/", fcmToken);
         pathMap.put("/vendors/" + phoneNumber + "/" + "info" + "/phoneNumber", phoneNumber);
 
-        final FirebaseDbManager dbManager = new FirebaseDbManager(FirebaseDatabase.getInstance(), phoneNumber);
+        final FirebaseDbManager dbManager = App.getApplication(getApplicationContext()).getDbManager();
 
         dbManager.getVendorInfoDataSnapshot(new ToastErrorHandlingListener(this) {
             @Override public void onDataChange(DataSnapshot dataSnapshot) {

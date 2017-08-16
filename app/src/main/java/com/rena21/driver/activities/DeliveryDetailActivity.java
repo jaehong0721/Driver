@@ -13,8 +13,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.rena21.driver.App;
 import com.rena21.driver.R;
 import com.rena21.driver.firebase.FirebaseDbManager;
 import com.rena21.driver.listener.ModifyFinishedListener;
@@ -61,7 +61,7 @@ public class DeliveryDetailActivity extends BaseActivity implements DeliveryOrde
         fileName = getIntent().getStringExtra("fileName");
         vendorPhoneNumber = getIntent().getStringExtra("vendorPhoneNumber");
 
-        dbManager = new FirebaseDbManager(FirebaseDatabase.getInstance(), vendorPhoneNumber);
+        dbManager = App.getApplication(getApplicationContext()).getDbManager();
 
         tvRestaurantName = (TextView) findViewById(R.id.tvRestaurantName);
         final String restaurantPhoneNumber = getPhoneNumber(fileName);

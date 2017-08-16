@@ -5,6 +5,7 @@ import android.content.Context;
 
 import com.google.firebase.database.FirebaseDatabase;
 import com.rena21.driver.etc.AppPreferenceManager;
+import com.rena21.driver.firebase.FirebaseDbManager;
 import com.rena21.driver.network.ConnectivityIntercepter;
 
 import okhttp3.OkHttpClient;
@@ -16,6 +17,7 @@ public class App extends Application {
 
     private Retrofit retrofit;
     private AppPreferenceManager appPreferenceManager;
+    private FirebaseDbManager dbManager;
 
     public static App getApplication(Context context) {
         return (App) context;
@@ -56,5 +58,11 @@ public class App extends Application {
 
     public Retrofit getRetrofit() {
         return retrofit;
+    }
+
+    public FirebaseDbManager getDbManager() {
+        if(dbManager == null)
+            dbManager = new FirebaseDbManager(FirebaseDatabase.getInstance(), appPreferenceManager.getPhoneNumber());
+        return dbManager;
     }
 }

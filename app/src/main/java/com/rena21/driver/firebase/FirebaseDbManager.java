@@ -13,6 +13,17 @@ import java.util.List;
 
 public class FirebaseDbManager {
 
+    private static final String VENDORS = "vendors";
+    private static final String INFO = "info";
+    private static final String RESTAURANTS = "restaurants";
+    private static final String RESTAURANT_NAME = "restaurantName";
+    private static final String ORDERS = "orders";
+    private static final String ACCEPTED = "accepted";
+    private static final String TOTAL_PRICE = "totalPrice";
+    private static final String DELIVERED_TIME = "deliveredTime";
+    private static final String BUSINESS_INFO = "businessInfo";
+    private static final String MAJOR_ITEMS = "majorItems";
+
     private final FirebaseDatabase instance;
     private final String vendorPhoneNumber;
 
@@ -20,99 +31,137 @@ public class FirebaseDbManager {
     public FirebaseDbManager(FirebaseDatabase instance, String vendorPhoneNumber) {
         this.instance = instance;
         this.vendorPhoneNumber = vendorPhoneNumber;
+        instance.setPersistenceEnabled(true);
+        getRootRef().keepSynced(true);
     }
 
     public void getVendorInfoDataSnapshot(ValueEventListener listener) {
-        instance.getReference().child("vendors")
+        getRootRef()
+                .child(VENDORS)
                 .child(vendorPhoneNumber)
-                .child("info")
+                .child(INFO)
                 .addListenerForSingleValueEvent(listener);
     }
 
     public void getRestaurantName(String restaurantPhoneNumber, ValueEventListener listener) {
-        instance.getReference().child("restaurants")
+        getRootRef()
+                .child(RESTAURANTS)
                 .child(restaurantPhoneNumber)
-                .child("info")
-                .child("restaurantName")
+                .child(INFO)
+                .child(RESTAURANT_NAME)
                 .addListenerForSingleValueEvent(listener);
     }
 
     public void getOrderAccepted(String fileName, ValueEventListener listener) {
-        instance.getReference("orders")
-                .child("vendors")
+        getRootRef()
+                .child(ORDERS)
+                .child(VENDORS)
                 .child(vendorPhoneNumber)
                 .child(fileName)
-                .child("accepted")
+                .child(ACCEPTED)
                 .addListenerForSingleValueEvent(listener);
     }
 
     public void getTotalPrice(String fileName, ValueEventListener listener) {
-        instance.getReference("orders")
-                .child("vendors")
+        getRootRef()
+                .child(ORDERS)
+                .child(VENDORS)
                 .child(vendorPhoneNumber)
                 .child(fileName)
-                .child("totalPrice")
+                .child(TOTAL_PRICE)
                 .addListenerForSingleValueEvent(listener);
     }
 
     public void multiPathUpdateValue(HashMap<String, Object> pathMap, OnCompleteListener<Void> listener) {
-        instance.getReference()
+       getRootRef()
                 .updateChildren(pathMap)
                 .addOnCompleteListener(listener);
     }
 
     public void addChildEventListenerToOrdersRef(ChildEventListener listener) {
-        getSynchronizedAllOrdersRef().addChildEventListener(listener);
+        getRootRef()
+                .child(ORDERS)
+                .child(VENDORS)
+                .child(vendorPhoneNumber)
+                .addChildEventListener(listener);
     }
 
     public void removeChildEventListenerFromOrderRef(ChildEventListener listener) {
-        getSynchronizedAllOrdersRef().removeEventListener(listener);
+        getRootRef()
+                .child(ORDERS)
+                .child(VENDORS)
+                .child(vendorPhoneNumber)
+                .removeEventListener(listener);
     }
 
     public void addValueEventListenerToSpecificOrderRef(String orderKey, ValueEventListener listener) {
-        getSpecificOrderRef(orderKey).addValueEventListener(listener);
+        getRootRef()
+                .child(ORDERS)
+                .child(VENDORS)
+                .child(vendorPhoneNumber)
+                .child(orderKey)
+                .addValueEventListener(listener);
     }
 
     public void removeValueEventListenerFromSpecificOrderRef(String orderKey, ValueEventListener listener) {
-        getSpecificOrderRef(orderKey).removeEventListener(listener);
+        getRootRef()
+                .child(ORDERS)
+                .child(VENDORS)
+                .child(vendorPhoneNumber)
+                .child(orderKey)
+                .removeEventListener(listener);
     }
 
     public void addChildEventListenerToOrderRefOnSpecificDate(long dateMillis, ChildEventListener listener) {
-        getSynchronizedAllOrdersRef()
-                .orderByChild("deliveredTime")
+        getRootRef()
+                .child(ORDERS)
+                .child(VENDORS)
+                .child(vendorPhoneNumber)
+                .orderByChild(DELIVERED_TIME)
                 .equalTo(dateMillis)
                 .addChildEventListener(listener);
     }
 
     public void removeChildEventListenerFromOrderRefOnSpecificDate(long dateMillis, ChildEventListener listener) {
-        getSynchronizedAllOrdersRef()
-                .orderByChild("deliveredTime")
+        getRootRef()
+                .child(ORDERS)
+                .child(VENDORS)
+                .child(vendorPhoneNumber)
+                .orderByChild(DELIVERED_TIME)
                 .equalTo(dateMillis)
                 .removeEventListener(listener);
     }
 
     public void updateBusinessInfoData(BusinessInfoData businessInfoData) {
-        getSynchronizedVendorRef()
-                .child("businessInfo")
+        getRootRef()
+                .child(VENDORS)
+                .child(vendorPhoneNumber)
+                .child(BUSINESS_INFO)
                 .setValue(businessInfoData);
     }
 
     public void subscribeBusinessInfo(ValueEventListener listener) {
-        getSynchronizedVendorRef()
-                .child("businessInfo")
+        getRootRef()
+                .child(VENDORS)
+                .child(vendorPhoneNumber)
+                .child(BUSINESS_INFO)
                 .addValueEventListener(listener);
     }
 
     public void removeBusinessInfoListener(ValueEventListener listener) {
-        getSynchronizedVendorRef()
-                .child("businessInfo")
+        getRootRef()
+                .child(VENDORS)
+                .child(vendorPhoneNumber)
+                .child(BUSINESS_INFO)
                 .removeEventListener(listener);
     }
 
     public void updateMajorItems(List<String> items) {
-        getSynchronizedVendorRef()
-                .child("businessInfo")
-                .child("majorItems")
+        getRootRef()
+                .child(VENDORS)
+                .child(vendorPhoneNumber)
+                .child(BUSINESS_INFO)
+                .child(MAJOR_ITEMS)
                 .setValue(items);
     }
 
@@ -121,42 +170,31 @@ public class FirebaseDbManager {
         pathMap.put("/address/", contactInfoData.address);
         pathMap.put("/phoneNumber/", contactInfoData.phoneNumber);
         pathMap.put("/vendorName/", contactInfoData.vendorName);
-        getSynchronizedVendorRef()
-                .child("info")
+
+        getRootRef()
+                .child(VENDORS)
+                .child(vendorPhoneNumber)
+                .child(INFO)
                 .updateChildren(pathMap);
     }
 
     public void subscribeContactInfo(ValueEventListener listener) {
-        getSynchronizedVendorRef()
-                .child("info")
+        getRootRef()
+                .child(VENDORS)
+                .child(vendorPhoneNumber)
+                .child(INFO)
                 .addValueEventListener(listener);
     }
 
     public void removeContactInfoListener(ValueEventListener listener) {
-        getSynchronizedVendorRef()
-                .child("info")
+        getRootRef()
+                .child(VENDORS)
+                .child(vendorPhoneNumber)
+                .child(INFO)
                 .removeEventListener(listener);
     }
 
-    private DatabaseReference getSynchronizedAllOrdersRef() {
-        DatabaseReference orderRef = instance.getReference("orders")
-                .child("vendors")
-                .child(vendorPhoneNumber);
-        orderRef.keepSynced(true);
-        return orderRef;
-    }
-
-    private DatabaseReference getSynchronizedVendorRef() {
-        DatabaseReference vendorRef = instance.getReference("vendors")
-                .child(vendorPhoneNumber);
-        vendorRef.keepSynced(true);
-        return vendorRef;
-    }
-
-    private DatabaseReference getSpecificOrderRef(String fileName) {
-        return instance.getReference("orders")
-                .child("vendors")
-                .child(vendorPhoneNumber)
-                .child(fileName);
+    private DatabaseReference getRootRef() {
+        return instance.getReference();
     }
 }

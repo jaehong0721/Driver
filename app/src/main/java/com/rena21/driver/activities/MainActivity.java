@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 
-import com.google.firebase.database.FirebaseDatabase;
 import com.rena21.driver.App;
 import com.rena21.driver.R;
 import com.rena21.driver.etc.AppPreferenceManager;
@@ -42,7 +41,7 @@ public class MainActivity extends BaseActivity implements OrderClickedListener, 
 
         appPreferenceManager = App.getApplication(getApplicationContext()).getPreferenceManager();
 
-        dbManager = new FirebaseDbManager(FirebaseDatabase.getInstance(), appPreferenceManager.getPhoneNumber());
+        dbManager = App.getApplication(getApplicationContext()).getDbManager();
 
         orderListFragment = new OrderListFragment();
         ledgerFragment = new LedgerFragment();
