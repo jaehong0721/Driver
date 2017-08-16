@@ -7,6 +7,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.rena21.driver.models.BusinessInfoData;
 import com.rena21.driver.models.ContactInfoData;
+import com.rena21.driver.models.RankingInfoData;
 
 import java.util.HashMap;
 import java.util.List;
@@ -23,6 +24,7 @@ public class FirebaseDbManager {
     private static final String DELIVERED_TIME = "deliveredTime";
     private static final String BUSINESS_INFO = "businessInfo";
     private static final String MAJOR_ITEMS = "majorItems";
+    private static final String RANKING_INFO = "rankingInfo";
 
     private final FirebaseDatabase instance;
     private final String vendorPhoneNumber;
@@ -194,6 +196,29 @@ public class FirebaseDbManager {
                 .removeEventListener(listener);
     }
 
+    public void subscribeRankingInfo(ValueEventListener listener) {
+        getRootRef()
+                .child(VENDORS)
+                .child(vendorPhoneNumber)
+                .child(RANKING_INFO)
+                .addValueEventListener(listener);
+    }
+
+    public void removeRankingInfoListener(ValueEventListener listener) {
+        getRootRef()
+                .child(VENDORS)
+                .child(vendorPhoneNumber)
+                .child(RANKING_INFO)
+                .removeEventListener(listener);
+    }
+
+    public void updateRankingInfo(RankingInfoData rankingInfoData) {
+        getRootRef()
+                .child(VENDORS)
+                .child(vendorPhoneNumber)
+                .child(RANKING_INFO)
+                .setValue(rankingInfoData);
+    }
     private DatabaseReference getRootRef() {
         return instance.getReference();
     }
