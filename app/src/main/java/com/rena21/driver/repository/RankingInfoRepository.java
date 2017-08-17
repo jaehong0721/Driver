@@ -28,10 +28,6 @@ public class RankingInfoRepository implements ValueEventListener{
         dbManager.removeRankingInfoListener(this);
     }
 
-    public void saveRankingInfoData(RankingInfoData rankingInfoData) {
-        dbManager.updateRankingInfo(rankingInfoData);
-    }
-
     @Override public void onDataChange(DataSnapshot dataSnapshot) {
         RankingInfoData rankingInfoData = new RankingInfoData();
 

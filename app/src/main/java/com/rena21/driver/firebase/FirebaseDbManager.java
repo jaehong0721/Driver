@@ -7,7 +7,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.rena21.driver.models.BusinessInfoData;
 import com.rena21.driver.models.ContactInfoData;
-import com.rena21.driver.models.RankingInfoData;
 
 import java.util.HashMap;
 import java.util.List;
@@ -212,13 +211,6 @@ public class FirebaseDbManager {
                 .removeEventListener(listener);
     }
 
-    public void updateRankingInfo(RankingInfoData rankingInfoData) {
-        getRootRef()
-                .child(VENDORS)
-                .child(vendorPhoneNumber)
-                .child(RANKING_INFO)
-                .setValue(rankingInfoData);
-    }
     private DatabaseReference getRootRef() {
         return instance.getReference();
     }
