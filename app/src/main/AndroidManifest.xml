@@ -30,11 +30,13 @@
         </activity>
         <activity android:name=".activities.BaseActivity"/>
         <activity android:name=".activities.MainActivity"/>
-        <activity android:name=".activities.OrderDetailActivity"
-                  android:windowSoftInputMode="adjustResize">
+        <activity
+            android:name=".activities.OrderDetailActivity"
+            android:windowSoftInputMode="adjustResize">
         </activity>
-        <activity android:name=".activities.DeliveryDetailActivity"
-                  android:windowSoftInputMode="adjustResize">
+        <activity
+            android:name=".activities.DeliveryDetailActivity"
+            android:windowSoftInputMode="adjustResize">
         </activity>
 
         <service android:name=".firebase.fcm.FcmIdService">
@@ -49,14 +51,15 @@
         </service>
 
         <provider
-            android:name = "android.support.v4.content.FileProvider"
-            android:authorities = "@string/authority"
-            android:exported = "false"
-            android:grantUriPermissions = "true">
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="@string/authority"
+            android:exported="false"
+            android:grantUriPermissions="true">
             <meta-data
-                android:name = "android.support.FILE_PROVIDER_PATHS"
-                android:resource = "@xml/file_path"/>
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_path"/>
         </provider>
+
         <service
             android:name="com.amazonaws.mobileconnectors.s3.transferutility.TransferService"
             android:enabled="true"/>
@@ -68,6 +71,9 @@
             </intent-filter>
         </service>
         <service android:name=".services.FileUploadService"/>
+
+        <activity android:name=".activities.AddMajorItemActivity">
+        </activity>
     </application>
 
 </manifest>
