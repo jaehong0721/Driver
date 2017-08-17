@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.Toast;
 
 import com.rena21.driver.R;
@@ -48,6 +49,7 @@ public class MyInfoFragment extends Fragment {
     private MyInfoViewModel myInfoViewModel;
     private BroadcastReceiver fileUploadSuccessReceiver;
 
+    private ScrollView scrollView;
     private RankingInfoContainer rankingInfoContainer;
     private ContactInfoContainer contactInfoContainer;
     private VendorImageContainer vendorImageContainer;
@@ -96,6 +98,7 @@ public class MyInfoFragment extends Fragment {
         initVendorImageContainer(rootView);
         initBusinessInfoContainer(rootView);
 
+        scrollView = (ScrollView) rootView.findViewById(R.id.scrollView);
         titleBar = (RelativeLayout) rootView.findViewById(R.id.titleBar);
 
         ivClose = (ImageView) rootView.findViewById(R.id.ivClose);
@@ -250,6 +253,7 @@ public class MyInfoFragment extends Fragment {
 
     private void setNormalMode() {
         ((AppCompatActivity)getActivity()).getSupportActionBar().show();
+        scrollView.fullScroll(ScrollView.FOCUS_UP);
         titleBar.setVisibility(View.GONE);
         rankingInfoContainer.setVisibility(View.VISIBLE);
         ivEdit.setVisibility(View.VISIBLE);
