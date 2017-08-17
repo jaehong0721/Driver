@@ -22,11 +22,13 @@ import com.rena21.driver.firebase.FirebaseDbManager;
 import com.rena21.driver.models.BusinessInfoData;
 import com.rena21.driver.models.ContactInfoData;
 import com.rena21.driver.models.ContainerToObserve;
+import com.rena21.driver.models.RankingInfoData;
 import com.rena21.driver.models.VendorImageData;
 import com.rena21.driver.services.FileUploadService;
 import com.rena21.driver.util.ImagePickUpUtil;
 import com.rena21.driver.view.component.BusinessInfoContainer;
 import com.rena21.driver.view.component.ContactInfoContainer;
+import com.rena21.driver.view.component.RankingInfoContainer;
 import com.rena21.driver.view.component.VendorImageContainer;
 import com.rena21.driver.viewmodel.MyInfoViewModel;
 
@@ -46,6 +48,7 @@ public class MyInfoFragment extends Fragment {
     private MyInfoViewModel myInfoViewModel;
     private BroadcastReceiver fileUploadSuccessReceiver;
 
+    private RankingInfoContainer rankingInfoContainer;
     private ContactInfoContainer contactInfoContainer;
     private VendorImageContainer vendorImageContainer;
     private BusinessInfoContainer businessInfoContainer;
@@ -88,6 +91,7 @@ public class MyInfoFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_my_info, container, false);
 
+        initRankingInfoContainer(rootView);
         initContactInfoContainer(rootView);
         initVendorImageContainer(rootView);
         initBusinessInfoContainer(rootView);
@@ -224,6 +228,16 @@ public class MyInfoFragment extends Fragment {
             }
         };
         myInfoViewModel.getBusinessInfoDataContainer().addObserver(businessInfoObserver);
+    }
+
+    private void initRankingInfoContainer(View rootView) {
+        rankingInfoContainer = (RankingInfoContainer) rootView.findViewById(R.id.rankingInfoContainer);
+        Observer rankingInfoObserver = new Observer() {
+            @Override public void update(Observable o, Object arg) {
+                rankingInfoContainer.setRankingInfoData(((ContainerToObserve<RankingInfoData>) o).getObject());
+            }
+        };
+        myInfoViewModel.getRankingInfoDataContainer().addObserver(rankingInfoObserver);
     }
 
     private void setEditMode() {

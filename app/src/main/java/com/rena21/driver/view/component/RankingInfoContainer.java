@@ -9,6 +9,7 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.rena21.driver.R;
+import com.rena21.driver.models.RankingInfoData;
 
 public class RankingInfoContainer extends FrameLayout {
 
@@ -26,5 +27,16 @@ public class RankingInfoContainer extends FrameLayout {
 
         tvRank = (TextView) findViewById(R.id.tvRank);
         tvVisitCount = (TextView) findViewById(R.id.tvVisitCount);
+    }
+
+    public void setRankingInfoData(RankingInfoData rankingInfoData) {
+        String rank = String.valueOf(rankingInfoData.rank);
+        String visitCount = String.valueOf(rankingInfoData.visitCount);
+
+        rank = rank.equals("0") ? "???" : rank+"위";
+        visitCount = visitCount.equals("0") ? "???" : visitCount+"명";
+
+        tvRank.setText(rank);
+        tvVisitCount.setText(visitCount);
     }
 }
