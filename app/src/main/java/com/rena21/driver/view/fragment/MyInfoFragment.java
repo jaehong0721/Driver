@@ -243,6 +243,7 @@ public class MyInfoFragment extends Fragment {
     private void setEditMode() {
         ((AppCompatActivity)getActivity()).getSupportActionBar().hide();
         titleBar.setVisibility(View.VISIBLE);
+        rankingInfoContainer.setVisibility(View.GONE);
         ivEdit.setVisibility(View.GONE);
         btnSaveInfo.setVisibility(View.VISIBLE);
     }
@@ -250,6 +251,7 @@ public class MyInfoFragment extends Fragment {
     private void setNormalMode() {
         ((AppCompatActivity)getActivity()).getSupportActionBar().show();
         titleBar.setVisibility(View.GONE);
+        rankingInfoContainer.setVisibility(View.VISIBLE);
         ivEdit.setVisibility(View.VISIBLE);
         btnSaveInfo.setVisibility(View.GONE);
     }
