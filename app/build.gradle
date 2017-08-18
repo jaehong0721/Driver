@@ -35,6 +35,8 @@ android {
             proguardFile 'proguard-retrofit2.pro'
             proguardFile 'proguard-gson.pro'
             proguardFile 'proguard-jodatime.pro'
+            proguardFile 'proguard-aws.pro'
+            proguardFile 'proguard-glide.pro'
         }
     }
 }
