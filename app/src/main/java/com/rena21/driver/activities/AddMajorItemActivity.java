@@ -21,7 +21,7 @@ import java.util.HashMap;
 import java.util.List;
 
 
-public class AddMajorItemActivity extends BaseActivity {
+public class AddMajorItemActivity extends BaseActivity implements MiddleCategoryAdapter.ClickMiddleCategoryListener{
 
     private RecyclerView rvLargeCategory;
     private RecyclerView rvMiddleCategory;
@@ -66,6 +66,7 @@ public class AddMajorItemActivity extends BaseActivity {
 
                 List<String> middleCategoryList = middleCategoryMap.get(largeCategoryName);
                 MiddleCategoryAdapter middleCategoryAdapter = new MiddleCategoryAdapter(middleCategoryList, selectedCategoryList);
+                middleCategoryAdapter.setClickMiddleCategoryListener(AddMajorItemActivity.this);
                 rvMiddleCategory.setLayoutManager(new LinearLayoutManager(AddMajorItemActivity.this));
                 rvMiddleCategory.setAdapter(middleCategoryAdapter);
             }
@@ -83,6 +84,7 @@ public class AddMajorItemActivity extends BaseActivity {
         });
 
         btnSaveMajorItems = (Button) findViewById(R.id.btnSaveMajorItems);
+        setButtonText();
         btnSaveMajorItems.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
                 Intent returnIntent = new Intent();
@@ -91,5 +93,17 @@ public class AddMajorItemActivity extends BaseActivity {
                 finish();
             }
         });
+    }
+
+    @Override public void onClickMiddleCategory() {
+        setButtonText();
+    }
+
+    private void setButtonText() {
+        if(selectedCategoryList.size() == 0) {
+            btnSaveMajorItems.setText("저장");
+        } else {
+            btnSaveMajorItems.setText("저장 (" + selectedCategoryList.size() + ")");
+        }
     }
 }

@@ -13,6 +13,10 @@ import java.util.List;
 
 public class MiddleCategoryAdapter extends RecyclerView.Adapter<MiddleCategoryAdapter.MiddleCategoryViewHolder>{
 
+    public interface ClickMiddleCategoryListener {
+        void onClickMiddleCategory();
+    }
+
     class MiddleCategoryViewHolder extends RecyclerView.ViewHolder {
         MiddleCategoryButton middleCategory;
 
@@ -38,6 +42,8 @@ public class MiddleCategoryAdapter extends RecyclerView.Adapter<MiddleCategoryAd
                         middleCategory.setSelected(true);
                         selectedCategoryList.add(categoryName);
                     }
+                    if(listener == null) return;
+                    listener.onClickMiddleCategory();
                 }
             });
         }
@@ -46,9 +52,15 @@ public class MiddleCategoryAdapter extends RecyclerView.Adapter<MiddleCategoryAd
     private List<String> middleCategoryList;
     private List<String> selectedCategoryList;
 
+    private ClickMiddleCategoryListener listener;
+
     public MiddleCategoryAdapter(List<String> middleCategoryList, List<String> selectedCategoryList) {
         this.middleCategoryList = middleCategoryList;
         this.selectedCategoryList = selectedCategoryList;
+    }
+
+    public void setClickMiddleCategoryListener(ClickMiddleCategoryListener listener) {
+        this.listener = listener;
     }
 
     @Override public MiddleCategoryViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
