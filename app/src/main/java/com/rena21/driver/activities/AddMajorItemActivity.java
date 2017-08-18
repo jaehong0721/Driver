@@ -12,6 +12,7 @@ import com.rena21.driver.App;
 import com.rena21.driver.R;
 import com.rena21.driver.firebase.FirebaseDbManager;
 import com.rena21.driver.firebase.fcm.ToastErrorHandlingListener;
+import com.rena21.driver.view.actionbar.ActionBarWithButtonViewModel;
 import com.rena21.driver.view.adapter.LargeCategoryAdapter;
 import com.rena21.driver.view.adapter.MiddleCategoryAdapter;
 
@@ -33,6 +34,14 @@ public class AddMajorItemActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_major_item);
+
+        ActionBarWithButtonViewModel.createWithActionBar(getSupportActionBar())
+                .setTitle("주요품목 추가")
+                .setCloseButtonListener(new View.OnClickListener() {
+                    @Override public void onClick(View v) {
+                        finish();
+                    }
+                });
 
         selectedCategoryList = getIntent().getStringArrayListExtra("majorItems");
         if(selectedCategoryList == null) selectedCategoryList = new ArrayList<>();
