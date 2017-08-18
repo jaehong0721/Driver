@@ -4,10 +4,10 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -19,14 +19,16 @@ import com.rena21.driver.listener.OrderClickedListener;
 import com.rena21.driver.models.Order;
 import com.rena21.driver.view.DividerItemDecoration;
 import com.rena21.driver.view.adapter.ReceivedOrdersAdapter;
+import com.rena21.driver.view.widget.RecyclerViewEmptySupport;
 
 
 public class OrderListFragment extends Fragment implements ChildEventListener {
 
     private OrderClickedListener orderClickedListener;
 
-    private RecyclerView rvReceivedOrders;
+    private RecyclerViewEmptySupport rvReceivedOrders;
     private ReceivedOrdersAdapter receivedOrdersAdapter;
+    private TextView tvEmptyView;
 
     private FirebaseDbManager dbManager;
 
@@ -49,11 +51,13 @@ public class OrderListFragment extends Fragment implements ChildEventListener {
 
         dbManager.addChildEventListenerToOrdersRef(this);
 
-        rvReceivedOrders = (RecyclerView) view.findViewById(R.id.rvReceivedOrders);
+        rvReceivedOrders = (RecyclerViewEmptySupport) view.findViewById(R.id.rvReceivedOrders);
+        tvEmptyView = (TextView) view.findViewById(R.id.tvEmptyView);
         receivedOrdersAdapter = new ReceivedOrdersAdapter(dbManager);
 
         rvReceivedOrders.setLayoutManager(new LinearLayoutManager(getActivity()));
         rvReceivedOrders.addItemDecoration(new DividerItemDecoration(getActivity(), R.drawable.shape_divider_for_received_orders));
+        rvReceivedOrders.setEmptyView(tvEmptyView);
         rvReceivedOrders.setAdapter(receivedOrdersAdapter);
 
         receivedOrdersAdapter.addOnItemClickListener(new ReceivedOrdersAdapter.OnItemClickListener() {
