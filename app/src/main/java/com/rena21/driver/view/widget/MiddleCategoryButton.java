@@ -36,14 +36,15 @@ public class MiddleCategoryButton extends FrameLayout {
 
     @Override public void setSelected(boolean selected) {
         if(selected) {
-            container.setBackgroundColor(ContextCompat.getColor(container.getContext(),R.color.primaryGreen));
+            container.setBackground(ContextCompat.getDrawable(container.getContext(),R.drawable.selected_middle_category_shape));
             tvMiddleCategoryName.setTextColor(ContextCompat.getColor(tvMiddleCategoryName.getContext(), R.color.white));
-            ivCheckMark.setImageResource(R.drawable.unselected_checkmark);
-        } else {
-            container.setBackgroundColor(ContextCompat.getColor(container.getContext(),R.color.white));
-            tvMiddleCategoryName.setTextColor(ContextCompat.getColor(tvMiddleCategoryName.getContext(), R.color.business_info_text_color));
             ivCheckMark.setImageResource(R.drawable.selected_checkmark);
+        } else {
+            container.setBackground(ContextCompat.getDrawable(container.getContext(),R.drawable.unselected_middle_category_shape));
+            tvMiddleCategoryName.setTextColor(ContextCompat.getColor(tvMiddleCategoryName.getContext(), R.color.business_info_text_color));
+            ivCheckMark.setImageResource(R.drawable.unselected_checkmark);
         }
+        super.setSelected(selected);
     }
 
     public void setMiddleCategoryName(String middleCategoryName) {

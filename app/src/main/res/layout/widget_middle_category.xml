@@ -11,8 +11,7 @@
         android:paddingLeft="18dp"
         android:paddingTop="13dp"
         android:paddingRight="9dp"
-        android:paddingBottom="11dp"
-        android:background="@drawable/major_item_view_shape">
+        android:paddingBottom="11dp">
 
         <TextView
             android:id="@+id/tvMiddleCategoryName"
