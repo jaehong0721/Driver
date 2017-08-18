@@ -24,6 +24,8 @@ public class FirebaseDbManager {
     private static final String BUSINESS_INFO = "businessInfo";
     private static final String MAJOR_ITEMS = "majorItems";
     private static final String RANKING_INFO = "rankingInfo";
+    private static final String CATEGORY = "category";
+    private static final String LARGE = "large";
 
     private final FirebaseDatabase instance;
     private final String vendorPhoneNumber;
@@ -211,6 +213,11 @@ public class FirebaseDbManager {
                 .removeEventListener(listener);
     }
 
+    public void getLargeCategoryList(ValueEventListener listener) {
+        DatabaseReference dr = getRootRef().child(CATEGORY).child(LARGE);
+        dr.keepSynced(true);
+        dr.addListenerForSingleValueEvent(listener);
+    }
     private DatabaseReference getRootRef() {
         return instance.getReference();
     }

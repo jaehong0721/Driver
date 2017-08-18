@@ -6,7 +6,6 @@
                 android:paddingTop="23dp"
                 android:paddingRight="16dp"
                 android:paddingBottom="21dp"
-                android:background="@color/white_two"
                 xmlns:tools="http://schemas.android.com/tools">
 
     <TextView
