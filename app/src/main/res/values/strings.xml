@@ -12,6 +12,7 @@
 
     <string name="order_list_empty">"접수된 주문이 없습니다.\n\n거래하는 식당에게\n 혁신적인 음성 주문 서비스를 추천하세요."</string>
     <string name="ledger_empty">"해당 날짜의 거래내역이 없습니다"</string>
+    <string name="pick_category_instruction">"왼쪽 대분류 목록 중\n 하나를 선택해주세요"</string>
 
     <string name="fonts_path">fonts/dohyun.ttf</string>
 </resources>

@@ -6,6 +6,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.google.firebase.database.DataSnapshot;
 import com.rena21.driver.App;
@@ -25,6 +26,7 @@ public class AddMajorItemActivity extends BaseActivity implements MiddleCategory
 
     private RecyclerView rvLargeCategory;
     private RecyclerView rvMiddleCategory;
+    private TextView tvInstruction;
     private Button btnSaveMajorItems;
 
     private HashMap<String,List<String>> middleCategoryMap;
@@ -51,7 +53,7 @@ public class AddMajorItemActivity extends BaseActivity implements MiddleCategory
         rvLargeCategory = (RecyclerView) findViewById(R.id.rvLargeCategory);
         rvMiddleCategory = (RecyclerView) findViewById(R.id.rvMiddleCategory);
         btnSaveMajorItems = (Button) findViewById(R.id.btnSaveMajorItems);
-
+        tvInstruction = (TextView) findViewById(R.id.tvInstruction);
 
         dbManager.getMiddleCategoryList(new ToastErrorHandlingListener(this) {
             @Override public void onDataChange(DataSnapshot dataSnapshot) {
@@ -63,7 +65,10 @@ public class AddMajorItemActivity extends BaseActivity implements MiddleCategory
         final LargeCategoryAdapter.ClickLargeCategoryListener listener = new LargeCategoryAdapter.ClickLargeCategoryListener() {
             @Override public void onClickLargeCategory(String largeCategoryName) {
                 if(middleCategoryMap == null) return;
-
+                if(tvInstruction.getVisibility() == View.VISIBLE) {
+                    tvInstruction.setVisibility(View.GONE);
+                    rvMiddleCategory.setVisibility(View.VISIBLE);
+                }
                 List<String> middleCategoryList = middleCategoryMap.get(largeCategoryName);
                 MiddleCategoryAdapter middleCategoryAdapter = new MiddleCategoryAdapter(middleCategoryList, selectedCategoryList);
                 middleCategoryAdapter.setClickMiddleCategoryListener(AddMajorItemActivity.this);
