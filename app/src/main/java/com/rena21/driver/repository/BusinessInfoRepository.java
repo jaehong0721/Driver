@@ -49,6 +49,10 @@ public class BusinessInfoRepository implements ValueEventListener {
         dbManager.removeBusinessInfoListener(this);
     }
 
+    public void addMajorItem(List<String> items) {
+        dbManager.updateMajorItems(items);
+    }
+
     public void removeMajorItem(List<String> items) {
         dbManager.updateMajorItems(items);
     }

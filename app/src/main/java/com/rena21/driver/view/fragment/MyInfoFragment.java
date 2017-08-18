@@ -34,6 +34,7 @@ import com.rena21.driver.view.component.RankingInfoContainer;
 import com.rena21.driver.view.component.VendorImageContainer;
 import com.rena21.driver.viewmodel.MyInfoViewModel;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
@@ -43,7 +44,9 @@ import static android.app.Activity.RESULT_OK;
 public class MyInfoFragment extends Fragment {
 
     private static final String PHONE_NUMBER = "phoneNumber";
+
     private static final int PICK_IMAGE_REQUEST = 0;
+    private static final int ADD_MAJOR_ITEM_REQUEST = 1;
 
     private String phoneNumber;
 
@@ -156,17 +159,23 @@ public class MyInfoFragment extends Fragment {
     @Override public void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch(requestCode) {
             case PICK_IMAGE_REQUEST:
-                if(resultCode == RESULT_OK) {
-                    boolean result = ImagePickUpUtil.saveImageFileFromResult(getContext(), data);
-                    if(result) {
-                        Intent intent = new Intent(getContext(), FileUploadService.class);
-                        getContext().startService(intent);
-                        Toast.makeText(getContext(), "사진을 저장 중입니다", Toast.LENGTH_SHORT).show();
-                    } else {
-                        Toast.makeText(getContext(), "사진 저장에 실패하였습니다", Toast.LENGTH_SHORT).show();
-                    }
+                if(!(resultCode == RESULT_OK)) break;
+                boolean result = ImagePickUpUtil.saveImageFileFromResult(getContext(), data);
+                if(result) {
+                    Intent intent = new Intent(getContext(), FileUploadService.class);
+                    getContext().startService(intent);
+                    Toast.makeText(getContext(), "사진을 저장 중입니다", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getContext(), "사진 저장에 실패하였습니다", Toast.LENGTH_SHORT).show();
                 }
                 break;
+
+            case ADD_MAJOR_ITEM_REQUEST:
+                if(!(resultCode == RESULT_OK)) break;
+                ArrayList<String> majorItems = data.getStringArrayListExtra("majorItems");
+                myInfoViewModel.addMajorItem(majorItems);
+                break;
+
             default:
                 Log.d("test", "사진 저장 실패");
                 super.onActivityResult(requestCode, resultCode, data);
@@ -217,9 +226,10 @@ public class MyInfoFragment extends Fragment {
     private void initBusinessInfoContainer(View rootView) {
         businessInfoContainer = (BusinessInfoContainer) rootView.findViewById(R.id.businessInfoContainer);
         businessInfoContainer.setAddMajorItemListener(new BusinessInfoContainer.AddMajorItemListener() {
-            @Override public void onAddMajorItem() {
+            @Override public void onAddMajorItem(ArrayList<String> majorItems) {
                 Intent intent = new Intent(getActivity(), AddMajorItemActivity.class);
-                startActivity(intent);
+                intent.putStringArrayListExtra("majorItems", majorItems);
+                startActivityForResult(intent, ADD_MAJOR_ITEM_REQUEST);
             }
         });
         businessInfoContainer.setRemoveMajorItemListener(new BusinessInfoContainer.RemoveMajorItemListener() {

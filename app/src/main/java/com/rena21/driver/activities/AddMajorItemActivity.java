@@ -1,11 +1,11 @@
 package com.rena21.driver.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.rena21.driver.App;
@@ -27,12 +27,15 @@ public class AddMajorItemActivity extends BaseActivity {
     private Button btnSaveMajorItems;
 
     private HashMap<String,List<String>> middleCategoryMap;
-    private List<String> selectedCategoryList = new ArrayList<>();
+    private ArrayList<String> selectedCategoryList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_major_item);
+
+        selectedCategoryList = getIntent().getStringArrayListExtra("majorItems");
+        if(selectedCategoryList == null) selectedCategoryList = new ArrayList<>();
 
         FirebaseDbManager dbManager = App.getApplication(getApplicationContext()).getDbManager();
 
@@ -40,9 +43,6 @@ public class AddMajorItemActivity extends BaseActivity {
         rvMiddleCategory = (RecyclerView) findViewById(R.id.rvMiddleCategory);
         btnSaveMajorItems = (Button) findViewById(R.id.btnSaveMajorItems);
 
-        this.selectedCategoryList.add("우동소스");
-        this.selectedCategoryList.add("국수소스");
-        this.selectedCategoryList.add("국내산 육류");
 
         dbManager.getMiddleCategoryList(new ToastErrorHandlingListener(this) {
             @Override public void onDataChange(DataSnapshot dataSnapshot) {
@@ -73,11 +73,13 @@ public class AddMajorItemActivity extends BaseActivity {
             }
         });
 
-        //temp
         btnSaveMajorItems = (Button) findViewById(R.id.btnSaveMajorItems);
         btnSaveMajorItems.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
-                Toast.makeText(AddMajorItemActivity.this, selectedCategoryList.toString(), Toast.LENGTH_SHORT).show();
+                Intent returnIntent = new Intent();
+                returnIntent.putStringArrayListExtra("majorItems", selectedCategoryList);
+                setResult(RESULT_OK,returnIntent);
+                finish();
             }
         });
     }

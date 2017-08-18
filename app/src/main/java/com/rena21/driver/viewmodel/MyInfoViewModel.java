@@ -83,7 +83,9 @@ public class MyInfoViewModel {
     public ContainerToObserve getBusinessInfoDataContainer() {
         return businessInfoDataContainer;
     }
-
+    public void addMajorItem(List<String> items) {
+        businessInfoRepository.addMajorItem(items);
+    }
     public void removeMajorItem(List<String> items) {
         businessInfoRepository.removeMajorItem(items);
     }

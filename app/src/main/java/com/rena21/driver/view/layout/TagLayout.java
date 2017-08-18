@@ -8,11 +8,10 @@ import android.view.View;
 import com.google.android.flexbox.FlexboxLayout;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class TagLayout extends FlexboxLayout {
     
-    private List<String> tagNames;
+    private ArrayList<String> tagNames;
     
     public TagLayout(Context context) {
         this(context, null);
@@ -20,7 +19,7 @@ public class TagLayout extends FlexboxLayout {
 
     public TagLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
-        tagNames = new ArrayList();
+        tagNames = new ArrayList<>();
     }
     
     @Override public void removeAllViews() {
@@ -38,7 +37,7 @@ public class TagLayout extends FlexboxLayout {
         super.addView(child,index);
     }
     
-    public List<String> getTagNames() {
+    public ArrayList<String> getTagNames() {
         return tagNames;
     }
 }

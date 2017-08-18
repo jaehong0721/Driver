@@ -8,6 +8,7 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.rena21.driver.R;
 import com.rena21.driver.models.BusinessInfoData;
@@ -18,6 +19,7 @@ import com.rena21.driver.view.widget.AddMajorItemButton;
 import com.rena21.driver.view.widget.DeliveryAreaView;
 import com.rena21.driver.view.widget.MajorItemView;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,7 +27,7 @@ import java.util.Map;
 public class BusinessInfoContainer extends FrameLayout {
 
     public interface AddMajorItemListener {
-        void onAddMajorItem();
+        void onAddMajorItem(ArrayList<String> majorItems);
     }
 
     public interface RemoveMajorItemListener {
@@ -59,12 +61,15 @@ public class BusinessInfoContainer extends FrameLayout {
     private HashMap<View, View> transformableView;
 
     private boolean editMode;
+    private boolean loadedData;
+
+    private ArrayList<String> majorItems;
 
     public BusinessInfoContainer(@NonNull Context context) {
         super(context, null);
     }
 
-    public BusinessInfoContainer(@NonNull Context context, @Nullable AttributeSet attrs) {
+    public BusinessInfoContainer(@NonNull final Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
 
         inflate(context, R.layout.component_vendor_business_info, this);
@@ -106,7 +111,11 @@ public class BusinessInfoContainer extends FrameLayout {
         addMajorItemButton.setOnClickListener(new OnClickListener() {
             @Override public void onClick(View v) {
                 if(addMajorItemListener == null) return;
-                addMajorItemListener.onAddMajorItem();
+                if(!loadedData) {
+                    Toast.makeText(context, "품목 정보를 불러오는 중입니다.\n잠시만 기다려주세요..", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                addMajorItemListener.onAddMajorItem(majorItems);
             }
         });
     }
@@ -152,9 +161,12 @@ public class BusinessInfoContainer extends FrameLayout {
     }
 
     public void setBusinessInfoData(final BusinessInfoData businessInfoData) {
+        loadedData = true;
+
         majorItemsLayout.removeAllViews();
         majorItemsLayout.addView(addMajorItemButton);
         if(businessInfoData.majorItems != null) {
+            this.majorItems = businessInfoData.majorItems;
             for (final String majorItem: businessInfoData.majorItems) {
                 final MajorItemView majorItemView = new MajorItemView(getContext());
                 majorItemView.setItemName(majorItem);
