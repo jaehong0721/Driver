@@ -5,6 +5,7 @@ import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.rena21.driver.firebase.fcm.ToastErrorHandlingListener;
 import com.rena21.driver.models.BusinessInfoData;
 import com.rena21.driver.models.ContactInfoData;
 
@@ -26,6 +27,7 @@ public class FirebaseDbManager {
     private static final String RANKING_INFO = "rankingInfo";
     private static final String CATEGORY = "category";
     private static final String LARGE = "large";
+    private static final String MIDDLE = "middle";
 
     private final FirebaseDatabase instance;
     private final String vendorPhoneNumber;
@@ -218,6 +220,13 @@ public class FirebaseDbManager {
         dr.keepSynced(true);
         dr.addListenerForSingleValueEvent(listener);
     }
+
+    public void getMiddleCategoryList(ToastErrorHandlingListener listener) {
+        DatabaseReference dr = getRootRef().child(CATEGORY).child(MIDDLE);
+        dr.keepSynced(true);
+        dr.addListenerForSingleValueEvent(listener);
+    }
+
     private DatabaseReference getRootRef() {
         return instance.getReference();
     }
