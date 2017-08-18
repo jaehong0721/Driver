@@ -37,182 +37,205 @@ public class FirebaseDbManager {
         this.instance = instance;
         this.vendorPhoneNumber = vendorPhoneNumber;
         instance.setPersistenceEnabled(true);
-        getRootRef().keepSynced(true);
     }
 
     public void getVendorInfoDataSnapshot(ValueEventListener listener) {
-        getRootRef()
+        DatabaseReference dr = getRootRef()
                 .child(VENDORS)
                 .child(vendorPhoneNumber)
-                .child(INFO)
-                .addListenerForSingleValueEvent(listener);
+                .child(INFO);
+        dr.keepSynced(true);
+        dr.addListenerForSingleValueEvent(listener);
     }
 
     public void getRestaurantName(String restaurantPhoneNumber, ValueEventListener listener) {
-        getRootRef()
+        DatabaseReference dr = getRootRef()
                 .child(RESTAURANTS)
                 .child(restaurantPhoneNumber)
                 .child(INFO)
-                .child(RESTAURANT_NAME)
-                .addListenerForSingleValueEvent(listener);
+                .child(RESTAURANT_NAME);
+        dr.keepSynced(true);
+        dr.addListenerForSingleValueEvent(listener);
     }
 
     public void getOrderAccepted(String fileName, ValueEventListener listener) {
-        getRootRef()
+        DatabaseReference dr = getRootRef()
                 .child(ORDERS)
                 .child(VENDORS)
                 .child(vendorPhoneNumber)
                 .child(fileName)
-                .child(ACCEPTED)
-                .addListenerForSingleValueEvent(listener);
+                .child(ACCEPTED);
+        dr.keepSynced(true);
+        dr.addListenerForSingleValueEvent(listener);
     }
 
     public void getTotalPrice(String fileName, ValueEventListener listener) {
-        getRootRef()
+        DatabaseReference dr = getRootRef()
                 .child(ORDERS)
                 .child(VENDORS)
                 .child(vendorPhoneNumber)
                 .child(fileName)
-                .child(TOTAL_PRICE)
-                .addListenerForSingleValueEvent(listener);
+                .child(TOTAL_PRICE);
+        dr.keepSynced(true);
+        dr.addListenerForSingleValueEvent(listener);
     }
 
     public void multiPathUpdateValue(HashMap<String, Object> pathMap, OnCompleteListener<Void> listener) {
-       getRootRef()
-                .updateChildren(pathMap)
-                .addOnCompleteListener(listener);
+        DatabaseReference dr = getRootRef();
+        dr.keepSynced(true);
+        dr.updateChildren(pathMap).addOnCompleteListener(listener);
     }
 
     public void addChildEventListenerToOrdersRef(ChildEventListener listener) {
-        getRootRef()
+        DatabaseReference dr = getRootRef()
                 .child(ORDERS)
                 .child(VENDORS)
-                .child(vendorPhoneNumber)
-                .addChildEventListener(listener);
+                .child(vendorPhoneNumber);
+        dr.keepSynced(true);
+        dr.addChildEventListener(listener);
     }
 
     public void removeChildEventListenerFromOrderRef(ChildEventListener listener) {
-        getRootRef()
+        DatabaseReference dr = getRootRef()
                 .child(ORDERS)
                 .child(VENDORS)
-                .child(vendorPhoneNumber)
-                .removeEventListener(listener);
+                .child(vendorPhoneNumber);
+        dr.keepSynced(true);
+        dr.removeEventListener(listener);
     }
 
     public void addValueEventListenerToSpecificOrderRef(String orderKey, ValueEventListener listener) {
-        getRootRef()
+        DatabaseReference dr = getRootRef()
                 .child(ORDERS)
                 .child(VENDORS)
-                .child(vendorPhoneNumber)
-                .child(orderKey)
+                .child(vendorPhoneNumber);
+        dr.keepSynced(true);
+        dr.child(orderKey)
                 .addValueEventListener(listener);
     }
 
     public void removeValueEventListenerFromSpecificOrderRef(String orderKey, ValueEventListener listener) {
-        getRootRef()
+        DatabaseReference dr = getRootRef()
                 .child(ORDERS)
                 .child(VENDORS)
-                .child(vendorPhoneNumber)
-                .child(orderKey)
+                .child(vendorPhoneNumber);
+
+        dr.keepSynced(true);
+        dr.child(orderKey)
                 .removeEventListener(listener);
     }
 
     public void addChildEventListenerToOrderRefOnSpecificDate(long dateMillis, ChildEventListener listener) {
-        getRootRef()
+        DatabaseReference dr = getRootRef()
                 .child(ORDERS)
                 .child(VENDORS)
-                .child(vendorPhoneNumber)
-                .orderByChild(DELIVERED_TIME)
+                .child(vendorPhoneNumber);
+
+        dr.keepSynced(true);
+
+        dr.orderByChild(DELIVERED_TIME)
                 .equalTo(dateMillis)
                 .addChildEventListener(listener);
     }
 
     public void removeChildEventListenerFromOrderRefOnSpecificDate(long dateMillis, ChildEventListener listener) {
-        getRootRef()
+        DatabaseReference dr = getRootRef()
                 .child(ORDERS)
                 .child(VENDORS)
-                .child(vendorPhoneNumber)
-                .orderByChild(DELIVERED_TIME)
+                .child(vendorPhoneNumber);
+
+        dr.keepSynced(true);
+
+        dr.orderByChild(DELIVERED_TIME)
                 .equalTo(dateMillis)
                 .removeEventListener(listener);
     }
 
     public void updateBusinessInfoData(BusinessInfoData businessInfoData) {
-        getRootRef()
+        DatabaseReference dr = getRootRef()
                 .child(VENDORS)
                 .child(vendorPhoneNumber)
-                .child(BUSINESS_INFO)
-                .setValue(businessInfoData);
+                .child(BUSINESS_INFO);
+        dr.keepSynced(true);
+        dr.setValue(businessInfoData);
     }
 
     public void subscribeBusinessInfo(ValueEventListener listener) {
-        getRootRef()
+        DatabaseReference dr = getRootRef()
                 .child(VENDORS)
                 .child(vendorPhoneNumber)
-                .child(BUSINESS_INFO)
-                .addValueEventListener(listener);
+                .child(BUSINESS_INFO);
+        dr.keepSynced(true);
+        dr.addValueEventListener(listener);
     }
 
     public void removeBusinessInfoListener(ValueEventListener listener) {
-        getRootRef()
+        DatabaseReference dr = getRootRef()
                 .child(VENDORS)
                 .child(vendorPhoneNumber)
-                .child(BUSINESS_INFO)
-                .removeEventListener(listener);
+                .child(BUSINESS_INFO);
+        dr.keepSynced(true);
+        dr.removeEventListener(listener);
     }
 
     public void updateMajorItems(List<String> items) {
-        getRootRef()
+        DatabaseReference dr = getRootRef()
                 .child(VENDORS)
                 .child(vendorPhoneNumber)
                 .child(BUSINESS_INFO)
-                .child(MAJOR_ITEMS)
-                .setValue(items);
+                .child(MAJOR_ITEMS);
+        dr.keepSynced(true);
+        dr.setValue(items);
     }
 
     public void updateContactInfoData(ContactInfoData contactInfoData) {
-        HashMap<String,Object> pathMap = new HashMap<>();
+        HashMap<String, Object> pathMap = new HashMap<>();
         pathMap.put("/address/", contactInfoData.address);
         pathMap.put("/phoneNumber/", contactInfoData.phoneNumber);
         pathMap.put("/vendorName/", contactInfoData.vendorName);
 
-        getRootRef()
+        DatabaseReference dr = getRootRef()
                 .child(VENDORS)
                 .child(vendorPhoneNumber)
-                .child(INFO)
-                .updateChildren(pathMap);
+                .child(INFO);
+        dr.keepSynced(true);
+        dr.updateChildren(pathMap);
     }
 
     public void subscribeContactInfo(ValueEventListener listener) {
-        getRootRef()
+        DatabaseReference dr = getRootRef()
                 .child(VENDORS)
                 .child(vendorPhoneNumber)
-                .child(INFO)
-                .addValueEventListener(listener);
+                .child(INFO);
+        dr.keepSynced(true);
+        dr.addValueEventListener(listener);
     }
 
     public void removeContactInfoListener(ValueEventListener listener) {
-        getRootRef()
+        DatabaseReference dr = getRootRef()
                 .child(VENDORS)
                 .child(vendorPhoneNumber)
-                .child(INFO)
-                .removeEventListener(listener);
+                .child(INFO);
+        dr.keepSynced(true);
+        dr.removeEventListener(listener);
     }
 
     public void subscribeRankingInfo(ValueEventListener listener) {
-        getRootRef()
+        DatabaseReference dr = getRootRef()
                 .child(VENDORS)
                 .child(vendorPhoneNumber)
-                .child(RANKING_INFO)
-                .addValueEventListener(listener);
+                .child(RANKING_INFO);
+        dr.keepSynced(true);
+        dr.addValueEventListener(listener);
     }
 
     public void removeRankingInfoListener(ValueEventListener listener) {
-        getRootRef()
+        DatabaseReference dr = getRootRef()
                 .child(VENDORS)
                 .child(vendorPhoneNumber)
-                .child(RANKING_INFO)
-                .removeEventListener(listener);
+                .child(RANKING_INFO);
+        dr.keepSynced(true);
+        dr.removeEventListener(listener);
     }
 
     public void getLargeCategoryList(ValueEventListener listener) {
