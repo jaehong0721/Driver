@@ -18,6 +18,7 @@ import android.widget.ScrollView;
 import android.widget.Toast;
 
 import com.rena21.driver.R;
+import com.rena21.driver.activities.AddMajorItemActivity;
 import com.rena21.driver.activities.MainActivity;
 import com.rena21.driver.firebase.FirebaseDbManager;
 import com.rena21.driver.models.BusinessInfoData;
@@ -217,7 +218,8 @@ public class MyInfoFragment extends Fragment {
         businessInfoContainer = (BusinessInfoContainer) rootView.findViewById(R.id.businessInfoContainer);
         businessInfoContainer.setAddMajorItemListener(new BusinessInfoContainer.AddMajorItemListener() {
             @Override public void onAddMajorItem() {
-                Toast.makeText(getContext(), "품목 추가!!", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getActivity(), AddMajorItemActivity.class);
+                startActivity(intent);
             }
         });
         businessInfoContainer.setRemoveMajorItemListener(new BusinessInfoContainer.RemoveMajorItemListener() {
