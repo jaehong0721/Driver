@@ -5,10 +5,10 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -23,6 +23,7 @@ import com.rena21.driver.view.DividerItemDecoration;
 import com.rena21.driver.view.adapter.OrderSummaryOnLedgerAdapter;
 import com.rena21.driver.view.layout.AmountSummaryLayout;
 import com.rena21.driver.view.layout.DateSelectLayout;
+import com.rena21.driver.view.widget.RecyclerViewEmptySupport;
 
 import org.joda.time.DateTime;
 
@@ -33,7 +34,9 @@ public class LedgerFragment extends Fragment implements DateSelectLayout.DateCha
 
     private DateSelectLayout dateSelectLayout;
     private AmountSummaryLayout amountSummaryLayout;
-    private RecyclerView rvOrdersWithPrice;
+    private RecyclerViewEmptySupport rvOrdersWithPrice;
+
+    private TextView tvEmptyView;
 
     private FirebaseDbManager dbManager;
 
@@ -60,8 +63,8 @@ public class LedgerFragment extends Fragment implements DateSelectLayout.DateCha
         View view = inflater.inflate(R.layout.fragment_ledger, container, false);
         dateSelectLayout = (DateSelectLayout) view.findViewById(R.id.dateSelectLayout);
         amountSummaryLayout = (AmountSummaryLayout) view.findViewById(R.id.amountSummaryLayout);
-        rvOrdersWithPrice = (RecyclerView) view.findViewById(R.id.rvOrdersWithPrice);
-
+        rvOrdersWithPrice = (RecyclerViewEmptySupport) view.findViewById(R.id.rvOrdersWithPrice);
+        tvEmptyView = (TextView) view.findViewById(R.id.tvEmptyView);
         return view;
     }
 
@@ -72,6 +75,7 @@ public class LedgerFragment extends Fragment implements DateSelectLayout.DateCha
 
         orderSummaryOnLedgerAdapter = new OrderSummaryOnLedgerAdapter(dbManager);
 
+        rvOrdersWithPrice.setEmptyView(tvEmptyView);
         rvOrdersWithPrice.setLayoutManager(new LinearLayoutManager(getActivity()));
         rvOrdersWithPrice.addItemDecoration(new DividerItemDecoration(getActivity(), R.drawable.shape_divider_for_received_orders));
         rvOrdersWithPrice.setAdapter(orderSummaryOnLedgerAdapter);

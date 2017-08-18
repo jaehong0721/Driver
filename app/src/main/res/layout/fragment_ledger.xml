@@ -24,10 +24,19 @@
         android:layout_marginTop="@dimen/activity_horizontal_margin"
         android:background="@color/itemDividerForListView"/>
 
-    <android.support.v7.widget.RecyclerView
+    <com.rena21.driver.view.widget.RecyclerViewEmptySupport
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/rvOrdersWithPrice"
         android:background="@color/recyclerViewBackground">
-    </android.support.v7.widget.RecyclerView>
+    </com.rena21.driver.view.widget.RecyclerViewEmptySupport>
+
+    <TextView
+        android:id="@+id/tvEmptyView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:layout_marginTop="80dp"
+        android:text="@string/ledger_empty"
+        android:visibility="gone"/>
 </LinearLayout>
