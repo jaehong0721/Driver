@@ -1,50 +1,52 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:tools="http://schemas.android.com/tools"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                tools:context="com.rena21.driver.view.fragment.EstimateFragment">
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/estimate_root_view"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/black_05"
+    android:paddingBottom="22dp"
+    android:paddingLeft="20dp"
+    android:paddingRight="19dp"
+    android:paddingTop="24dp">
 
-    <LinearLayout
+    <FrameLayout
+        android:id="@+id/header_container"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="32dp"
-        android:orientation="vertical"
-        android:gravity="center">
+        android:layout_height="wrap_content">
 
-        <TextView
+        <RadioGroup
+            android:id="@+id/rdGroupToSorting"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/request_estimate_main"
-            android:textColor="@color/textBlack"
-            android:textSize="22sp"/>
+            android:orientation="horizontal">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:lineSpacingExtra="11sp"
-            android:text="@string/request_estimate_sub_1"
-            android:textColor="@color/textBlack"
-            android:textSize="12sp"/>
+            <android.support.v7.widget.AppCompatRadioButton
+                android:id="@+id/rbAll"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:text="전체"
+                android:textSize="13sp"
+                android:textStyle="bold"/>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:lineSpacingExtra="11sp"
-            android:text="@string/request_estimate_sub_2"
-            android:textColor="@color/textBlack"
-            android:textSize="12sp"/>
+            <android.support.v7.widget.AppCompatRadioButton
+                android:id="@+id/rbMyReply"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="25dp"
+                android:text="내 견적제안"
+                android:textSize="13sp"
+                android:textStyle="bold"/>
+        </RadioGroup>
+    </FrameLayout>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:lineSpacingExtra="11sp"
-            android:text="@string/request_estimate_sub_3"
-            android:textColor="@color/textBlack"
-            android:textSize="12sp"/>
-    </LinearLayout>
 
+    <android.support.v4.view.ViewPager
+        android:id="@+id/vpEstimate"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/header_container"
+        android:layout_marginTop="17dp">
+    </android.support.v4.view.ViewPager>
 </RelativeLayout>

@@ -6,6 +6,9 @@
         <item name="colorAccent">@color/primaryYellow</item>
 
         <item name="android:textColor">@color/textBlack</item>
+
+        <item name="colorControlActivated">@color/primaryGreen</item>
+        <item name="colorControlNormal">@color/primaryGreen</item>
     </style>
 
     <style name="TextAppearance.FontPath" parent="android:TextAppearance">

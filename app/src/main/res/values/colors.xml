@@ -36,4 +36,7 @@
 
     <color name="business_info_text_color">#333333</color>
     <color name="input_text_background">#ececec</color>
+
+    <color name="black_05">#0D000000</color>
+
 </resources>
