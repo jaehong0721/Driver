@@ -48,6 +48,35 @@ public class FirebaseDbManager {
         dr.addListenerForSingleValueEvent(listener);
     }
 
+    public void setVendorName(String vendorName) {
+        DatabaseReference dr = getRootRef()
+                .child(VENDORS)
+                .child(vendorPhoneNumber)
+                .child(INFO)
+                .child("vendorName");
+        dr.keepSynced(true);
+        dr.setValue(vendorName);
+    }
+
+    public void setPhoneNumber() {
+        DatabaseReference dr = getRootRef()
+                .child(VENDORS)
+                .child(vendorPhoneNumber)
+                .child(INFO)
+                .child("phoneNumber");
+        dr.keepSynced(true);
+        dr.setValue(vendorPhoneNumber);
+    }
+
+    public void setFcmId(String fcmToken) {
+        DatabaseReference dr = getRootRef()
+                .child(VENDORS)
+                .child(vendorPhoneNumber)
+                .child(INFO)
+                .child("fcmId");
+        dr.keepSynced(true);
+        dr.setValue(fcmToken);
+    }
     public void getRestaurantName(String restaurantPhoneNumber, ValueEventListener listener) {
         DatabaseReference dr = getRootRef()
                 .child(RESTAURANTS)

@@ -32,8 +32,6 @@ import com.rena21.driver.pojo.UserToken;
 import com.rena21.driver.util.LauncherUtil;
 import com.rena21.driver.view.dialogs.Dialogs;
 
-import java.util.HashMap;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -52,6 +50,7 @@ public class SplashActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.d("test", "onCreate");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
@@ -73,6 +72,8 @@ public class SplashActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        Log.d("test", "onResume");
+
         permissionManager.requestPermission(new PermissionManager.PermissionsPermittedListener() {
             @Override
             public void onAllPermissionsPermitted() {
@@ -82,6 +83,8 @@ public class SplashActivity extends BaseActivity {
     }
 
     private void checkPlayService() {
+        Log.d("test", "checkPlayService");
+
         PlayServiceManager.checkPlayServices(SplashActivity.this, new PlayServiceManager.CheckPlayServiceListener() {
             @Override
             public void onNext() {
@@ -91,6 +94,8 @@ public class SplashActivity extends BaseActivity {
     }
 
     private void checkInternetConnection() {
+        Log.d("test", "checkInternetConnection");
+
         if (NetworkUtil.isInternetConnected(getApplicationContext())) {
             checkAppVersion();
         } else {
@@ -104,6 +109,8 @@ public class SplashActivity extends BaseActivity {
     }
 
     private void checkAppVersion() {
+        Log.d("test", "checkAppVersion");
+
         VersionManager.checkAppVersion(SplashActivity.this, new VersionManager.MeetRequiredVersionListener() {
             @Override
             public void onMeetRequiredVersion() {
@@ -113,6 +120,8 @@ public class SplashActivity extends BaseActivity {
     }
 
     private void checkUserSignedIn() {
+        Log.d("test", "checkUserSignedIn");
+
         FirebaseUser user = firebaseAuth.getCurrentUser();
         if (user != null) {
             storeVendorInfo();
@@ -122,6 +131,8 @@ public class SplashActivity extends BaseActivity {
     }
 
     private void requestUserToken() {
+        Log.d("test", "requestUserToken");
+
         appPreferenceManager.initPhoneNumber();
         apiService
                 .getToken(appPreferenceManager.getPhoneNumber())
@@ -142,6 +153,8 @@ public class SplashActivity extends BaseActivity {
     }
 
     private void signIn(String customToken) {
+        Log.d("test", "signIn");
+
         firebaseAuth
                 .signInWithCustomToken(customToken)
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
@@ -161,35 +174,35 @@ public class SplashActivity extends BaseActivity {
     }
 
     private void storeVendorInfo() {
+        Log.d("test", "sotreVendorInfo");
 
-        final String phoneNumber = appPreferenceManager.getPhoneNumber();
         final String fcmToken = appPreferenceManager.getFcmToken();
-
-        final HashMap<String, Object> pathMap = new HashMap<>();
-        pathMap.put("/vendors/" + phoneNumber + "/" + "info" + "/fcmId/", fcmToken);
-        pathMap.put("/vendors/" + phoneNumber + "/" + "info" + "/phoneNumber", phoneNumber);
 
         final FirebaseDbManager dbManager = App.getApplication(getApplicationContext()).getDbManager();
 
+        Log.d("test", "납품업체 정보 확인 시작");
         dbManager.getVendorInfoDataSnapshot(new ToastErrorHandlingListener(this) {
             @Override public void onDataChange(DataSnapshot dataSnapshot) {
-                if(!dataSnapshot.child("vendorName").exists())
-                    pathMap.put("/vendors/" + phoneNumber + "/" + "info" + "/vendorName/", "등록필요");
+                Log.d("test", "납품업체 정보 확인 종료");
 
-                dbManager.multiPathUpdateValue(pathMap, new OnCompleteListener<Void>() {
-                    @Override public void onComplete(@NonNull Task<Void> task) {
-                        if(task.isSuccessful()) {
-                            goToMain();
-                        } else {
-                            FirebaseCrash.logcat(Log.ERROR, "vendorInfo", "vendorInfo 등록 실패");
-                        }
-                    }
-                });
+                if(!dataSnapshot.child("vendorName").exists())
+                    dbManager.setVendorName("등록필요");
+
+                if(!dataSnapshot.child("phoneNumber").exists())
+                    dbManager.setPhoneNumber();
+
+                dbManager.setFcmId(fcmToken);
+
+                goToMain();
             }
         });
+
+
     }
 
     private void goToMain() {
+        Log.d("test", "goToMain");
+
         Intent intent = new Intent(SplashActivity.this, MainActivity.class);
 
         if(getIntent().getExtras() != null) {
