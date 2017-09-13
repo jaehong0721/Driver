@@ -1,10 +1,10 @@
 package com.rena21.driver.view.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +14,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.rena21.driver.App;
 import com.rena21.driver.R;
+import com.rena21.driver.activities.InputPriceOfEstimateActivity;
 import com.rena21.driver.firebase.FirebaseDbManager;
 import com.rena21.driver.models.Estimate;
 import com.rena21.driver.models.Reply;
@@ -49,7 +50,13 @@ public class EstimateFragment extends Fragment {
     @Override public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        viewPagerAdapter = new EstimateViewPagerAdapter();
+        viewPagerAdapter = new EstimateViewPagerAdapter(new EstimateViewPagerAdapter.InputPriceListener() {
+            @Override public void onInputPrice(String estimateKey) {
+                Intent intent = new Intent(getActivity(), InputPriceOfEstimateActivity.class);
+                startActivity(intent);
+            }
+        });
+
         vpEstimate.setAdapter(viewPagerAdapter);
 
         allEstimateListener = new ChildEventListener() {
@@ -80,7 +87,6 @@ public class EstimateFragment extends Fragment {
                 Reply reply = dataSnapshot.getValue(Reply.class);
 
                 viewPagerAdapter.addMyReply(estimateKey, reply);
-                Log.d("test", estimateKey + reply.toString());
             }
 
             @Override public void onChildChanged(DataSnapshot dataSnapshot, String s) {

@@ -25,17 +25,27 @@ import java.util.HashMap;
 
 public class EstimateViewPagerAdapter extends PagerAdapter {
 
+    public interface InputPriceListener {
+        void onInputPrice(String estimateKey);
+    }
+
+    private InputPriceListener inputPriceListener;
+
     private ArrayList<String> allEstimateKeyList = new ArrayList<>();
     private HashMap<String, Estimate> allEstimateMap = new HashMap<>();
     private HashMap<String, Reply> myReplyMap = new HashMap<>();
+
+    public EstimateViewPagerAdapter(InputPriceListener inputPriceListener) {
+        this.inputPriceListener = inputPriceListener;
+    }
 
     @Override public Object instantiateItem(ViewGroup container, int position) {
         View itemView = LayoutInflater.from(container.getContext()).inflate(R.layout.item_viewpager_estimate,container,false);
         TextView tvRestaurantName = (TextView) itemView.findViewById(R.id.tvRestaurantName);
         TextView tvRestaurantAddress = (TextView) itemView.findViewById(R.id.tvRestaurantAddress);
 
-        String estimateKey = allEstimateKeyList.get(position);
-        Estimate estimate = allEstimateMap.get(estimateKey);
+        final String estimateKey = allEstimateKeyList.get(position);
+        final Estimate estimate = allEstimateMap.get(estimateKey);
 
         tvRestaurantName.setText(estimate.restaurantName);
         tvRestaurantAddress.setText(estimate.restaurantAddress);
@@ -76,6 +86,11 @@ public class EstimateViewPagerAdapter extends PagerAdapter {
                 setEstimateFinishView(itemView);
             } else {
                 Button btnInputPrice = (Button) itemView.findViewById(R.id.btnInputPrice);
+                btnInputPrice.setOnClickListener(new View.OnClickListener() {
+                    @Override public void onClick(View v) {
+                        inputPriceListener.onInputPrice(estimateKey);
+                    }
+                });
                 btnInputPrice.setVisibility(View.VISIBLE);
             }
         }
