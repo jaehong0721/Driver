@@ -15,7 +15,7 @@ import java.util.ArrayList;
 
 public class EstimateItemAdapter extends RecyclerView.Adapter<EstimateItemAdapter.EstimateItemViewHolder> {
 
-    ArrayList<RequestedEstimateItem> estimateItems;
+    ArrayList<? extends RequestedEstimateItem> estimateItems;
     boolean isReplied;
 
     class EstimateItemViewHolder extends RecyclerView.ViewHolder {
@@ -45,7 +45,7 @@ public class EstimateItemAdapter extends RecyclerView.Adapter<EstimateItemAdapte
         }
     }
 
-    public EstimateItemAdapter(ArrayList<RequestedEstimateItem> estimateItems, boolean isReplied) {
+    public EstimateItemAdapter(ArrayList<? extends RequestedEstimateItem> estimateItems, boolean isReplied) {
         this.estimateItems = estimateItems;
         this.isReplied = isReplied;
     }
@@ -58,7 +58,6 @@ public class EstimateItemAdapter extends RecyclerView.Adapter<EstimateItemAdapte
     @Override public void onBindViewHolder(EstimateItemViewHolder holder, int position) {
         holder.setChildVisibility();
         holder.bind(estimateItems.get(position));
-
     }
 
     @Override public int getItemCount() {

@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,7 @@ import com.rena21.driver.App;
 import com.rena21.driver.R;
 import com.rena21.driver.firebase.FirebaseDbManager;
 import com.rena21.driver.models.Estimate;
+import com.rena21.driver.models.Reply;
 import com.rena21.driver.view.adapter.EstimateViewPagerAdapter;
 
 public class EstimateFragment extends Fragment {
@@ -23,6 +25,7 @@ public class EstimateFragment extends Fragment {
     private FirebaseDbManager dbManager;
 
     private ChildEventListener allEstimateListener;
+    private ChildEventListener myReplyListener;
 
     private EstimateViewPagerAdapter viewPagerAdapter;
 
@@ -63,13 +66,34 @@ public class EstimateFragment extends Fragment {
             @Override public void onCancelled(DatabaseError databaseError) {}
         };
 
+        myReplyListener = new ChildEventListener() {
+            @Override public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                String estimateKey = dataSnapshot.getKey();
+                Reply reply = dataSnapshot.getValue(Reply.class);
+
+                viewPagerAdapter.addMyReply(estimateKey, reply);
+                Log.d("test", estimateKey + reply.toString());
+            }
+
+            @Override public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override public void onChildRemoved(DataSnapshot dataSnapshot) {}
+
+            @Override public void onChildMoved(DataSnapshot dataSnapshot, String s) {}
+
+            @Override public void onCancelled(DatabaseError databaseError) {}
+        };
 
         dbManager = App.getApplication(getContext().getApplicationContext()).getDbManager();
         dbManager.subscribeAllEstimate(allEstimateListener);
+        dbManager.subscribeMyReply(myReplyListener);
     }
 
     @Override public void onDestroy() {
         dbManager.removeAllEstimateListener(allEstimateListener);
+        dbManager.removeMyReplyListener(myReplyListener);
         super.onDestroy();
     }
 }

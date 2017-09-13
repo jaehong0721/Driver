@@ -7,10 +7,12 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.rena21.driver.R;
 import com.rena21.driver.models.Estimate;
+import com.rena21.driver.models.Reply;
 import com.rena21.driver.view.DividerItemDecoration;
 
 import java.util.ArrayList;
@@ -20,9 +22,8 @@ import java.util.HashMap;
 public class EstimateViewPagerAdapter extends PagerAdapter {
 
     private ArrayList<String> allEstimateKeyList = new ArrayList<>();
-    private ArrayList<String> myEstimateKeyList = new ArrayList<>();
-
     private HashMap<String, Estimate> allEstimateMap = new HashMap<>();
+    private HashMap<String, Reply> myReplyMap = new HashMap<>();
 
     @Override public Object instantiateItem(ViewGroup container, int position) {
         View itemView = LayoutInflater.from(container.getContext()).inflate(R.layout.item_viewpager_estimate,container,false);
@@ -38,7 +39,23 @@ public class EstimateViewPagerAdapter extends PagerAdapter {
         RecyclerView rvEstimateItem = (RecyclerView) itemView.findViewById(R.id.rvEstimateItem);
         rvEstimateItem.setLayoutManager(new LinearLayoutManager(container.getContext()));
         rvEstimateItem.addItemDecoration(new DividerItemDecoration(container.getContext(), R.drawable.shape_divider_for_received_orders));
-        EstimateItemAdapter adapter = new EstimateItemAdapter(estimate.items, false);
+
+        Reply reply = myReplyMap.get(estimateKey);
+        EstimateItemAdapter adapter;
+        if(reply != null) {
+            adapter = new EstimateItemAdapter(reply.repliedItems, true);
+
+            TextView tvPriceTitle = (TextView) itemView.findViewById(R.id.tvPriceTitle);
+            tvPriceTitle.setVisibility(View.VISIBLE);
+
+            Button btnModifyPrice = (Button) itemView.findViewById(R.id.btnModifyPrice);
+            btnModifyPrice.setVisibility(View.VISIBLE);
+        } else{
+            adapter = new EstimateItemAdapter(estimate.items, false);
+
+            Button btnInputPrice = (Button) itemView.findViewById(R.id.btnInputPrice);
+            btnInputPrice.setVisibility(View.VISIBLE);
+        }
         rvEstimateItem.setAdapter(adapter);
 
         container.addView(itemView);
@@ -72,6 +89,12 @@ public class EstimateViewPagerAdapter extends PagerAdapter {
 
     public void changeEstimate(String estimateKey, Estimate estimate) {
         allEstimateMap.put(estimateKey, estimate);
+
+        notifyDataSetChanged();
+    }
+
+    public void addMyReply(String estimateKey, Reply reply) {
+        myReplyMap.put(estimateKey, reply);
 
         notifyDataSetChanged();
     }
