@@ -29,14 +29,20 @@ public class EstimateViewPagerAdapter extends PagerAdapter {
         void onInputPrice(String estimateKey);
     }
 
+    public interface ModifyPriceListener {
+        void onModifyPrice(String estimateKey);
+    }
+
     private InputPriceListener inputPriceListener;
+    private ModifyPriceListener modifyPriceListener;
 
     private ArrayList<String> allEstimateKeyList = new ArrayList<>();
     private HashMap<String, Estimate> allEstimateMap = new HashMap<>();
     private HashMap<String, Reply> myReplyMap = new HashMap<>();
 
-    public EstimateViewPagerAdapter(InputPriceListener inputPriceListener) {
+    public EstimateViewPagerAdapter(InputPriceListener inputPriceListener, ModifyPriceListener modifyPriceListener) {
         this.inputPriceListener = inputPriceListener;
+        this.modifyPriceListener = modifyPriceListener;
     }
 
     @Override public Object instantiateItem(ViewGroup container, int position) {
@@ -76,6 +82,11 @@ public class EstimateViewPagerAdapter extends PagerAdapter {
                     setEstimateFinishView(itemView);
                 } else {
                     Button btnModifyPrice = (Button) itemView.findViewById(R.id.btnModifyPrice);
+                    btnModifyPrice.setOnClickListener(new View.OnClickListener() {
+                        @Override public void onClick(View v) {
+                            modifyPriceListener.onModifyPrice(estimateKey);
+                        }
+                    });
                     btnModifyPrice.setVisibility(View.VISIBLE);
                 }
             }

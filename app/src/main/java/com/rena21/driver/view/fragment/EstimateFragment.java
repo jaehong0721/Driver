@@ -52,8 +52,11 @@ public class EstimateFragment extends Fragment {
 
         viewPagerAdapter = new EstimateViewPagerAdapter(new EstimateViewPagerAdapter.InputPriceListener() {
             @Override public void onInputPrice(String estimateKey) {
-                Intent intent = new Intent(getActivity(), InputPriceOfEstimateActivity.class);
-                startActivity(intent);
+                startInputPriceActivity(estimateKey, "input");
+            }
+        }, new EstimateViewPagerAdapter.ModifyPriceListener() {
+            @Override public void onModifyPrice(String estimateKey) {
+                startInputPriceActivity(estimateKey, "modify");
             }
         });
 
@@ -109,5 +112,12 @@ public class EstimateFragment extends Fragment {
         dbManager.removeAllEstimateListener(allEstimateListener);
         dbManager.removeMyReplyListener(myReplyListener);
         super.onDestroy();
+    }
+
+    private void startInputPriceActivity(String estimateKey, String what) {
+        Intent intent = new Intent(getActivity(), InputPriceOfEstimateActivity.class);
+        intent.putExtra("estimateKey", estimateKey);
+        intent.putExtra("what", what);
+        startActivity(intent);
     }
 }
