@@ -268,6 +268,26 @@ public class FirebaseDbManager {
         dr.removeEventListener(listener);
     }
 
+    public void subscribeMyReply(ChildEventListener listener) {
+        DatabaseReference dr = getRootRef()
+                .child("estimate")
+                .child(VENDORS)
+                .child(vendorPhoneNumber);
+
+        dr.keepSynced(true);
+        dr.addChildEventListener(listener);
+    }
+
+    public void removeMyReplyListener(ChildEventListener listener) {
+        DatabaseReference dr = getRootRef()
+                .child("estimate")
+                .child(VENDORS)
+                .child(vendorPhoneNumber);
+
+        dr.keepSynced(true);
+        dr.removeEventListener(listener);
+    }
+
     private DatabaseReference getRootRef() {
         return instance.getReference();
     }
