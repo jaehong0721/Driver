@@ -93,7 +93,10 @@ public class EstimateFragment extends Fragment {
             }
 
             @Override public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                String estimateKey = dataSnapshot.getKey();
+                Reply reply = dataSnapshot.getValue(Reply.class);
 
+                viewPagerAdapter.changeMyReply(estimateKey, reply);
             }
 
             @Override public void onChildRemoved(DataSnapshot dataSnapshot) {}

@@ -148,6 +148,11 @@ public class EstimateViewPagerAdapter extends PagerAdapter {
         notifyDataSetChanged();
     }
 
+    public void changeMyReply(String estimateKey, Reply reply) {
+        myReplyMap.put(estimateKey, reply);
+
+        notifyDataSetChanged();
+    }
     private void setEstimateFinishView(View itemView) {
         setUpperMessage(itemView, "해당 견적요청이 종료되었습니다", R.color.warm_grey_two);
         View dimView = itemView.findViewById(R.id.dimView);
