@@ -14,5 +14,9 @@
     <string name="ledger_empty">"해당 날짜의 거래내역이 없습니다"</string>
     <string name="pick_category_instruction">"왼쪽 대분류 목록 중\n 하나를 선택해주세요"</string>
 
+    <string name="input_price_guide">납품 가능한 품목의 견적가를 최대한 입력해주세요.
+                                    식당앱에서 <font color='#CE6531'>견적가 입력률</font>에 따라
+                                    <font color='#CE6531'>보여지는 순위</font>가 정해집니다"</string>
+
     <string name="fonts_path">fonts/dohyun.ttf</string>
 </resources>
