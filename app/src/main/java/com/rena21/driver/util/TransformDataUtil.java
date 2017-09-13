@@ -26,4 +26,11 @@ public class TransformDataUtil {
         List<String> areaList = new ArrayList<>(Arrays.asList(splitAreas));
         return areaList;
     }
+
+    public static String getPhoneNumberFrom(String estimateKey) {
+        if(estimateKey == null || estimateKey.length() == 0)
+            throw new RuntimeException("견적요청 key값이 올바르지 않습니다.");
+
+        return estimateKey.split("_")[0];
+    }
 }

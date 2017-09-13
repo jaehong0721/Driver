@@ -4,10 +4,25 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
+    <TextView
+        android:id="@+id/tvCelebrationMessage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/primaryOrange"
+        android:paddingBottom="10dp"
+        android:paddingLeft="23dp"
+        android:paddingTop="11dp"
+        android:text="축하드려요! 새 거래처로 선정되셨습니다"
+        android:textColor="@color/white"
+        android:textSize="13sp"
+        android:textStyle="bold"
+        android:visibility="gone"/>
+
     <RelativeLayout
         android:id="@+id/estimate_header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/tvCelebrationMessage"
         android:background="@color/white"
         android:paddingBottom="19dp"
         android:paddingLeft="24dp"
@@ -55,8 +70,8 @@
         android:layout_below="@+id/estimate_header"
         android:background="@color/white_50"
         android:paddingLeft="24dp"
-        android:paddingTop="16dp"
-        android:paddingRight="24dp">
+        android:paddingRight="24dp"
+        android:paddingTop="16dp">
 
         <TextView
             android:id="@+id/tvItemInfoTitle"
@@ -84,8 +99,8 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_marginTop="10dp"
             android:layout_below="@+id/tvItemInfoTitle"
+            android:layout_marginTop="10dp"
             android:background="@color/itemDividerForListView"/>
 
     </RelativeLayout>
@@ -98,13 +113,6 @@
         android:layout_below="@+id/items_header"
         android:background="@color/white_50"/>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginTop="10dp"
-        android:layout_above="@+id/estimate_footer"
-        android:background="@color/dividerLine"/>
-
     <RelativeLayout
         android:id="@+id/estimate_footer"
         android:layout_width="match_parent"
@@ -112,6 +120,10 @@
         android:layout_alignParentBottom="true"
         android:background="@color/white">
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/dividerLine"/>
 
         <Button
             android:id="@+id/btnInputPrice"

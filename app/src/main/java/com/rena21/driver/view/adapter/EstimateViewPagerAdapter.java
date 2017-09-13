@@ -8,12 +8,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.rena21.driver.R;
 import com.rena21.driver.models.Estimate;
 import com.rena21.driver.models.Reply;
+import com.rena21.driver.util.TransformDataUtil;
 import com.rena21.driver.view.DividerItemDecoration;
+import com.rena21.driver.view.widget.CallButton;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -48,13 +51,39 @@ public class EstimateViewPagerAdapter extends PagerAdapter {
             TextView tvPriceTitle = (TextView) itemView.findViewById(R.id.tvPriceTitle);
             tvPriceTitle.setVisibility(View.VISIBLE);
 
-            Button btnModifyPrice = (Button) itemView.findViewById(R.id.btnModifyPrice);
-            btnModifyPrice.setVisibility(View.VISIBLE);
+            if(reply.isPicked) {
+                TextView tvCelebrationMessage = (TextView) itemView.findViewById(R.id.tvCelebrationMessage);
+                tvCelebrationMessage.setVisibility(View.VISIBLE);
+
+                CallButton callButton = (CallButton) itemView.findViewById(R.id.ivCall);
+                callButton.setCalleeInfo(TransformDataUtil.getPhoneNumberFrom(estimateKey));
+                callButton.setVisibility(View.VISIBLE);
+
+                RelativeLayout estimateFooter = (RelativeLayout) itemView.findViewById(R.id.estimate_footer);
+                estimateFooter.setVisibility(View.GONE);
+            } else {
+                if(estimate.isFinish) {
+                    //견적 종료
+
+                    RelativeLayout estimateFooter = (RelativeLayout) itemView.findViewById(R.id.estimate_footer);
+                    estimateFooter.setVisibility(View.GONE);
+                } else {
+                    Button btnModifyPrice = (Button) itemView.findViewById(R.id.btnModifyPrice);
+                    btnModifyPrice.setVisibility(View.VISIBLE);
+                }
+            }
         } else{
             adapter = new EstimateItemAdapter(estimate.items, false);
 
-            Button btnInputPrice = (Button) itemView.findViewById(R.id.btnInputPrice);
-            btnInputPrice.setVisibility(View.VISIBLE);
+            if(estimate.isFinish) {
+                //견적 종료
+
+                RelativeLayout estimateFooter = (RelativeLayout) itemView.findViewById(R.id.estimate_footer);
+                estimateFooter.setVisibility(View.GONE);
+            } else {
+                Button btnInputPrice = (Button) itemView.findViewById(R.id.btnInputPrice);
+                btnInputPrice.setVisibility(View.VISIBLE);
+            }
         }
         rvEstimateItem.setAdapter(adapter);
 
