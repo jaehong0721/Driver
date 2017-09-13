@@ -7,10 +7,12 @@ import android.text.InputType;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
 
+import java.util.Locale;
+
 public class CurrencyFormatEditText extends android.support.v7.widget.AppCompatEditText {
 
     public interface AmountInputFinishListener {
-        void onAmountInputFinish(long amount);
+        void onAmountInputFinish(Object tag, long amount);
     }
 
     private AmountInputFinishListener listener;
@@ -41,11 +43,11 @@ public class CurrencyFormatEditText extends android.support.v7.widget.AppCompatE
 
                     longVal = Long.parseLong(originalString);
 
-                    setText(String.format("%,d", longVal));
+                    setText(String.format(Locale.KOREA, "%,d", longVal));
                     setSelection(getText().length());
                 } catch (NumberFormatException e) {}
 
-                if(listener!= null) listener.onAmountInputFinish(getAmount());
+                if(listener!= null) listener.onAmountInputFinish(getTag(), getAmount());
 
                 addTextChangedListener(this);
             }

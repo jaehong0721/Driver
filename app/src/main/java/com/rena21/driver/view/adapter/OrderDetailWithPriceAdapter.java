@@ -13,34 +13,29 @@ import com.rena21.driver.view.widget.CurrencyFormatEditText;
 
 import java.util.List;
 
-public class OrderDetailWithPriceAdapter extends RecyclerView.Adapter<OrderDetailWithPriceAdapter.OrderDetailViewHolder>{
+public class OrderDetailWithPriceAdapter extends RecyclerView.Adapter<OrderDetailWithPriceAdapter.OrderDetailViewHolder>
+                                        implements CurrencyFormatEditText.AmountInputFinishListener {
 
     class OrderDetailViewHolder extends RecyclerView.ViewHolder {
+
         TextView tvItemName;
         TextView tvItemCount;
         CurrencyFormatEditText etItemPrice;
 
-        OrderDetailWithPriceAdapter adapter;
-
-        public OrderDetailViewHolder(final OrderDetailWithPriceAdapter adapter, View itemView) {
+        public OrderDetailViewHolder(View itemView, CurrencyFormatEditText.AmountInputFinishListener listener) {
             super(itemView);
-
-            this.adapter = adapter;
 
             tvItemName = (TextView) itemView.findViewById(R.id.tvItemName);
             tvItemCount = (TextView) itemView.findViewById(R.id.tvItemCount);
             etItemPrice = (CurrencyFormatEditText) itemView.findViewById(R.id.etItemPrice);
-            etItemPrice.addTextChangedFinishListener(new CurrencyFormatEditText.AmountInputFinishListener() {
-                @Override public void onAmountInputFinish(long amount) {
-                    adapter.setOrderItemPrice(getAdapterPosition(), (int)amount);
-                }
-            });
+            etItemPrice.addTextChangedFinishListener(listener);
         }
 
         public void bind(String itemName, String itemCount, int itemPrice) {
             tvItemName.setText(itemName);
             tvItemCount.setText(itemCount);
-            etItemPrice.setText(itemPrice + "");
+            etItemPrice.setTag(getAdapterPosition());
+            etItemPrice.setText(String.valueOf(itemPrice));
         }
     }
 
@@ -52,7 +47,7 @@ public class OrderDetailWithPriceAdapter extends RecyclerView.Adapter<OrderDetai
 
     @Override public OrderDetailViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_recyclerview_order_detail_with_price, parent, false);
-        return new OrderDetailViewHolder(this, view);
+        return new OrderDetailViewHolder(view, this);
     }
 
     @Override public void onBindViewHolder(OrderDetailViewHolder holder, int position) {
@@ -71,5 +66,9 @@ public class OrderDetailWithPriceAdapter extends RecyclerView.Adapter<OrderDetai
 
     private void setOrderItemPrice(int position, int itemPrice) {
         orderItems.get(position).price = itemPrice;
+    }
+
+    @Override public void onAmountInputFinish(Object tag, long amount) {
+        orderItems.get((int) tag).price = (int) amount;
     }
 }
