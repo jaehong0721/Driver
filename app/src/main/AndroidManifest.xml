@@ -24,22 +24,39 @@
             android:name="com.google.firebase.messaging.default_notification_color"
             android:resource="@color/primaryYellow"/>
 
-        <activity android:name=".activities.SplashActivity">
+        <activity
+            android:name=".activities.SplashActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".activities.BaseActivity"/>
-        <activity android:name=".activities.MainActivity"/>
+
+        <activity
+            android:name=".activities.BaseActivity"
+            android:screenOrientation="portrait"/>
+
+        <activity
+            android:name=".activities.MainActivity"
+            android:screenOrientation="portrait"/>
+
         <activity
             android:name=".activities.OrderDetailActivity"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize">
         </activity>
+
         <activity
             android:name=".activities.DeliveryDetailActivity"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize">
+        </activity>
+
+        <activity
+            android:name=".activities.AddMajorItemActivity"
+            android:screenOrientation="portrait">
         </activity>
 
         <service android:name=".firebase.fcm.FcmIdService">
@@ -75,8 +92,6 @@
         </service>
         <service android:name=".services.FileUploadService"/>
 
-        <activity android:name=".activities.AddMajorItemActivity">
-        </activity>
     </application>
 
 </manifest>
