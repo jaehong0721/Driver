@@ -317,7 +317,28 @@ public class FirebaseDbManager {
         dr.removeEventListener(listener);
     }
 
+    public void getRepliedItems(String estimateKey, ToastErrorHandlingListener listener) {
+        DatabaseReference dr = getRootRef()
+                .child("estimate")
+                .child(VENDORS)
+                .child(vendorPhoneNumber)
+                .child(estimateKey)
+                .child("repliedItems");
+
+        dr.keepSynced(true);
+        dr.addListenerForSingleValueEvent(listener);
+    }
     private DatabaseReference getRootRef() {
         return instance.getReference();
+    }
+
+    public void getEstimateItems(String estimateKey, ToastErrorHandlingListener listener) {
+        DatabaseReference dr = getRootRef()
+                .child("estimate")
+                .child(RESTAURANTS)
+                .child(estimateKey)
+                .child("items");
+        dr.keepSynced(true);
+        dr.addListenerForSingleValueEvent(listener);
     }
 }
