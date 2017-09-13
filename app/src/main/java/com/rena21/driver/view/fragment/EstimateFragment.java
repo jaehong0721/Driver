@@ -50,7 +50,10 @@ public class EstimateFragment extends Fragment {
             }
 
             @Override public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                String estimateKey = dataSnapshot.getKey();
+                Estimate estimate = dataSnapshot.getValue(Estimate.class);
 
+                viewPagerAdapter.changeEstimate(estimateKey, estimate);
             }
 
             @Override public void onChildRemoved(DataSnapshot dataSnapshot) {}

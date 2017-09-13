@@ -69,4 +69,10 @@ public class EstimateViewPagerAdapter extends PagerAdapter {
 
         notifyDataSetChanged();
     }
+
+    public void changeEstimate(String estimateKey, Estimate estimate) {
+        allEstimateMap.put(estimateKey, estimate);
+
+        notifyDataSetChanged();
+    }
 }
