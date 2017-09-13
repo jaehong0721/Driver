@@ -45,20 +45,63 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_above="@+id/rvEstimateItem"
+        android:layout_above="@+id/items_header"
         android:background="@color/dividerLine"/>
+
+    <RelativeLayout
+        android:id="@+id/items_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/estimate_header"
+        android:background="@color/white_50"
+        android:paddingLeft="24dp"
+        android:paddingTop="16dp"
+        android:paddingRight="24dp">
+
+        <TextView
+            android:id="@+id/tvItemInfoTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:lineSpacingExtra="34sp"
+            android:text="품목명"
+            android:textColor="@color/warm_gray"
+            android:textSize="12sp"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/tvPriceTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:lineSpacingExtra="33sp"
+            android:text="견적가(원)"
+            android:textColor="@color/warm_gray"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:visibility="gone"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="10dp"
+            android:layout_below="@+id/tvItemInfoTitle"
+            android:background="@color/itemDividerForListView"/>
+
+    </RelativeLayout>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rvEstimateItem"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/estimate_footer"
-        android:layout_below="@+id/estimate_header"
-        android:background="@color/white_five"/>
+        android:layout_below="@+id/items_header"
+        android:background="@color/white_50"/>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
+        android:layout_marginTop="10dp"
         android:layout_above="@+id/estimate_footer"
         android:background="@color/dividerLine"/>
 
