@@ -250,6 +250,24 @@ public class FirebaseDbManager {
         dr.addListenerForSingleValueEvent(listener);
     }
 
+    public void subscribeAllEstimate(ChildEventListener listener) {
+        DatabaseReference dr = getRootRef()
+                .child("estimate")
+                .child(RESTAURANTS);
+
+        dr.keepSynced(true);
+        dr.addChildEventListener(listener);
+    }
+
+    public void removeAllEstimateListener(ChildEventListener listener) {
+        DatabaseReference dr = getRootRef()
+                .child("estimate")
+                .child(RESTAURANTS);
+
+        dr.keepSynced(true);
+        dr.removeEventListener(listener);
+    }
+
     private DatabaseReference getRootRef() {
         return instance.getReference();
     }
