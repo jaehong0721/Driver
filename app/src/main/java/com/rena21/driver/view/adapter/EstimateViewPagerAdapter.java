@@ -1,6 +1,7 @@
 package com.rena21.driver.view.adapter;
 
 
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -52,8 +53,7 @@ public class EstimateViewPagerAdapter extends PagerAdapter {
             tvPriceTitle.setVisibility(View.VISIBLE);
 
             if(reply.isPicked) {
-                TextView tvCelebrationMessage = (TextView) itemView.findViewById(R.id.tvCelebrationMessage);
-                tvCelebrationMessage.setVisibility(View.VISIBLE);
+                setUpperMessage(itemView, "축하드려요! 새 거래처로 선정되셨습니다", R.color.primaryOrange);
 
                 CallButton callButton = (CallButton) itemView.findViewById(R.id.ivCall);
                 callButton.setCalleeInfo(TransformDataUtil.getPhoneNumberFrom(estimateKey));
@@ -63,10 +63,7 @@ public class EstimateViewPagerAdapter extends PagerAdapter {
                 estimateFooter.setVisibility(View.GONE);
             } else {
                 if(estimate.isFinish) {
-                    //견적 종료
-
-                    RelativeLayout estimateFooter = (RelativeLayout) itemView.findViewById(R.id.estimate_footer);
-                    estimateFooter.setVisibility(View.GONE);
+                    setEstimateFinishView(itemView);
                 } else {
                     Button btnModifyPrice = (Button) itemView.findViewById(R.id.btnModifyPrice);
                     btnModifyPrice.setVisibility(View.VISIBLE);
@@ -76,10 +73,7 @@ public class EstimateViewPagerAdapter extends PagerAdapter {
             adapter = new EstimateItemAdapter(estimate.items, false);
 
             if(estimate.isFinish) {
-                //견적 종료
-
-                RelativeLayout estimateFooter = (RelativeLayout) itemView.findViewById(R.id.estimate_footer);
-                estimateFooter.setVisibility(View.GONE);
+                setEstimateFinishView(itemView);
             } else {
                 Button btnInputPrice = (Button) itemView.findViewById(R.id.btnInputPrice);
                 btnInputPrice.setVisibility(View.VISIBLE);
@@ -126,5 +120,21 @@ public class EstimateViewPagerAdapter extends PagerAdapter {
         myReplyMap.put(estimateKey, reply);
 
         notifyDataSetChanged();
+    }
+
+    private void setEstimateFinishView(View itemView) {
+        setUpperMessage(itemView, "해당 견적요청이 종료되었습니다", R.color.warm_grey_two);
+        View dimView = itemView.findViewById(R.id.dimView);
+        dimView.bringToFront();
+
+        RelativeLayout estimateFooter = (RelativeLayout) itemView.findViewById(R.id.estimate_footer);
+        estimateFooter.setVisibility(View.GONE);
+    }
+
+    private void setUpperMessage(View itemView, String message, int backgroundColorRes) {
+        TextView tvUpperMessage = (TextView) itemView.findViewById(R.id.tvUpperMessage);
+        tvUpperMessage.setText(message);
+        tvUpperMessage.setBackground(ContextCompat.getDrawable(itemView.getContext(), backgroundColorRes));
+        tvUpperMessage.setVisibility(View.VISIBLE);
     }
 }

@@ -4,15 +4,19 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
+    <View
+        android:id="@+id/dimView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:foreground="@color/white_50"/>
+
     <TextView
-        android:id="@+id/tvCelebrationMessage"
+        android:id="@+id/tvUpperMessage"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/primaryOrange"
         android:paddingBottom="10dp"
         android:paddingLeft="23dp"
         android:paddingTop="11dp"
-        android:text="축하드려요! 새 거래처로 선정되셨습니다"
         android:textColor="@color/white"
         android:textSize="13sp"
         android:textStyle="bold"
@@ -22,7 +26,7 @@
         android:id="@+id/estimate_header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/tvCelebrationMessage"
+        android:layout_below="@+id/tvUpperMessage"
         android:background="@color/white"
         android:paddingBottom="19dp"
         android:paddingLeft="24dp"
