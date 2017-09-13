@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.rena21.driver.R;
 import com.rena21.driver.models.RepliedEstimateItem;
 import com.rena21.driver.models.RequestedEstimateItem;
+import com.rena21.driver.view.widget.CurrencyFormatTextView;
 
 import java.util.ArrayList;
 
@@ -20,12 +21,12 @@ public class EstimateItemAdapter extends RecyclerView.Adapter<EstimateItemAdapte
 
     class EstimateItemViewHolder extends RecyclerView.ViewHolder {
         TextView tvItemInfo;
-        TextView tvPrice;
+        CurrencyFormatTextView tvPrice;
 
         public EstimateItemViewHolder(View itemView) {
             super(itemView);
             tvItemInfo = (TextView) itemView.findViewById(R.id.tvItemInfo);
-            tvPrice = (TextView) itemView.findViewById(R.id.tvPrice);
+            tvPrice = (CurrencyFormatTextView) itemView.findViewById(R.id.tvPrice);
         }
 
         public void setChildVisibility() {
@@ -41,7 +42,7 @@ public class EstimateItemAdapter extends RecyclerView.Adapter<EstimateItemAdapte
             tvItemInfo.setText(itemName + ", " + itemNum);
 
             if(isReplied)
-                tvPrice.setText(String.valueOf(((RepliedEstimateItem) requestedEstimateItem).price));
+                tvPrice.setWon(((RepliedEstimateItem) requestedEstimateItem).price);
         }
     }
 
