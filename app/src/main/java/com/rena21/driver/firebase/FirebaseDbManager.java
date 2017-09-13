@@ -8,6 +8,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.rena21.driver.firebase.fcm.ToastErrorHandlingListener;
 import com.rena21.driver.models.BusinessInfoData;
 import com.rena21.driver.models.ContactInfoData;
+import com.rena21.driver.models.Reply;
 
 import java.util.HashMap;
 import java.util.List;
@@ -328,9 +329,6 @@ public class FirebaseDbManager {
         dr.keepSynced(true);
         dr.addListenerForSingleValueEvent(listener);
     }
-    private DatabaseReference getRootRef() {
-        return instance.getReference();
-    }
 
     public void getEstimateItems(String estimateKey, ToastErrorHandlingListener listener) {
         DatabaseReference dr = getRootRef()
@@ -340,5 +338,38 @@ public class FirebaseDbManager {
                 .child("items");
         dr.keepSynced(true);
         dr.addListenerForSingleValueEvent(listener);
+    }
+
+    public void setEstimateReply(String estimateKey, Reply reply) {
+        DatabaseReference restaurantDr = getRootRef()
+                .child("estimate")
+                .child(RESTAURANTS)
+                .child(estimateKey)
+                .child("reply")
+                .child(vendorPhoneNumber);
+        restaurantDr.keepSynced(true);
+        restaurantDr.setValue(reply);
+
+        DatabaseReference vendorDr = getRootRef()
+                .child("estimate")
+                .child(VENDORS)
+                .child(vendorPhoneNumber)
+                .child(estimateKey);
+        vendorDr.keepSynced(true);
+        vendorDr.setValue(reply);
+    }
+
+    public void getVendorName(ToastErrorHandlingListener listener) {
+        DatabaseReference dr = getRootRef()
+                .child(VENDORS)
+                .child(vendorPhoneNumber)
+                .child(INFO)
+                .child("vendorName");
+        dr.keepSynced(true);
+        dr.addListenerForSingleValueEvent(listener);
+    }
+
+    private DatabaseReference getRootRef() {
+        return instance.getReference();
     }
 }
