@@ -17,6 +17,7 @@ import com.rena21.driver.R;
 import com.rena21.driver.firebase.FirebaseDbManager;
 import com.rena21.driver.models.Estimate;
 import com.rena21.driver.models.Reply;
+import com.rena21.driver.util.DpToPxConverter;
 import com.rena21.driver.view.adapter.EstimateViewPagerAdapter;
 
 public class EstimateFragment extends Fragment {
@@ -35,6 +36,13 @@ public class EstimateFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_estimate, container, false);
 
         vpEstimate = (ViewPager) view.findViewById(R.id.vpEstimate);
+        vpEstimate.setClipToPadding(false);
+
+        int padding = DpToPxConverter.convertDpToPx(20,getResources().getDisplayMetrics());
+        vpEstimate.setPadding(padding, 0, padding, 0);
+
+        int margin = DpToPxConverter.convertDpToPx(10, getResources().getDisplayMetrics());
+        vpEstimate.setPageMargin(margin);
         return view;
     }
 
