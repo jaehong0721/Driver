@@ -2,6 +2,8 @@ package com.rena21.driver.view.adapter;
 
 
 import android.support.v4.view.PagerAdapter;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +11,7 @@ import android.widget.TextView;
 
 import com.rena21.driver.R;
 import com.rena21.driver.models.Estimate;
+import com.rena21.driver.view.DividerItemDecoration;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -31,6 +34,12 @@ public class EstimateViewPagerAdapter extends PagerAdapter {
 
         tvRestaurantName.setText(estimate.restaurantName);
         tvRestaurantAddress.setText(estimate.restaurantAddress);
+
+        RecyclerView rvEstimateItem = (RecyclerView) itemView.findViewById(R.id.rvEstimateItem);
+        rvEstimateItem.setLayoutManager(new LinearLayoutManager(container.getContext()));
+        rvEstimateItem.addItemDecoration(new DividerItemDecoration(container.getContext(), R.drawable.shape_divider_for_received_orders));
+        EstimateItemAdapter adapter = new EstimateItemAdapter(estimate.items, false);
+        rvEstimateItem.setAdapter(adapter);
 
         container.addView(itemView);
         return itemView;
