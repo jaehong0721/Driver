@@ -97,19 +97,22 @@ public class EstimateFragment extends Fragment {
                 String estimateKey = dataSnapshot.getKey();
                 Estimate estimate = dataSnapshot.getValue(Estimate.class);
 
-                viewPagerAdapter.addAllEstimate(estimateKey, estimate);
+                int position = viewPagerAdapter.addAllEstimate(estimateKey, estimate);
 
                 if(emptyView.getVisibility() == View.VISIBLE)
                     emptyView.setVisibility(View.GONE);
                 if(vpEstimate.getVisibility() == View.GONE)
                     vpEstimate.setVisibility(View.VISIBLE);
+
+                vpEstimate.setCurrentItem(position);
             }
 
             @Override public void onChildChanged(DataSnapshot dataSnapshot, String s) {
                 String estimateKey = dataSnapshot.getKey();
                 Estimate estimate = dataSnapshot.getValue(Estimate.class);
 
-                viewPagerAdapter.changeEstimate(estimateKey, estimate);
+                int position = viewPagerAdapter.changeEstimate(estimateKey, estimate);
+                vpEstimate.setCurrentItem(position);
             }
 
             @Override public void onChildRemoved(DataSnapshot dataSnapshot) {}
@@ -124,14 +127,16 @@ public class EstimateFragment extends Fragment {
                 String estimateKey = dataSnapshot.getKey();
                 Reply reply = dataSnapshot.getValue(Reply.class);
 
-                viewPagerAdapter.addMyReply(estimateKey, reply);
+                int position = viewPagerAdapter.addMyReply(estimateKey, reply);
+                vpEstimate.setCurrentItem(position);
             }
 
             @Override public void onChildChanged(DataSnapshot dataSnapshot, String s) {
                 String estimateKey = dataSnapshot.getKey();
                 Reply reply = dataSnapshot.getValue(Reply.class);
 
-                viewPagerAdapter.changeMyReply(estimateKey, reply);
+                int position = viewPagerAdapter.changeMyReply(estimateKey, reply);
+                vpEstimate.setCurrentItem(position);
             }
 
             @Override public void onChildRemoved(DataSnapshot dataSnapshot) {}

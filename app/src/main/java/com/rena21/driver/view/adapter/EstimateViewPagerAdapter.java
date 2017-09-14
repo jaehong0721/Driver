@@ -13,6 +13,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.rena21.driver.R;
+import com.rena21.driver.etc.ComparatorTimeSort;
 import com.rena21.driver.models.Estimate;
 import com.rena21.driver.models.Reply;
 import com.rena21.driver.util.TransformDataUtil;
@@ -20,6 +21,7 @@ import com.rena21.driver.view.DividerItemDecoration;
 import com.rena21.driver.view.widget.CallButton;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 
 
@@ -132,30 +134,44 @@ public class EstimateViewPagerAdapter extends PagerAdapter {
     }
 
 
-    public void addAllEstimate(String estimateKey, Estimate estimate) {
+    public int addAllEstimate(String estimateKey, Estimate estimate) {
         allEstimateKeyList.add(estimateKey);
         allEstimateMap.put(estimateKey, estimate);
 
+        ComparatorTimeSort orderByTime = new ComparatorTimeSort();
+        Collections.sort(allEstimateKeyList, orderByTime);
+
         notifyDataSetChanged();
+
+        return allEstimateKeyList.indexOf(estimateKey);
     }
 
-    public void changeEstimate(String estimateKey, Estimate estimate) {
+    public int changeEstimate(String estimateKey, Estimate estimate) {
         allEstimateMap.put(estimateKey, estimate);
 
         notifyDataSetChanged();
+
+        return allEstimateKeyList.indexOf(estimateKey);
     }
 
-    public void addMyReply(String estimateKey, Reply reply) {
+    public int addMyReply(String estimateKey, Reply reply) {
         myReplyMap.put(estimateKey, reply);
         myReplyKeyList.add(estimateKey);
 
+        ComparatorTimeSort orderByTime = new ComparatorTimeSort();
+        Collections.sort(myReplyKeyList, orderByTime);
+
         notifyDataSetChanged();
+
+        return myReplyKeyList.indexOf(estimateKey);
     }
 
-    public void changeMyReply(String estimateKey, Reply reply) {
+    public int changeMyReply(String estimateKey, Reply reply) {
         myReplyMap.put(estimateKey, reply);
 
         notifyDataSetChanged();
+
+        return myReplyKeyList.indexOf(estimateKey);
     }
 
     private void setEstimateFinishView(View itemView) {
