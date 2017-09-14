@@ -78,6 +78,10 @@ public class ReceivedOrdersAdapter extends RecyclerView.Adapter<ReceivedOrdersAd
 
             itemView.setOnClickListener(onClickListener);
         }
+
+        public void removeClickListener() {
+            itemView.setOnClickListener(null);
+        }
     }
 
     private final FirebaseDbManager dbManager;
@@ -110,6 +114,7 @@ public class ReceivedOrdersAdapter extends RecyclerView.Adapter<ReceivedOrdersAd
 
         if(order.delivered) {
             holder.bind(restaurantName, orderItems, timeStamp, "납품완료");
+            holder.removeClickListener();
         } else if(order.accepted) {
             holder.bind(restaurantName, orderItems, timeStamp, "주문확인", new View.OnClickListener() {
                 @Override public void onClick(View v) {
