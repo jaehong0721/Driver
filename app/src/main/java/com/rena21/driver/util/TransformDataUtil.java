@@ -8,7 +8,7 @@ import java.util.List;
 public class TransformDataUtil {
 
     public static String makeDeliveryAreasString(List<String> areas) {
-        if(areas.size() == 0) return null;
+        if(areas == null || areas.size() == 0) return null;
 
         StringBuilder sb = new StringBuilder();
         for(String area : areas) {
@@ -32,5 +32,17 @@ public class TransformDataUtil {
             throw new RuntimeException("견적요청 key값이 올바르지 않습니다.");
 
         return estimateKey.split("_")[0];
+    }
+
+    public static String makeMajorItemsString(List<String> majorItems) {
+        if(majorItems == null|| majorItems.size() == 0) return null;
+
+        StringBuilder sb = new StringBuilder();
+        for(String majorItem : majorItems) {
+            sb.append(majorItem);
+            sb.append(",");
+        }
+        sb.deleteCharAt(sb.length()-1);
+        return sb.toString();
     }
 }

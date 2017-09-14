@@ -17,6 +17,8 @@ import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.Toast;
 
+import com.google.firebase.crash.FirebaseCrash;
+import com.rena21.driver.App;
 import com.rena21.driver.R;
 import com.rena21.driver.activities.AddMajorItemActivity;
 import com.rena21.driver.activities.MainActivity;
@@ -26,8 +28,10 @@ import com.rena21.driver.models.ContactInfoData;
 import com.rena21.driver.models.ContainerToObserve;
 import com.rena21.driver.models.RankingInfoData;
 import com.rena21.driver.models.VendorImageData;
+import com.rena21.driver.network.ApiService;
 import com.rena21.driver.services.FileUploadService;
 import com.rena21.driver.util.ImagePickUpUtil;
+import com.rena21.driver.util.TransformDataUtil;
 import com.rena21.driver.view.component.BusinessInfoContainer;
 import com.rena21.driver.view.component.ContactInfoContainer;
 import com.rena21.driver.view.component.RankingInfoContainer;
@@ -35,9 +39,15 @@ import com.rena21.driver.view.component.VendorImageContainer;
 import com.rena21.driver.viewmodel.MyInfoViewModel;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -131,6 +141,28 @@ public class MyInfoFragment extends Fragment {
                 myInfoViewModel.saveContactInfoData(newContactInfoData);
                 BusinessInfoData newBusinessInfoData = businessInfoContainer.getNewBusinessInfoData();
                 myInfoViewModel.saveBusinessInfoData(newBusinessInfoData);
+
+                HashMap<String, Object> vendorInfoMap = new HashMap<String, Object>();
+                vendorInfoMap.put("name", newContactInfoData.vendorName);
+                vendorInfoMap.put("phone", newContactInfoData.phoneNumber);
+
+                String address = newContactInfoData.address;
+                if(address != null)
+                    vendorInfoMap.put("address", address);
+                if(newBusinessInfoData.majorItems != null)
+                    vendorInfoMap.put("majorItems", TransformDataUtil.makeMajorItemsString(newBusinessInfoData.majorItems));
+                if(newBusinessInfoData.deliveryAreas != null)
+                    vendorInfoMap.put("deliveryArea", TransformDataUtil.makeDeliveryAreasString(newBusinessInfoData.deliveryAreas));
+
+                Retrofit retrofit = App.getApplication(getContext().getApplicationContext()).getRetrofit();
+                ApiService apiService = retrofit.create(ApiService.class);
+                apiService.setVendorInfo(vendorInfoMap).enqueue(new Callback<Void>() {
+                    @Override public void onResponse(Call<Void> call, Response<Void> response) {}
+
+                    @Override public void onFailure(Call<Void> call, Throwable t) {
+                        FirebaseCrash.report(t);
+                    }
+                });
 
                 Toast.makeText(getContext(), "저장중입니다", Toast.LENGTH_SHORT).show();
                 setNormalMode();
