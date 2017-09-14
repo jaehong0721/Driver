@@ -2,12 +2,15 @@ package com.rena21.driver.view.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.IdRes;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.support.v7.widget.AppCompatRadioButton;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RadioGroup;
 
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -30,6 +33,8 @@ public class EstimateFragment extends Fragment {
     private ChildEventListener myReplyListener;
 
     private EstimateViewPagerAdapter viewPagerAdapter;
+    private RadioGroup radioGroup;
+    private AppCompatRadioButton rbAll;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -44,21 +49,42 @@ public class EstimateFragment extends Fragment {
 
         int margin = DpToPxConverter.convertDpToPx(10, getResources().getDisplayMetrics());
         vpEstimate.setPageMargin(margin);
+
+        viewPagerAdapter = new EstimateViewPagerAdapter(
+                new EstimateViewPagerAdapter.InputPriceListener() {
+                    @Override public void onInputPrice(String estimateKey) {
+                        startInputPriceActivity(estimateKey, "input");
+                    }
+                },
+                new EstimateViewPagerAdapter.ModifyPriceListener() {
+                    @Override public void onModifyPrice(String estimateKey) {
+                        startInputPriceActivity(estimateKey, "modify");
+                    }
+                });
+
+        radioGroup = (RadioGroup) view.findViewById(R.id.rdGroupToFiltering);
+        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override public void onCheckedChanged(RadioGroup group, @IdRes int checkedId) {
+                if(checkedId == R.id.rbAll) {
+                    viewPagerAdapter.setDisplayedEstimate("all");
+                    vpEstimate.setCurrentItem(0);
+                }
+                else if(checkedId == R.id.rbMyReply) {
+                    viewPagerAdapter.setDisplayedEstimate("myReply");
+                    vpEstimate.setCurrentItem(0);
+                }
+            }
+        });
+
+        rbAll = (AppCompatRadioButton) view.findViewById(R.id.rbAll);
+        if(rbAll.isChecked())
+            viewPagerAdapter.setDisplayedEstimate("all");
+
         return view;
     }
 
     @Override public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
-        viewPagerAdapter = new EstimateViewPagerAdapter(new EstimateViewPagerAdapter.InputPriceListener() {
-            @Override public void onInputPrice(String estimateKey) {
-                startInputPriceActivity(estimateKey, "input");
-            }
-        }, new EstimateViewPagerAdapter.ModifyPriceListener() {
-            @Override public void onModifyPrice(String estimateKey) {
-                startInputPriceActivity(estimateKey, "modify");
-            }
-        });
 
         vpEstimate.setAdapter(viewPagerAdapter);
 
@@ -111,9 +137,15 @@ public class EstimateFragment extends Fragment {
         dbManager.subscribeMyReply(myReplyListener);
     }
 
+    @Override public void onDestroyView() {
+        radioGroup.clearCheck();
+        super.onDestroyView();
+    }
+
     @Override public void onDestroy() {
         dbManager.removeAllEstimateListener(allEstimateListener);
         dbManager.removeMyReplyListener(myReplyListener);
+        radioGroup.clearCheck();
         super.onDestroy();
     }
 

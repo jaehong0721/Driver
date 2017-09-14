@@ -36,7 +36,10 @@ public class EstimateViewPagerAdapter extends PagerAdapter {
     private InputPriceListener inputPriceListener;
     private ModifyPriceListener modifyPriceListener;
 
+    private ArrayList<String> displayedEstimate = new ArrayList<>();
     private ArrayList<String> allEstimateKeyList = new ArrayList<>();
+    private ArrayList<String> myReplyKeyList = new ArrayList<>();
+
     private HashMap<String, Estimate> allEstimateMap = new HashMap<>();
     private HashMap<String, Reply> myReplyMap = new HashMap<>();
 
@@ -50,7 +53,7 @@ public class EstimateViewPagerAdapter extends PagerAdapter {
         TextView tvRestaurantName = (TextView) itemView.findViewById(R.id.tvRestaurantName);
         TextView tvRestaurantAddress = (TextView) itemView.findViewById(R.id.tvRestaurantAddress);
 
-        final String estimateKey = allEstimateKeyList.get(position);
+        final String estimateKey = displayedEstimate.get(position);
         final Estimate estimate = allEstimateMap.get(estimateKey);
 
         tvRestaurantName.setText(estimate.restaurantName);
@@ -116,7 +119,7 @@ public class EstimateViewPagerAdapter extends PagerAdapter {
     }
 
     @Override public int getCount() {
-        return allEstimateKeyList.size();
+        return displayedEstimate.size();
     }
 
     @Override public boolean isViewFromObject(View view, Object object) {
@@ -144,6 +147,7 @@ public class EstimateViewPagerAdapter extends PagerAdapter {
 
     public void addMyReply(String estimateKey, Reply reply) {
         myReplyMap.put(estimateKey, reply);
+        myReplyKeyList.add(estimateKey);
 
         notifyDataSetChanged();
     }
@@ -153,6 +157,7 @@ public class EstimateViewPagerAdapter extends PagerAdapter {
 
         notifyDataSetChanged();
     }
+
     private void setEstimateFinishView(View itemView) {
         setUpperMessage(itemView, "해당 견적요청이 종료되었습니다", R.color.warm_grey_two);
         View dimView = itemView.findViewById(R.id.dimView);
@@ -167,5 +172,18 @@ public class EstimateViewPagerAdapter extends PagerAdapter {
         tvUpperMessage.setText(message);
         tvUpperMessage.setBackground(ContextCompat.getDrawable(itemView.getContext(), backgroundColorRes));
         tvUpperMessage.setVisibility(View.VISIBLE);
+    }
+
+    public void setDisplayedEstimate(String filter) {
+        switch (filter) {
+            case "all" :
+                displayedEstimate = allEstimateKeyList;
+                break;
+
+            case "myReply" :
+                displayedEstimate = myReplyKeyList;
+                break;
+        }
+        notifyDataSetChanged();
     }
 }
