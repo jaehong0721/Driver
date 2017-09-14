@@ -47,6 +47,46 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/header_container"
-        android:layout_marginTop="17dp">
+        android:layout_marginTop="17dp"
+        android:visibility="gone">
     </android.support.v4.view.ViewPager>
+
+    <LinearLayout
+        android:id="@+id/emptyView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_below="@+id/header_container"
+        android:layout_marginTop="72dp"
+        android:layout_centerHorizontal="true">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/request_estimate_main"
+            android:textColor="@color/textBlack"
+            android:layout_gravity="center"
+            android:textSize="22sp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:lineSpacingExtra="11sp"
+            android:text="@string/request_estimate_sub_1"
+            android:layout_gravity="center_horizontal"
+            android:textColor="@color/textBlack"
+            android:textSize="12sp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:lineSpacingExtra="11sp"
+            android:gravity="center_horizontal"
+            android:text="@string/request_estimate_sub_2"
+            android:textColor="@color/textBlack"
+            android:textSize="12sp"/>
+    </LinearLayout>
+
 </RelativeLayout>

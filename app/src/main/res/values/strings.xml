@@ -4,8 +4,8 @@
     <string name="request_estimate_main">새로운 거래처를 찾으세요?</string>
 
     <string name="request_estimate_sub_1">거생앱으로 식당의 견적요청을 받아보세요</string>
-    <string name="request_estimate_sub_2">견적금액만 입력해서 보내면 식당에서 사장님께 직접</string>
-    <string name="request_estimate_sub_3">전화드립니다 출시예정!</string>
+    <string name="request_estimate_sub_2">견적금액만 입력해서 보내면 식당에서 사장님께 직접\n전화드립니다!!</string>
+    <string name="request_estimate_sub_3">아직 견적 요청이 없습니다</string>
 
     <string name="vendor_image_guide">품목, 간판, 차량 등 다양한 사진을 올리시면\n식당에서 업체 선정시에 도움이 됩니다</string>
     <string name="raking_info">"하단 내 정보를 상세하게 입력하시면 업체 순위가 올라\n가고 이에 따라 방문자 수가 늘어납니다"</string>

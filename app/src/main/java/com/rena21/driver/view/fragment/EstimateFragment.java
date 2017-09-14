@@ -10,6 +10,7 @@ import android.support.v7.widget.AppCompatRadioButton;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 
 import com.google.firebase.database.ChildEventListener;
@@ -35,11 +36,14 @@ public class EstimateFragment extends Fragment {
     private EstimateViewPagerAdapter viewPagerAdapter;
     private RadioGroup radioGroup;
     private AppCompatRadioButton rbAll;
+    private LinearLayout emptyView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_estimate, container, false);
+
+        emptyView = (LinearLayout) view.findViewById(R.id.emptyView);
 
         vpEstimate = (ViewPager) view.findViewById(R.id.vpEstimate);
         vpEstimate.setClipToPadding(false);
@@ -94,6 +98,11 @@ public class EstimateFragment extends Fragment {
                 Estimate estimate = dataSnapshot.getValue(Estimate.class);
 
                 viewPagerAdapter.addAllEstimate(estimateKey, estimate);
+
+                if(emptyView.getVisibility() == View.VISIBLE)
+                    emptyView.setVisibility(View.GONE);
+                if(vpEstimate.getVisibility() == View.GONE)
+                    vpEstimate.setVisibility(View.VISIBLE);
             }
 
             @Override public void onChildChanged(DataSnapshot dataSnapshot, String s) {
