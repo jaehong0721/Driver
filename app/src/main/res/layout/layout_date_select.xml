@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:gravity="center">
+
+    <RelativeLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1">
+
+        <!-- Text 내용에 따라 Width가 변할 수 있으므로, minWidth를 설정한다.-->
+        <TextView
+            android:id="@+id/tvDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_centerVertical="true"
+            android:gravity="center"
+            android:minWidth="110dp"
+            android:text="2016년 11월 4일"
+            android:textSize="@dimen/text_select_date"/>
+
+        <ImageButton
+            android:id="@+id/btnBefore"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@id/tvDate"
+            android:background="@null"
+            android:padding="8dp"
+            android:src="@drawable/btn_date_prev"/>
+
+        <ImageButton
+            android:id="@+id/btnNext"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@id/tvDate"
+            android:background="@null"
+            android:padding="8dp"
+            android:src="@drawable/btn_date_next"/>
+    </RelativeLayout>
+</LinearLayout>

@@ -1,152 +1,134 @@
 package com.rena21.driver.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.widget.Toast;
+import android.support.v4.app.FragmentTransaction;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.crash.FirebaseCrash;
-import com.google.firebase.database.ChildEventListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.rena21.driver.App;
 import com.rena21.driver.R;
 import com.rena21.driver.etc.AppPreferenceManager;
 import com.rena21.driver.firebase.FirebaseDbManager;
-import com.rena21.driver.listener.OrderAcceptedListener;
-import com.rena21.driver.models.Order;
-import com.rena21.driver.view.DividerItemDecoration;
-import com.rena21.driver.view.actionbar.ActionBarViewModel;
-import com.rena21.driver.view.adapter.ReceivedOrdersAdapter;
-import com.rena21.driver.view.fragment.OrderDetailDialogFragment;
+import com.rena21.driver.listener.OrderClickedListener;
+import com.rena21.driver.view.actionbar.ActionBarWithTabViewModel;
+import com.rena21.driver.view.fragment.EstimateFragment;
+import com.rena21.driver.view.fragment.LedgerFragment;
+import com.rena21.driver.view.fragment.MyInfoFragment;
+import com.rena21.driver.view.fragment.OrderListFragment;
 
-import java.util.HashMap;
 
-public class MainActivity extends BaseActivity implements OrderAcceptedListener {
+public class MainActivity extends BaseActivity implements OrderClickedListener, ActionBarWithTabViewModel.MainTabClickListener {
 
-    private RecyclerView rvReceivedOrders;
-    private ReceivedOrdersAdapter receivedOrdersAdapter;
-
-    private OrderDetailDialogFragment orderDetailDialogFragment;
-
-    private DatabaseReference vendorRef;
-    private ChildEventListener receivedOrderEventListener;
+    public static final int REQUEST_CODE = 100;
 
     private AppPreferenceManager appPreferenceManager;
     private FirebaseDbManager dbManager;
+
+    private ActionBarWithTabViewModel mainTab;
+
+    private OrderListFragment orderListFragment;
+    private LedgerFragment ledgerFragment;
+    private MyInfoFragment myInfoFragment;
+    private EstimateFragment estimateFragment;
+
+    private boolean isCallAfterDeliveryCompletion;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        ActionBarViewModel.createWithActionBar(getSupportActionBar())
-                .setTitle("");
+        mainTab = ActionBarWithTabViewModel.createWithActionBarTab(getSupportActionBar());
 
         appPreferenceManager = App.getApplication(getApplicationContext()).getPreferenceManager();
 
-        dbManager = new FirebaseDbManager(FirebaseDatabase.getInstance());
+        dbManager = App.getApplication(getApplicationContext()).getDbManager();
 
-        orderDetailDialogFragment = new OrderDetailDialogFragment();
+        orderListFragment = new OrderListFragment();
+        ledgerFragment = new LedgerFragment();
+        myInfoFragment = MyInfoFragment.newInstance(appPreferenceManager.getPhoneNumber());
+        estimateFragment = new EstimateFragment();
 
-        rvReceivedOrders = (RecyclerView) findViewById(R.id.rvReceivedOrders);
-        receivedOrdersAdapter = new ReceivedOrdersAdapter(dbManager);
-
-        rvReceivedOrders.setLayoutManager(new LinearLayoutManager(this));
-        rvReceivedOrders.addItemDecoration(new DividerItemDecoration(this, R.drawable.shape_divider_for_received_orders));
-        rvReceivedOrders.setAdapter(receivedOrdersAdapter);
-        receivedOrdersAdapter.addOnItemClickListener(new ReceivedOrdersAdapter.OnItemClickListener() {
-            @Override public void onItemClick(String fileName, Order order) {
-                Bundle bundle = new Bundle();
-                bundle.putString("fileName", fileName);
-                orderDetailDialogFragment.setArguments(bundle);
-                orderDetailDialogFragment.show(getSupportFragmentManager(), "order_detail");
-            }
-        });
-
-        vendorRef = FirebaseDatabase.getInstance()
-                .getReference("orders")
-                .child("vendors")
-                .child(appPreferenceManager.getPhoneNumber());
-
-        vendorRef.keepSynced(true);
-
-        receivedOrderEventListener = new ChildEventListener() {
-            @Override public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                String fileName = dataSnapshot.getKey();
-                Order order = dataSnapshot.getValue(Order.class);
-                receivedOrdersAdapter.addedItem(fileName, order);
-            }
-
-            @Override public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                String fileName = dataSnapshot.getKey();
-                Order order = dataSnapshot.getValue(Order.class);
-
-                receivedOrdersAdapter.changedItem(fileName, order);
-            }
-
-            @Override public void onChildRemoved(DataSnapshot dataSnapshot) {
-                String fileName = dataSnapshot.getKey();
-
-                receivedOrdersAdapter.removedItem(fileName);
-            }
-
-            @Override public void onChildMoved(DataSnapshot dataSnapshot, String s) {}
-
-            @Override public void onCancelled(DatabaseError databaseError) {}
-        };
-
-        vendorRef.addChildEventListener(receivedOrderEventListener);
+        mainTab.setMainTabClickListener(this);
+        mainTab.showOrdersTab();
     }
 
     @Override protected void onResume() {
         super.onResume();
-        // TODO: Order 객체를 직접 전달하지 않고, FirebaseDB에서 값을 전달 받는 방식으로 변경
-        if (getIntent().getExtras() != null) {
-            final String fileName = getIntent().getExtras().getString("orderKey");
-            Bundle bundle = new Bundle();
-            bundle.putString("fileName", fileName);
-            orderDetailDialogFragment.setArguments(bundle);
-            orderDetailDialogFragment.show(getSupportFragmentManager(), "order_detail");
+        Bundle bundle = getIntent().getExtras();
+        if (bundle != null && bundle.getString("orderKey") != null) {
+            final String fileName = bundle.getString("orderKey");
+            getIntent().removeExtra("orderKey");
+            goToDetailActivity(fileName);
         }
     }
 
-    @Override protected void onDestroy() {
-        super.onDestroy();
-        vendorRef.removeEventListener(receivedOrderEventListener);
+    @Override protected void onPostResume() {
+        super.onPostResume();
+        if(isCallAfterDeliveryCompletion) {
+            mainTab.showLedgerTab();
+        }
+        isCallAfterDeliveryCompletion = false;
     }
 
-    @Override public void onOrderAccepted(String fileName) {
-        HashMap<String, Object> map = new HashMap<>();
-        // 확인 버튼을 눌렀는지 저장하기 위한 경로
-        map.put("/orders/vendors/" + appPreferenceManager.getPhoneNumber() + "/" + fileName + "/accepted/", true);
-        // 식당앱을 위한 경로
-        map.put("/orders/restaurants/" + fileName + "/" + appPreferenceManager.getPhoneNumber() + "/accepted/", true);
-        FirebaseDatabase.getInstance()
-                .getReference()
-                .updateChildren(map)
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override public void onComplete(@NonNull Task<Void> task) {
-                        if (!task.isSuccessful()) {
-                            Log.e("error", task.getResult().toString());
-                        }
-                    }
-                });
+    @Override protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            case REQUEST_CODE :
+                if(resultCode == RESULT_OK) {
+                   isCallAfterDeliveryCompletion = true;
+                }
+                break;
 
+            default:
+                super.onActivityResult(requestCode,resultCode,data);
+                break;
+        }
+    }
+
+    @Override public void onOrderClicked(String from, String orderKey) {
+        switch (from) {
+            case "detail":
+                goToDetailActivity(orderKey);
+                break;
+
+            case "ledger":
+                goToDeliveryDetailActivity(orderKey);
+                break;
+        }
+    }
+
+    @Override public void onMainTabClick(ActionBarWithTabViewModel.MainTab tab) {
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        switch (tab) {
+            case TAB_1_ORDERS:
+                transaction.replace(R.id.main_fragment_container, orderListFragment).commit();
+                break;
+            case TAB_2_LEDGER:
+                transaction.replace(R.id.main_fragment_container, ledgerFragment).commit();
+                break;
+            case TAB_3_INFO:
+                transaction.replace(R.id.main_fragment_container, myInfoFragment).commit();
+                break;
+            case TAB_4_ESTIMATE:
+                transaction.replace(R.id.main_fragment_container, estimateFragment).commit();
+                break;
+        }
     }
 
     public FirebaseDbManager getDbManager() {
         return dbManager;
     }
 
-    public String getPhoneNumber() {
-        return appPreferenceManager.getPhoneNumber();
+    private void goToDetailActivity(String fileName) {
+        Intent intent = new Intent(this, OrderDetailActivity.class);
+        intent.putExtra("vendorPhoneNumber", appPreferenceManager.getPhoneNumber());
+        intent.putExtra("fileName", fileName);
+        startActivityForResult(intent, REQUEST_CODE);
+    }
+
+    private void goToDeliveryDetailActivity(String fileName) {
+        Intent intent = new Intent(this, DeliveryDetailActivity.class);
+        intent.putExtra("vendorPhoneNumber", appPreferenceManager.getPhoneNumber());
+        intent.putExtra("fileName", fileName);
+        startActivity(intent);
     }
 }

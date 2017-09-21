@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.rena21.driver.activities.InputPriceOfEstimateActivity">
+
+    <RelativeLayout
+        android:id="@+id/input_price_header"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="19dp"
+        android:layout_marginRight="27dp"
+        android:layout_marginTop="24dp">
+
+        <TextView
+            android:layout_width="217dp"
+            android:layout_height="wrap_content"
+            android:lineSpacingExtra="7sp"
+            android:text="@string/input_price_guide"
+            android:textSize="12sp"/>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true">
+
+            <TextView
+                android:id="@+id/tvReplyRate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:lineSpacingExtra="8sp"
+                android:textColor="@color/warm_gray"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                android:text="견적가 입력률"/>
+
+            <LinearLayout
+                android:id="@+id/reply_rate_container"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tvReplyRate"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="11dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tvRepliedItemCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:lineSpacingExtra="-9sp"
+                    android:textColor="@color/primaryOrange"
+                    android:textSize="28sp"
+                    android:textStyle="bold"
+                    tools:text="3"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:lineSpacingExtra="1sp"
+                    android:text="/"
+                    android:textSize="18sp"
+                    android:textStyle="bold"/>
+
+                <TextView
+                    android:id="@+id/tvAllItemCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:lineSpacingExtra="1sp"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    tools:text="6"/>
+            </LinearLayout>
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/items_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/input_price_header"
+        android:paddingLeft="19dp"
+        android:paddingRight="27dp"
+        android:paddingTop="33dp">
+
+        <TextView
+            android:id="@+id/tvItemInfoTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:lineSpacingExtra="34sp"
+            android:text="품목명"
+            android:textColor="@color/warm_gray"
+            android:textSize="12sp"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/tvPriceTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:lineSpacingExtra="33sp"
+            android:text="견적가(원)"
+            android:textColor="@color/warm_gray"
+            android:textSize="12sp"
+            android:textStyle="bold"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@+id/tvItemInfoTitle"
+            android:layout_marginTop="10dp"
+            android:background="@color/itemDividerForListView"/>
+
+    </RelativeLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rvItemsAndPrice"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/items_header"
+        android:layout_above="@+id/btnSavePrice"/>
+
+    <Button
+        android:id="@+id/btnSavePrice"
+        android:layout_width="match_parent"
+        android:layout_height="47dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/primaryOrange"
+        android:text="저장"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        android:textStyle="bold"/>
+</RelativeLayout>

@@ -1,5 +1,6 @@
 package com.rena21.driver.view.adapter;
 
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.ViewHolder;
 import android.view.LayoutInflater;
@@ -11,54 +12,88 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 import com.rena21.driver.R;
+import com.rena21.driver.etc.ComparatorTimeSort;
 import com.rena21.driver.firebase.FirebaseDbManager;
 import com.rena21.driver.models.Order;
 import com.rena21.driver.models.OrderItem;
+import com.rena21.driver.util.FileNameUtil;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+
+import me.grantland.widget.AutofitTextView;
 
 
 public class ReceivedOrdersAdapter extends RecyclerView.Adapter<ReceivedOrdersAdapter.MyViewHolder> {
 
     public interface OnItemClickListener {
-        void onItemClick(String fileName, Order order);
+        void onItemClick(String fileName);
     }
 
     static class MyViewHolder extends ViewHolder {
 
+        private AutofitTextView tvRestaurantName;
+        private AutofitTextView tvItems;
         private TextView tvTimeStamp;
-        private TextView tvRestaurantName;
-        private TextView tvItems;
+        private TextView tvDeliveryFinish;
 
         public MyViewHolder(View itemView) {
             super(itemView);
+            tvRestaurantName = (AutofitTextView) itemView.findViewById(R.id.tvRestaurantName);
             tvTimeStamp = (TextView) itemView.findViewById(R.id.tvTimeStamp);
-            tvRestaurantName = (TextView) itemView.findViewById(R.id.tvRestaurantName);
-            tvItems = (TextView) itemView.findViewById(R.id.tvItems);
+            tvItems = (AutofitTextView) itemView.findViewById(R.id.tvItems);
+            tvDeliveryFinish = (TextView) itemView.findViewById(R.id.tvDeliveryFinish);
         }
 
-        public void bind(String timeStamp, String restaurantName, String orderItems, View.OnClickListener onClickListener) {
-            tvTimeStamp.setText(timeStamp);
-            tvItems.setText(orderItems);
-            itemView.setOnClickListener(onClickListener);
+        public void bind(String restaurantName, String orderItems, String timeStamp, String state) {
+            int dimColor = ContextCompat.getColor(itemView.getContext(), R.color.textDim);
+
             tvRestaurantName.setText(restaurantName);
+            tvRestaurantName.setTextColor(dimColor);
+
+            tvItems.setText(orderItems);
+            tvItems.setTextColor(dimColor);
+
+            tvTimeStamp.setText(timeStamp);
+            tvTimeStamp.setTextColor(dimColor);
+
+            tvDeliveryFinish.setText(state);
+            tvDeliveryFinish.setTextColor(dimColor);
         }
 
+        public void bind(String restaurantName, String orderItems, String timeStamp, String state, View.OnClickListener onClickListener) {
+            tvRestaurantName.setText(restaurantName);
+            tvRestaurantName.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.textBlack));
 
+            tvItems.setText(orderItems);
+            tvItems.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.textBlackSub));
+
+            tvTimeStamp.setText(timeStamp);
+            tvTimeStamp.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.primaryOrange));
+
+            tvDeliveryFinish.setText(state);
+            tvDeliveryFinish.setTextColor(ContextCompat.getColor(itemView.getContext(), R.color.textBlack));
+
+            itemView.setOnClickListener(onClickListener);
+        }
+
+        public void removeClickListener() {
+            itemView.setOnClickListener(null);
+        }
     }
 
     private final FirebaseDbManager dbManager;
     private HashMap<String, Order> orderMap;
     private ArrayList<String> fileNameList;
-    private HashMap<String, String> restaruantNameMapCache;
+    private HashMap<String, String> restaurantNameMapCache;
     private OnItemClickListener onItemClickListener;
 
     public ReceivedOrdersAdapter(FirebaseDbManager dbManager) {
         this.orderMap = new HashMap<>();
         this.fileNameList = new ArrayList<>();
-        this.restaruantNameMapCache = new HashMap<>();
+        this.restaurantNameMapCache = new HashMap<>();
         this.dbManager = dbManager;
     }
 
@@ -69,54 +104,72 @@ public class ReceivedOrdersAdapter extends RecyclerView.Adapter<ReceivedOrdersAd
 
     @Override public void onBindViewHolder(MyViewHolder holder, int position) {
         final String fileName = fileNameList.get(position);
+        final String timeStamp = FileNameUtil.getDisplayTimeFromfileName(fileName);
         final Order order = orderMap.get(fileName);
         final String restaurantPhoneNumber = getPhoneNumber(fileName);
 
-        String timeStamp = getDisplayTimeFromfileName(fileName);
         String orderItems = makeOrderItemsString(order.orderItems);
+        String restaurantName = restaurantNameMapCache.containsKey(restaurantPhoneNumber) ?
+                restaurantNameMapCache.get(restaurantPhoneNumber) : restaurantPhoneNumber;
 
-        String restaurantName = restaruantNameMapCache.containsKey(restaurantPhoneNumber) ?
-                restaruantNameMapCache.get(restaurantPhoneNumber) : restaurantPhoneNumber;
-
-
-        holder.bind(timeStamp, restaurantName, orderItems, new View.OnClickListener() {
-            @Override public void onClick(View v) {
-                onItemClickListener.onItemClick(fileName, order);
-            }
-        });
-
+        if(order.delivered) {
+            holder.bind(restaurantName, orderItems, timeStamp, "납품완료");
+            holder.removeClickListener();
+        } else if(order.accepted) {
+            holder.bind(restaurantName, orderItems, timeStamp, "주문확인", new View.OnClickListener() {
+                @Override public void onClick(View v) {
+                    onItemClickListener.onItemClick(fileName);
+                }
+            });
+        } else {
+            holder.bind(restaurantName, orderItems, timeStamp, "주문접수", new View.OnClickListener() {
+                @Override public void onClick(View v) {
+                    onItemClickListener.onItemClick(fileName);
+                }
+            });
+        }
     }
 
     @Override public int getItemCount() {
         return fileNameList.size();
     }
 
-    public void addedItem(final String fileName, Order order) {
+    public int addedItem(final String fileName, Order order) {
         orderMap.put(fileName, order);
         fileNameList.add(0, fileName);
+
+        ComparatorTimeSort orderByTime = new ComparatorTimeSort();
+        Collections.sort(fileNameList, orderByTime);
+
         final String restaurantPhoneNumber = getPhoneNumber(fileName);
-        notifyItemInserted(0);
+
         // 식당 이름이 저장되지 않은 경우
-        if (!restaruantNameMapCache.containsKey(restaurantPhoneNumber)) {
+        if (!restaurantNameMapCache.containsKey(restaurantPhoneNumber)) {
             dbManager.getRestaurantName(restaurantPhoneNumber, new ValueEventListener() {
                 @Override public void onDataChange(DataSnapshot dataSnapshot) {
                     String restaurantName = dataSnapshot.getValue(String.class);
-                    restaruantNameMapCache.put(restaurantPhoneNumber, (restaurantName == null) ? restaurantPhoneNumber : restaurantName);
-                    notifyItemChanged(0);
+                    restaurantNameMapCache.put(restaurantPhoneNumber, (restaurantName == null) ? restaurantPhoneNumber : restaurantName);
+                    //todo notifyItemChanged()로
+                    notifyDataSetChanged();
                 }
 
                 @Override public void onCancelled(DatabaseError databaseError) { }
             });
         }
+        int position = fileNameList.indexOf(fileName);
+        notifyItemInserted(position);
+        return position;
     }
 
-    public void changedItem(String fileName, Order order) {
+    public int changedItem(String fileName, Order order) {
         int position = fileNameList.indexOf(fileName);
 
         orderMap.remove(fileName);
         orderMap.put(fileName, order);
 
         notifyItemChanged(position);
+
+        return position;
     }
 
     public void removedItem(String fileName) {
@@ -134,27 +187,6 @@ public class ReceivedOrdersAdapter extends RecyclerView.Adapter<ReceivedOrdersAd
 
     private String getPhoneNumber(String fileName) {
         return fileName.split("_")[0];
-    }
-
-    private String getDisplayTimeFromfileName(String fileName) {
-        StringBuffer sb = new StringBuffer();
-        String timeStamp = fileName.substring(16, 26);
-        for (int i = 0; i < timeStamp.length(); i++) {
-            if (i == 2) {
-                sb.append(".");
-            }
-            if (i == 4) {
-                sb.append("  ");
-            }
-            if (i == 6) {
-                sb.append(":");
-            }
-            if (i == 8) {
-                sb.append(":");
-            }
-            sb.append(timeStamp.charAt(i));
-        }
-        return sb.toString();
     }
 
     private String makeOrderItemsString(List<OrderItem> orderItems) {

@@ -11,19 +11,20 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.crash.FirebaseCrash;
-import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.DataSnapshot;
 import com.rena21.driver.App;
 import com.rena21.driver.R;
 import com.rena21.driver.etc.AppPreferenceManager;
 import com.rena21.driver.etc.PermissionManager;
 import com.rena21.driver.etc.PlayServiceManager;
 import com.rena21.driver.etc.VersionManager;
+import com.rena21.driver.firebase.FirebaseDbManager;
+import com.rena21.driver.firebase.fcm.ToastErrorHandlingListener;
 import com.rena21.driver.network.ApiService;
 import com.rena21.driver.network.NetworkUtil;
 import com.rena21.driver.network.NoConnectivityException;
@@ -49,6 +50,7 @@ public class SplashActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.d("test", "onCreate");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
@@ -70,6 +72,8 @@ public class SplashActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        Log.d("test", "onResume");
+
         permissionManager.requestPermission(new PermissionManager.PermissionsPermittedListener() {
             @Override
             public void onAllPermissionsPermitted() {
@@ -79,6 +83,8 @@ public class SplashActivity extends BaseActivity {
     }
 
     private void checkPlayService() {
+        Log.d("test", "checkPlayService");
+
         PlayServiceManager.checkPlayServices(SplashActivity.this, new PlayServiceManager.CheckPlayServiceListener() {
             @Override
             public void onNext() {
@@ -88,6 +94,8 @@ public class SplashActivity extends BaseActivity {
     }
 
     private void checkInternetConnection() {
+        Log.d("test", "checkInternetConnection");
+
         if (NetworkUtil.isInternetConnected(getApplicationContext())) {
             checkAppVersion();
         } else {
@@ -101,6 +109,8 @@ public class SplashActivity extends BaseActivity {
     }
 
     private void checkAppVersion() {
+        Log.d("test", "checkAppVersion");
+
         VersionManager.checkAppVersion(SplashActivity.this, new VersionManager.MeetRequiredVersionListener() {
             @Override
             public void onMeetRequiredVersion() {
@@ -110,38 +120,19 @@ public class SplashActivity extends BaseActivity {
     }
 
     private void checkUserSignedIn() {
+        Log.d("test", "checkUserSignedIn");
+
         FirebaseUser user = firebaseAuth.getCurrentUser();
         if (user != null) {
-            storeFcmToken();
+            storeVendorInfo();
         } else {
             requestUserToken();
         }
     }
 
-
-    private void storeFcmToken() {
-        String phoneNumber = appPreferenceManager.getPhoneNumber();
-        String fcmToken = appPreferenceManager.getFcmToken();
-        FirebaseDatabase.getInstance().getReference().child("vendors")
-                .child(phoneNumber)
-                .child("info")
-                .child("fcmId")
-                .setValue(fcmToken)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override public void onSuccess(Void aVoid) {
-                        Log.d("fcm", "Fcm 토큰 등록 성공");
-                        goToMain();
-                    }
-                })
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override public void onComplete(@NonNull Task<Void> task) {
-                        FirebaseCrash.logcat(Log.ERROR, "fcm", "Fcm 등록 실패");
-                    }
-                });
-
-    }
-
     private void requestUserToken() {
+        Log.d("test", "requestUserToken");
+
         appPreferenceManager.initPhoneNumber();
         apiService
                 .getToken(appPreferenceManager.getPhoneNumber())
@@ -154,6 +145,7 @@ public class SplashActivity extends BaseActivity {
                         if (t instanceof NoConnectivityException) {
                             Toast.makeText(SplashActivity.this, "인터넷이 연결 되어 있지 않습니다. 연결을 확인해주세요.", Toast.LENGTH_SHORT).show();
                         } else {
+                            Log.d("test", "reqsuest token failed : " + t.getMessage());
                             FirebaseCrash.report(t);
                         }
                     }
@@ -161,12 +153,14 @@ public class SplashActivity extends BaseActivity {
     }
 
     private void signIn(String customToken) {
+        Log.d("test", "signIn");
+
         firebaseAuth
                 .signInWithCustomToken(customToken)
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            storeFcmToken();
+                            storeVendorInfo();
                         } else {
                             Dialogs.createPlayServiceUpdateWarningDialog(SplashActivity.this, new Dialog.OnClickListener() {
                                 @Override
@@ -179,8 +173,43 @@ public class SplashActivity extends BaseActivity {
                 });
     }
 
+    private void storeVendorInfo() {
+        Log.d("test", "sotreVendorInfo");
+
+        final String fcmToken = appPreferenceManager.getFcmToken();
+
+        final FirebaseDbManager dbManager = App.getApplication(getApplicationContext()).getDbManager();
+
+        Log.d("test", "납품업체 정보 확인 시작");
+        dbManager.getVendorInfoDataSnapshot(new ToastErrorHandlingListener(this) {
+            @Override public void onDataChange(DataSnapshot dataSnapshot) {
+                Log.d("test", "납품업체 정보 확인 종료");
+
+                if(!dataSnapshot.child("vendorName").exists())
+                    dbManager.setVendorName("등록필요");
+
+                if(!dataSnapshot.child("phoneNumber").exists())
+                    dbManager.setPhoneNumber();
+
+                dbManager.setFcmId(fcmToken);
+
+                goToMain();
+            }
+        });
+
+
+    }
+
     private void goToMain() {
+        Log.d("test", "goToMain");
+
         Intent intent = new Intent(SplashActivity.this, MainActivity.class);
+
+        if(getIntent().getExtras() != null) {
+            String fileName = getIntent().getExtras().getString("orderKey");
+            intent.putExtra("orderKey", fileName);
+        }
+        
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);

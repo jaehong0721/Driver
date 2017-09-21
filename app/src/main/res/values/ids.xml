@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="tvItemName" type="id"/>
+    <item name="ivDelete" type="id"/>
+    <item name="ivClear" type="id"/>
+    <item name="etInput" type="id"/>
+</resources>

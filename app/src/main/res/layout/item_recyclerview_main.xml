@@ -2,34 +2,56 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingLeft="@dimen/itemLeftPadding"
-                android:paddingRight="@dimen/itemRightPadding"
-                android:paddingBottom="@dimen/itemPaddingBottom"
-                android:paddingTop="@dimen/itemPaddingTop">
+                xmlns:tools="http://schemas.android.com/tools">
 
-    <TextView
-        android:id="@+id/tvTimeStamp"
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="text"
-        android:textSize="@dimen/text_large_accent"/>
+        android:layout_marginBottom="@dimen/itemPaddingBottom"
+        android:layout_marginLeft="@dimen/itemLeftPadding"
+        android:layout_marginRight="@dimen/itemRightPadding"
+        android:layout_marginTop="@dimen/itemPaddingTop">
 
-    <TextView
-        android:id="@+id/tvRestaurantName"
-        android:layout_marginTop="14dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/tvTimeStamp"
-        android:text="text"
-        android:textSize="@dimen/text_large"/>
+        <me.grantland.widget.AutofitTextView
+            android:id="@+id/tvRestaurantName"
+            android:layout_width="150dp"
+            android:layout_height="25dp"
+            android:maxLines="1"
+            android:textSize="20sp"
+            android:textColor="@color/textBlack"
+            tools:text="미카네 분식"/>
 
-    <TextView
-        android:id="@+id/tvItems"
-        android:layout_marginTop="12dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/tvRestaurantName"
-        android:text="text"
-        android:textColor="@color/textBlackSub"
-        android:textSize="@dimen/text_smallest"/>
+        <me.grantland.widget.AutofitTextView
+            android:id="@+id/tvItems"
+            android:layout_width="240dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvRestaurantName"
+            android:layout_marginTop="7dp"
+            android:maxLines="1"
+            android:textColor="@color/textBlackSub"
+            android:textSize="13sp"
+            tools:text="text"/>
+
+        <TextView
+            android:id="@+id/tvTimeStamp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvItems"
+            android:layout_marginTop="10dp"
+            android:textSize="@dimen/text_smallest"
+            android:textColor="@color/primaryOrange"
+            tools:text="text"/>
+
+        <TextView
+            android:id="@+id/tvDeliveryFinish"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="@dimen/activity_horizontal_margin"
+            android:text="text"
+            android:textSize="13sp"/>
+
+    </RelativeLayout>
+
 </RelativeLayout>

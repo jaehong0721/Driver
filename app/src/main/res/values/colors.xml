@@ -6,8 +6,43 @@
     <color name="primaryOrange">#CE6531</color>
     <color name="primaryMahogany">#390405</color>
 
-    <color name="textBlack">#313131</color>
-    <color name="textBlackSub">#838383</color>
+    <color name="textBlack">#333333</color>
+    <color name="textBlackSub">#8e8e8e</color>
+    <color name="textBackground">#F0F0F0</color>
+    <color name="textDim">#bfbfbf</color>
 
     <color name="itemDividerForListView">#CCCCCC</color>
+
+    <color name="itemDividerForContactListView">#E5E5E5</color>
+
+    <color name="recyclerViewBackground">#F0F0F0</color>
+
+    <color name="white">#ffffff</color>
+    <color name="white_30">#4dffffff</color>
+    <color name="white_50">#80ffffff</color>
+    <color name="white_two">#f7f7f7</color>
+    <color name="white_three">#dbdbdb</color>
+    <color name="white_five">#ededed</color>
+    <color name="white_six">#e8e8e8</color>
+    <color name="white_seven">#f2f2f2</color>
+    <color name="white_80">#ccffffff</color>
+
+    <color name="warm_gray">#949494</color>
+    <color name="warm_grey_two">#9b9b9b</color>
+
+    <color name="sea">#2d8985</color>
+    <color name="butterscotch">#ffc145</color>
+    <color name="purple_brown">#643a3b</color>
+    <color name="dark_maroon">#390405</color>
+    <color name="gunmetal">#494b57</color>
+    <color name="dark_maroon_15">#26390405</color>
+    <color name="rectangle_button">#ce6531</color>
+
+    <color name="business_info_text_color">#333333</color>
+    <color name="input_text_background">#ececec</color>
+
+    <color name="black_05">#0D000000</color>
+
+    <color name="dividerLine">#14000000</color>
+
 </resources>

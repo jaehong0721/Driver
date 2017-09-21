@@ -1,0 +1,42 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:layout_marginTop="@dimen/activity_horizontal_margin"
+              android:orientation="vertical"
+              tools:context="com.rena21.driver.view.fragment.LedgerFragment">
+
+    <com.rena21.driver.view.layout.DateSelectLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/dateSelectLayout">
+    </com.rena21.driver.view.layout.DateSelectLayout>
+
+    <com.rena21.driver.view.layout.AmountSummaryLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/amountSummaryLayout">
+    </com.rena21.driver.view.layout.AmountSummaryLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="@dimen/activity_horizontal_margin"
+        android:background="@color/itemDividerForListView"/>
+
+    <com.rena21.driver.view.widget.RecyclerViewEmptySupport
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/rvOrdersWithPrice"
+        android:background="@color/recyclerViewBackground">
+    </com.rena21.driver.view.widget.RecyclerViewEmptySupport>
+
+    <TextView
+        android:id="@+id/tvEmptyView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:layout_marginTop="80dp"
+        android:text="@string/ledger_empty"
+        android:visibility="gone"/>
+</LinearLayout>

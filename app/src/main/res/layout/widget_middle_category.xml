@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             xmlns:tools="http://schemas.android.com/tools">
+
+    <RelativeLayout
+        android:id="@+id/container"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="18dp"
+        android:paddingTop="13dp"
+        android:paddingRight="9dp"
+        android:paddingBottom="11dp">
+
+        <TextView
+            android:id="@+id/tvMiddleCategoryName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:textColor="@color/business_info_text_color"
+            tools:text="시금치"/>
+
+        <ImageView
+            android:id="@+id/ivCheckMark"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:src="@drawable/unselected_checkmark"/>
+    </RelativeLayout>
+</FrameLayout>

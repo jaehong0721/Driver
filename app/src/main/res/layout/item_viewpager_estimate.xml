@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+    <View
+        android:id="@+id/dimView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:foreground="@color/white_50"/>
+
+    <TextView
+        android:id="@+id/tvUpperMessage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="10dp"
+        android:paddingLeft="23dp"
+        android:paddingTop="11dp"
+        android:textColor="@color/white"
+        android:textSize="13sp"
+        android:textStyle="bold"
+        android:visibility="gone"/>
+
+    <RelativeLayout
+        android:id="@+id/estimate_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvUpperMessage"
+        android:background="@color/white"
+        android:paddingBottom="19dp"
+        android:paddingLeft="24dp"
+        android:paddingRight="20dp"
+        android:paddingTop="25dp">
+
+        <TextView
+            android:id="@+id/tvRestaurantName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            tools:text="수원갈비"/>
+
+        <TextView
+            android:id="@+id/tvRestaurantAddress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvRestaurantName"
+            android:layout_marginTop="6dp"
+            android:lineSpacingExtra="5sp"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            tools:text="서울특별시 용산구"/>
+
+
+        <com.rena21.driver.view.widget.CallButton
+            android:id="@+id/ivCall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:visibility="gone"/>
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_above="@+id/items_header"
+        android:background="@color/dividerLine"/>
+
+    <RelativeLayout
+        android:id="@+id/items_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/estimate_header"
+        android:background="@color/white_50"
+        android:paddingLeft="24dp"
+        android:paddingRight="24dp"
+        android:paddingTop="16dp">
+
+        <TextView
+            android:id="@+id/tvItemInfoTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:lineSpacingExtra="34sp"
+            android:text="품목명"
+            android:textColor="@color/warm_gray"
+            android:textSize="12sp"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/tvPriceTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:lineSpacingExtra="33sp"
+            android:text="견적가(원)"
+            android:textColor="@color/warm_gray"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:visibility="gone"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@+id/tvItemInfoTitle"
+            android:layout_marginTop="10dp"
+            android:background="@color/itemDividerForListView"/>
+
+    </RelativeLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rvEstimateItem"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/estimate_footer"
+        android:layout_below="@+id/items_header"
+        android:background="@color/white_50"/>
+
+    <RelativeLayout
+        android:id="@+id/estimate_footer"
+        android:layout_width="match_parent"
+        android:layout_height="69dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/white">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/dividerLine"/>
+
+        <Button
+            android:id="@+id/btnInputPrice"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="11dp"
+            android:background="@color/primaryOrange"
+            android:text="견적가 입력"
+            android:textColor="@color/white"
+            android:textSize="15dp"
+            android:textStyle="bold"
+            android:visibility="gone"/>
+
+        <Button
+            android:id="@+id/btnModifyPrice"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="11dp"
+            android:background="@drawable/shape_colorful_border_transperent_solid"
+            android:text="견적가 수정"
+            android:textColor="@color/primaryOrange"
+            android:textSize="15dp"
+            android:textStyle="bold"
+            android:visibility="gone"/>
+
+    </RelativeLayout>
+
+</RelativeLayout>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="@dimen/itemPaddingBottom"
+                android:paddingLeft="@dimen/itemLeftPadding"
+                android:paddingRight="@dimen/itemRightPadding"
+                android:paddingTop="@dimen/itemPaddingTop">
+
+    <TextView
+        android:id="@+id/tvRestaurantName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="text"
+        android:textSize="@dimen/text_large"/>
+
+    <TextView
+        android:id="@+id/tvItems"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvRestaurantName"
+        android:layout_marginTop="12dp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:text="text"
+        android:textColor="@color/textBlackSub"
+        android:textSize="@dimen/text_smallest"/>
+
+    <com.rena21.driver.view.widget.CurrencyFormatTextView
+        android:id="@+id/tvTotalPrice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/tvRestaurantName"
+        android:layout_alignParentRight="true"
+        android:text="text"
+        android:textSize="@dimen/text_default"/>
+
+    <com.rena21.driver.view.widget.CurrencyFormatTextView
+        android:id="@+id/tvTotalDeposit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/tvItems"
+        android:layout_alignParentRight="true"
+        android:text="text"
+        android:textColor="@color/primaryOrange"
+        android:textSize="@dimen/text_default"/>
+</RelativeLayout>

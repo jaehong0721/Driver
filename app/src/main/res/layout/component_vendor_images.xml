@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:id="@+id/emptyView"
+        android:layout_width="match_parent"
+        android:layout_height="220dp"
+        android:background="@color/white_two"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:visibility="visible">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="68dp"
+            android:src="@drawable/camera"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="13dp"
+            android:gravity="center_horizontal"
+            android:lineSpacingExtra="8sp"
+            android:text="@string/vendor_image_guide"
+            android:textColor="@color/warm_gray"
+            android:textSize="12sp"/>
+
+    </LinearLayout>
+
+    <com.rena21.driver.view.component.ViewPagerWithIndicator
+        android:id="@+id/imageViewPager"
+        android:layout_width="match_parent"
+        android:layout_height="220dp"
+        android:visibility="gone"/>
+
+    <ImageView
+        android:id="@+id/ivRemovePhoto"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="24dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="196dp"
+        android:visibility="gone"
+        android:src="@drawable/c_deletephoto"/>
+
+    <ImageView
+        android:id="@+id/ivAddPhoto"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginEnd="24dp"
+        android:layout_marginRight="24dp"
+        android:layout_marginTop="196dp"
+        android:src="@drawable/add_photo"/>
+</RelativeLayout>
